@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+dist
+**/dist
+.git
+
+eslint.config.mjs
+babel.config.js
+.prettierrc
+.prettierignore
+.gitignore
+
+**/*.spec.ts
+**/*.spec.tsx

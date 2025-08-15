@@ -1,0 +1,29 @@
+{
+	"extends": "../../tsconfig.json",
+
+	"compilerOptions": {
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"target": "ES2023",
+
+		"resolvePackageJsonExports": true,
+		"declaration": true,
+		"sourceMap": true,
+		"outDir": "./dist",
+		"baseUrl": "./",
+		"incremental": true,
+
+		// #Listing
+		"strictPropertyInitialization": false,
+		"noUnusedParameters": false,
+
+		"types": ["node", "jest"],
+
+		"paths": {
+			"@libs/types/*": ["../../libs/types/src/*"],
+			"@libs/shared/*": ["../../libs/shared/src/*"],
+			"@apps/server/*": ["./src/*"],
+			"@server/common": ["./libs/common/*"]
+		}
+	}
+}

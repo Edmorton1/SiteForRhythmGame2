@@ -1,0 +1,27 @@
+{
+	"extends": "../../tsconfig.json",
+
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "ESNext",
+
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+
+		"types": ["react", "jest", "@testing-library/react"],
+
+		"paths": {
+			"@libs/types/*": ["../../libs/types/src/*"],
+			"@libs/shared/*": ["../../libs/shared/src/*"],
+			"@apps/client/*": ["./src/*"]
+		}
+	},
+	"include": ["src", "global.d.ts"]
+}

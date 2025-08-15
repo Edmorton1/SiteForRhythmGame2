@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+
+*.drawio
+*.svg
+*.png
+*.jpg
+*.ico
+apps/server/openapi.json

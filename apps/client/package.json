@@ -1,0 +1,39 @@
+{
+	"name": "@apps/client",
+	"version": "1.0.0",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"watch": "tsc --noEmit --watch",
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"preview": "vite preview",
+		"test": "jest --config jest.unit.config.ts",
+		"test:react": "jest --config jest.react.config.ts",
+		"test:watch": "jest --watch --config jest.unit.config.ts",
+		"test:react:watch": "jest --watch --config jest.react.config.ts",
+		"test:cov": "jest --coverage --config jest.unit.config.ts",
+		"test:react:cov": "jest --coverage --config jest.react.config.ts",
+		"test:e2e": "cypress open"
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "^6.6.4",
+		"@testing-library/react": "^16.3.0",
+		"@types/react": "^19.1.9",
+		"@types/react-dom": "^19.1.7",
+		"@vitejs/plugin-react": "^4.6.0",
+		"cypress": "^14.5.3",
+		"jest-environment-jsdom": "^30.0.5",
+		"vite": "^7.0.4"
+	},
+	"dependencies": {
+		"@libs/shared": "workspace:*",
+		"@libs/types": "workspace:*",
+		"@hookform/resolvers": "^5.2.1",
+		"react": "^19.1.1",
+		"react-dom": "^19.1.1",
+		"react-error-boundary": "^6.0.0",
+		"react-hook-form": "^7.62.0",
+		"react-router-dom": "^7.7.1"
+	}
+}

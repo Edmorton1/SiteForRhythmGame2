@@ -1,0 +1,63 @@
+{
+	"compilerOptions": {
+		"allowJs": false,
+		"checkJs": false,
+		"jsx": "react-jsx",
+		"useDefineForClassFields": true,
+		"resolveJsonModule": true,
+
+		"removeComments": true,
+		"importHelpers": true,
+		// "verbatimModuleSyntax": true,
+		// "importsNotUsedAsValues": "error"
+		"downlevelIteration": true,
+		"sourceMap": false,
+		"isolatedModules": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true,
+
+		"strict": true,
+		// "strictPropertyInitialization": false,
+		// РУГАЕТСЯ ЕСЛИ ПЕРЕМЕННАЯ НЕ ИСПОЛЬЗУЕТСЯ
+		"noUnusedLocals": true,
+
+		// РУГАЕТСЯ ЕСЛИ НЕТ ЯВНОГО ОПРЕДЕЛЕНИЯ ПАРАМЕТРА ЕСЛИ ОН undefined
+		"exactOptionalPropertyTypes": true,
+
+		// РУГАЕТСЯ ЕСЛИ НЕТ ЯВНОГО return
+		"noImplicitReturns": true,
+
+		"noFallthroughCasesInSwitch": true,
+
+		// ВОЗВРАЩАЕТ undefined ИЗ НЕЯВНЫХ КОНСТРУКЦИЙ
+		// "noUncheckedIndexedAccess": true,
+
+		"noImplicitOverride": true,
+
+		// РУГАЕТСЯ ЕСЛИ ПИШЕТСЯ ЧЕРЕЗ .asd ВМЕСТО ["asd"]
+		"noPropertyAccessFromIndexSignature": true,
+
+		"allowUnusedLabels": false,
+		"allowUnreachableCode": false,
+
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+
+		// ПОБОЧНЫЕ ЭФФЕКТЫ
+		"noUncheckedSideEffectImports": true,
+		// НЕ ИСПОЛЬЗУЕМЫЕ ПАРАМЕТРЫ В ФУНКЦИЯХ
+		"noUnusedParameters": true
+		// https://eslint.org/docs/latest/extend/ways-to-extend
+		// "erasableSyntaxOnly": true
+
+		// "paths": {
+		// 	"@libs/types/*": ["./libs/types/src/*"],
+		// 	"@libs/shared/*": ["./libs/shared/src/*"],
+		// 	"@apps/server/*": ["./apps/server/src/*"],
+		// 	"@apps/client/*": ["./apps/client/src/*"]
+		// }
+	},
+	"exclude": ["node_modules", "dist", ".jest-cache"]
+}

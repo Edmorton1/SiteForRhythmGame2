@@ -1,0 +1,25 @@
+import { Module } from "@nestjs/common";
+import DatabaseModule from "@apps/server/db/postgres/database.module";
+import { AuthService } from "@apps/server/auth/auth.service";
+import { AuthController } from "@apps/server/auth/auth.controller";
+import { JwtModule } from "@nestjs/jwt";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+
+@Module({
+	imports: [
+		DatabaseModule,
+		JwtModule.registerAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: (configService: ConfigService) => ({
+				secret: configService.getOrThrow("JWT_SECRET"),
+				signOptions: {
+					expiresIn: "24h",
+				},
+			}),
+		}),
+	],
+	controllers: [AuthController],
+	providers: [AuthService],
+})
+export class AuthModule {}
