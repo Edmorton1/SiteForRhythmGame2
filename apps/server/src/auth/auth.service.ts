@@ -2,11 +2,8 @@ import { UserDTOValidation } from "@apps/server/auth/auth.dto";
 import { DatabaseService } from "@apps/server/db/postgres/database.service";
 import { RedisService } from "@apps/server/db/redis/redis.service";
 import { User } from "@libs/types/common/database.types";
-import {
-	ConflictException,
-	Injectable,
-	UnauthorizedException,
-} from "@nestjs/common";
+//prettier-ignore
+import {ConflictException, Injectable, UnauthorizedException,} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import bcrypt from "bcrypt";
 import { sql } from "kysely";
@@ -26,7 +23,7 @@ export class AuthService {
 		if (await this.isUserInDB(userDto.email)) {
 			throw new ConflictException("An account with this email already exists.");
 		}
-		// FIXME: In future set many
+		// TODO: set many salt
 		const hashPassword = await bcrypt.hash(userDto.password, 3);
 		const [user] = await this.databaseService.db
 			.insertInto("users")
@@ -34,7 +31,6 @@ export class AuthService {
 			.returningAll()
 			.execute();
 		this.redisService.set("helloFromCompose", "test2");
-		//@ts-expect-error FIXME: типы пока не работают
 		return this.generateToken(user);
 	}
 
@@ -47,12 +43,10 @@ export class AuthService {
 		if (!user) {
 			throw new UnauthorizedException("This email doesn't exist");
 		}
-		// FIXME: In future add provider checking
-		//@ts-expect-error FIXME: типы пока не работают
+		// TODO: add provider checking
 		if (!(await bcrypt.compare(userDto.password, user.password!))) {
 			throw new UnauthorizedException("The passwords do not match");
 		}
-		//@ts-expect-error FIXME: типы пока не работают
 		const token = await this.generateToken(user);
 		return token;
 	}

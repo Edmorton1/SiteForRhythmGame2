@@ -2,14 +2,12 @@ import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-// import { type Database } from "@libs/types/common/database.types";
 import { PinoLogger } from "nestjs-pino";
-// import { Database } from "@libs/types/common/database.types";
-// import type { DB } from "../../../node_modules/kysely-codegen/dist/db";
+import { DatabaseKysely } from "@apps/server/db/postgres/database.type";
 
 @Injectable()
 export class DatabaseService {
-	public db: Kysely<any>;
+	public db: Kysely<DatabaseKysely>;
 
 	constructor(
 		private readonly configService: ConfigService,
@@ -31,6 +29,6 @@ export class DatabaseService {
 
 		const dialect = new PostgresDialect({ pool });
 
-		this.db = new Kysely<any>({ dialect });
+		this.db = new Kysely<DatabaseKysely>({ dialect });
 	}
 }

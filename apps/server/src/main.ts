@@ -2,7 +2,6 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import fs from "fs";
-// import { SERVER_PREFIX } from "@libs/shared/CONST";
 import { ConfigService } from "@nestjs/config";
 import { patchNestJsSwagger, ZodValidationPipe } from "nestjs-zod";
 patchNestJsSwagger();

@@ -35,6 +35,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - pg-data:/var/lib/postgresql/data
   redis:
     image: redis:latest
     healthcheck:
@@ -42,6 +44,16 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
+    volumes:
+      - redis-data:/data
+
+volumes:
+  pg-data:
+    external: true
+    name: da6044db31cae4a77873422d2eb37da0ac6568bfb898d5efbfa05ca268e834ae
+  redis-data:
+    external: true
+    name: 0774945432b915ad6145ae6fe86723cf867fb915ef31d5a6c7dbbf118e2cb087
 
 # apk add curl
 # docker compose up -d

@@ -19,10 +19,6 @@ export class RedisService {
 		this.setLogs();
 	}
 
-	// async connect(): Promise<void> {
-	// 	await this.client.connect();
-	// }
-
 	public async disconnect(): Promise<void> {
 		await this.client.disconnect();
 	}
