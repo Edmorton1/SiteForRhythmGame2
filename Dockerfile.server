@@ -1,4 +1,5 @@
 # ATTENTION! RUN ONLY IN DOCKER COMPOSE
+
 # Build Stage
 FROM node:22-alpine AS builder
 
@@ -12,6 +13,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY pnpm-workspace.yaml ./
 
+# INSTALLING LIB FOR CACHING IN DOCKER
 COPY libs/shared/package.json ./libs/shared/package.json
 COPY libs/types/package.json ./libs/types/package.json
 COPY apps/server/package.json ./apps/server/package.json
@@ -23,19 +25,6 @@ COPY libs/shared ./libs/shared
 COPY libs/types ./libs/types
 
 COPY . .
-
-ENV DB_NAME=RhythmGame
-ENV DB_HOST=pg
-ENV DB_USER=postgres
-ENV DB_PORT=5432
-ENV DB_PASSWORD=123
-ENV REDIS_HOST=127.0.0.1
-ENV REDIS_PORT=6379
-ENV JWT_SECRET=jwtsecret
-ENV DATABASE_URL=postgres://postgres:123@pg:5432/RhythmGame
-ENV NODE_ENV=production
-
-# RUN pnpm run scandb
 
 RUN pnpm run build:s
 
@@ -55,25 +44,6 @@ COPY pnpm-workspace.yaml ./
 COPY apps/server/package*.json ./apps/server/
 COPY libs/shared/package*.json ./libs/shared/
 COPY libs/types/package*.json ./libs/types/
-
-# COPY packages/backend/.env ./packages/backend/.env
-
-# SET ENV
-ENV DB_NAME=RhythmGame
-ENV DB_HOST=pg
-ENV DB_USER=postgres
-ENV DB_PORT=5432
-ENV DB_PASSWORD=123
-ENV REDIS_HOST=127.0.0.1
-ENV REDIS_PORT=6379
-ENV JWT_SECRET=jwtsecret
-ENV DATABASE_URL=postgres://postgres:123@pg:5432/RhythmGame
-ENV NODE_ENV=production
-
-ENV PORT=80
-ENV HOST=0.0.0.0
-# SET ENV
-
 
 RUN pnpm install --prod
 

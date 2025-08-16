@@ -17,7 +17,7 @@ import { LoggerModule } from "nestjs-pino";
 					autoLogging: false,
 				};
 
-				if (configService.get("NODE_ENV") !== "production") {
+				if (configService.get("NODE_ENV") === "development") {
 					pinoHttpOption.transport = {
 						target: "pino-pretty",
 						options: { colorize: true },
