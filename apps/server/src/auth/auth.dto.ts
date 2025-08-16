@@ -1,7 +1,5 @@
-import {
-	UserDTO,
-	UserDTOZodSchema,
-} from "@libs/types/common/database.types.dto";
+// prettier-ignore
+import { UserDTO, UserDTOZodSchema } from "@libs/types/common/database.types.dto";
 import { ApiProperty } from "@nestjs/swagger";
 import { createZodDto } from "nestjs-zod";
 

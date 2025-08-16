@@ -4,9 +4,11 @@ import { AuthService } from "@apps/server/auth/auth.service";
 import { AuthController } from "@apps/server/auth/auth.controller";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { RedisModule } from "@apps/server/db/redis/redis.module";
 
 @Module({
 	imports: [
+		RedisModule,
 		DatabaseModule,
 		JwtModule.registerAsync({
 			imports: [ConfigModule],

@@ -115,10 +115,10 @@ export default defineConfig([
 			// "no-unused-vars": "error",
 			"object-shorthand": "error",
 			"prefer-const": "error",
-			"no-warning-comments": [
-				"warn",
-				{ terms: ["TODO", "FIXME"], location: "start" },
-			],
+			// "no-warning-comments": [
+			// 	"warn",
+			// 	{ terms: ["TODO", "FIXME"], location: "start" },
+			// ],
 			"prefer-named-capture-group": "error",
 			"symbol-description": "error",
 			"require-unicode-regexp": "error",

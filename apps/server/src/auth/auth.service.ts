@@ -1,5 +1,6 @@
 import { UserDTOValidation } from "@apps/server/auth/auth.dto";
 import { DatabaseService } from "@apps/server/db/postgres/database.service";
+import { RedisService } from "@apps/server/db/redis/redis.service";
 import { User } from "@libs/types/common/database.types";
 import {
 	ConflictException,
@@ -16,6 +17,7 @@ type PayloadDTO = { email: User["email"]; id: User["id"]; role: User["role"] };
 export class AuthService {
 	constructor(
 		private readonly databaseService: DatabaseService,
+		private readonly redisService: RedisService,
 		private readonly jwtService: JwtService,
 	) {}
 
@@ -31,7 +33,8 @@ export class AuthService {
 			.values({ email: userDto.email, password: hashPassword, role: "user" })
 			.returningAll()
 			.execute();
-		//@ts-ignore
+		this.redisService.set("helloFromCompose", "test2");
+		//@ts-expect-error FIXME: типы пока не работают
 		return this.generateToken(user);
 	}
 
@@ -45,11 +48,11 @@ export class AuthService {
 			throw new UnauthorizedException("This email doesn't exist");
 		}
 		// FIXME: In future add provider checking
-		//@ts-ignore
+		//@ts-expect-error FIXME: типы пока не работают
 		if (!(await bcrypt.compare(userDto.password, user.password!))) {
 			throw new UnauthorizedException("The passwords do not match");
 		}
-		//@ts-ignore
+		//@ts-expect-error FIXME: типы пока не работают
 		const token = await this.generateToken(user);
 		return token;
 	}
