@@ -5,7 +5,7 @@
 	"scripts": {
 		"lint": "npx eslint . --fix",
 		"watch:s": "npm run watch --workspace=@apps/server",
-		"dev:s": "npm run start:dev --workspace=@apps/server",
+		"dev:s": "npm run dev --workspace=@apps/server",
 		"build:s": "npm run build --workspace=@apps/server",
 		"start:s": "npm run start:prod --workspace=@apps/server",
 		"test:s": "npm run test --workspace=@apps/server",

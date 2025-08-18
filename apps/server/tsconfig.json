@@ -1,4 +1,3 @@
-//@ts-ignore
 {
 	"extends": "../../tsconfig.json",
 
@@ -24,7 +23,7 @@
 			"@libs/types/*": ["../../libs/types/src/*"],
 			"@libs/shared/*": ["../../libs/shared/src/*"],
 			"@apps/server/*": ["./src/*"],
-			"@server/common": ["./libs/common/*"]
+			"@server/libs/*": ["./libs/*"]
 		}
 	}
 }

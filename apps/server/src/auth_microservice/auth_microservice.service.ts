@@ -14,7 +14,7 @@ interface PayloadDTO {
 }
 
 @Injectable()
-export class AuthService {
+export class AuthMicroserviceService {
 	constructor(
 		private readonly databaseService: DatabaseService,
 		private readonly jwtService: JwtService,
@@ -59,11 +59,11 @@ export class AuthService {
 
 	private async isUserInDB(email: string) {
 		const { rows } = await sql<{ exists: boolean }>`
-		SELECT EXISTS(
-			SELECT 1
-			FROM users
-			WHERE email = ${email}
-		)`.execute(this.databaseService.db);
+      SELECT EXISTS(
+        SELECT 1
+        FROM users
+        WHERE email = ${email}
+      )`.execute(this.databaseService.db);
 
 		return rows[0].exists;
 	}

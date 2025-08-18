@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { PinoLogger } from "nestjs-pino";
 import Redis from "ioredis";
-import { getEnv } from "@apps/server/libs/utils/env";
+import { getEnv } from "@server/libs/common/env";
 
 @Injectable()
 export class RedisService {
-	private client: Redis;
+	private readonly client: Redis;
 
 	constructor(private readonly logger: PinoLogger) {
 		this.client = new Redis({
@@ -16,15 +16,15 @@ export class RedisService {
 		this.setLogs();
 	}
 
-	public async disconnect(): Promise<void> {
-		await this.client.disconnect();
+	async disconnect(): Promise<void> {
+		await this.client.quit();
 	}
 
-	public get(key: string): Promise<string | null> {
+	async get(key: string): Promise<string | null> {
 		return this.client.get(key);
 	}
 
-	public set(key: string, value: number | string): void {
+	set(key: string, value: number | string): void {
 		void this.client.set(key, value);
 	}
 

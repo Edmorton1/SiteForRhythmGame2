@@ -1,34 +1,21 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { NestFactory } from "@nestjs/core";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import fs from "fs";
-import { patchNestJsSwagger, ZodValidationPipe } from "nestjs-zod";
-import { AppModule } from "@apps/server/app.module";
-import { getEnv } from "@apps/server/libs/utils/env";
-patchNestJsSwagger();
+import { type MicroserviceOptions, Transport } from "@nestjs/microservices";
+import { AuthModule } from "@apps/server/auth/auth.module";
+import { getEnv } from "@server/libs/common/env";
 
 void (async () => {
-	const app = await NestFactory.create(AppModule, {
-		bufferLogs: true,
-	});
+	const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+		AuthModule,
+		{
+			transport: Transport.TCP,
+			options: {
+				port: parseInt(getEnv("PORT")),
+				host: getEnv("HOST"),
+			},
+		},
+	);
 
-	app.useGlobalPipes(new ZodValidationPipe());
-	const options = new DocumentBuilder()
-		.setTitle("Cats example")
-		.setDescription("The cats API description")
-		.setVersion("1.0")
-		.addTag("cats")
-		.build();
-
-	const document = SwaggerModule.createDocument(app, options);
-	// FIXME: Из-за этого WARN при запуске
-	SwaggerModule.setup("api", app, document);
-
-	fs.writeFileSync("./openapi.json", JSON.stringify(document));
-	app.setGlobalPrefix("/api");
-
-	const server = await app.listen(getEnv("PORT"), getEnv("HOST"));
-
-	console.log("SUPER SERVER", server.address());
+	await app.listen();
 })();

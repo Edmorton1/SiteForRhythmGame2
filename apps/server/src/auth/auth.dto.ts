@@ -13,7 +13,7 @@ export class UserDTOValidation
 
 export class UserDTOSwagger implements UserDTO {
 	@ApiProperty()
-	public email: string;
+	email: string;
 	@ApiProperty()
-	public password: string;
+	password: string;
 }

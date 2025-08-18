@@ -3,11 +3,11 @@ import { Kysely, PostgresDialect } from "kysely";
 import { Injectable } from "@nestjs/common";
 import { PinoLogger } from "nestjs-pino";
 import { DatabaseKysely } from "@apps/server/db/postgres/database.type";
-import { getEnv } from "@apps/server/libs/utils/env";
+import { getEnv } from "@server/libs/common/env";
 
 @Injectable()
 export class DatabaseService {
-	public db: Kysely<DatabaseKysely>;
+	db: Kysely<DatabaseKysely>;
 
 	constructor(private readonly logger: PinoLogger) {
 		const pool = new Pool({
