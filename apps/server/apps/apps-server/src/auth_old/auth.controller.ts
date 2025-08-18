@@ -1,7 +1,8 @@
-import { AuthService } from "@apps/server/auth/auth.service";
+import { AuthService } from "@apps/server/auth_old/auth.service";
 import { Body, Controller, Delete, HttpCode, Post, Res } from "@nestjs/common";
 import { ApiBody } from "@nestjs/swagger";
-import { UserDTOSwagger, UserDTOValidation } from "@apps/server/auth/auth.dto";
+//prettier-ignore
+import { UserDTOSwagger, UserDTOValidation } from "@apps/server/auth_old/auth.dto";
 import { serverPaths } from "@libs/shared/PATHS";
 import type { CookieOptions, Response } from "express";
 

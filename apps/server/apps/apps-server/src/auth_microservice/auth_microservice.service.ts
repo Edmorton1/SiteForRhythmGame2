@@ -1,9 +1,9 @@
-import { UserDTOValidation } from "@apps/server/auth/auth.dto";
-import { DatabaseService } from "@apps/server/db/postgres/database.service";
+import { UserDTOValidation } from "@apps/server/auth_old/auth.dto";
 import { User } from "@libs/types/common/database.types";
 //prettier-ignore
 import {ConflictException, Injectable, UnauthorizedException,} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { DatabaseService } from "@server/services/db/postgres/database.service";
 import bcrypt from "bcrypt";
 import { sql } from "kysely";
 
@@ -14,7 +14,7 @@ interface PayloadDTO {
 }
 
 @Injectable()
-export class AuthService {
+export class AuthMicroserviceService {
 	constructor(
 		private readonly databaseService: DatabaseService,
 		private readonly jwtService: JwtService,
@@ -59,11 +59,11 @@ export class AuthService {
 
 	private async isUserInDB(email: string) {
 		const { rows } = await sql<{ exists: boolean }>`
-		SELECT EXISTS(
-			SELECT 1
-			FROM users
-			WHERE email = ${email}
-		)`.execute(this.databaseService.db);
+      SELECT EXISTS(
+        SELECT 1
+        FROM users
+        WHERE email = ${email}
+      )`.execute(this.databaseService.db);
 
 		return rows[0].exists;
 	}
