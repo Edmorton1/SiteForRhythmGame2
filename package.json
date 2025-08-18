@@ -12,7 +12,6 @@
 		"test:watch:s": "npm run test:watch --workspace=@apps/server",
 		"test:cov:s": "npm run test:cov --workspace=@apps/server",
 		"test:e2e:s": "npm run test:e2e --workspace=@apps/server",
-		"scandb": "npm run scandb --workspace=@apps/server",
 		"watch:c": "npm run watch --workspace=@apps/client",
 		"dev:c": "npm run dev --workspace=@apps/client",
 		"build:c": "npm run build --workspace=@apps/client",
