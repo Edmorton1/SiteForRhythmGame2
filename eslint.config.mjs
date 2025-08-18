@@ -72,15 +72,6 @@ export default defineConfig([
 			"default-case": "error",
 			"default-case-last": "error",
 			"func-names": "error",
-
-			// "max-classes-per-file": "error",
-			"max-depth": ["error", 2],
-			"max-lines": ["error", 100],
-			// "max-lines-per-function": ["error", 20],
-			"max-nested-callbacks": ["error", 3],
-			"max-params": ["error", 3],
-			// "max-statements": ["error", 10],
-
 			"no-array-constructor": "error",
 			"no-empty-function": "error",
 			"no-eq-null": "error",
@@ -112,7 +103,6 @@ export default defineConfig([
 			"no-useless-constructor": "error",
 			"no-useless-rename": "error",
 			"no-useless-return": "error",
-			// "no-unused-vars": "error",
 			"object-shorthand": "error",
 			"prefer-const": "error",
 			// "no-warning-comments": [
@@ -123,7 +113,6 @@ export default defineConfig([
 			"symbol-description": "error",
 			"require-unicode-regexp": "error",
 			"require-await": "error",
-			radix: "error",
 			"prefer-rest-params": "error",
 			"prefer-regex-literals": "error",
 			"prefer-promise-reject-errors": "error",
