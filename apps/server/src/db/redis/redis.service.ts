@@ -1,19 +1,16 @@
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { PinoLogger } from "nestjs-pino";
 import Redis from "ioredis";
+import { getEnv } from "@apps/server/libs/utils/env";
 
 @Injectable()
 export class RedisService {
 	private client: Redis;
 
-	constructor(
-		private readonly configService: ConfigService,
-		private readonly logger: PinoLogger,
-	) {
+	constructor(private readonly logger: PinoLogger) {
 		this.client = new Redis({
-			host: this.configService.getOrThrow("REDIS_HOST"),
-			port: this.configService.getOrThrow("REDIS_PORT"),
+			host: getEnv("REDIS_HOST"),
+			port: parseInt(getEnv("REDIS_PORT")),
 			connectTimeout: 15000,
 		});
 		this.setLogs();

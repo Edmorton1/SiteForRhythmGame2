@@ -1,32 +1,27 @@
 import { Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import DatabaseModule from "@apps/server/db/postgres/database.module";
-import { AuthModule } from "@apps/server/auth/auth.module";
+import { DatabaseModule } from "@apps/server/db/postgres/database.module";
 import { RedisModule } from "@apps/server/db/redis/redis.module";
 import { LoggerModule } from "nestjs-pino";
+import { AuthModule } from "@apps/server/auth/auth.module";
+import { getEnv } from "@apps/server/libs/utils/env";
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-		}),
-		LoggerModule.forRootAsync({
-			inject: [ConfigService],
-			useFactory: (configService: ConfigService) => {
-				const pinoHttpOption: any = {
-					autoLogging: false,
-				};
+		AuthModule,
+		LoggerModule.forRoot({
+			pinoHttp: (() => {
+				const options: any = { autoLogging: false };
 
-				if (configService.get("NODE_ENV") === "development") {
-					pinoHttpOption.transport = {
+				if (getEnv("NODE_ENV") === "development") {
+					options.transport = {
 						target: "pino-pretty",
 						options: { colorize: true },
 					};
 				}
-				return { pinoHttp: pinoHttpOption };
-			},
+
+				return options;
+			})(),
 		}),
-		AuthModule,
 		DatabaseModule,
 		RedisModule,
 	],

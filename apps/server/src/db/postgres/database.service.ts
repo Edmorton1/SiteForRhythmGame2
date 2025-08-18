@@ -1,24 +1,21 @@
 import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { PinoLogger } from "nestjs-pino";
 import { DatabaseKysely } from "@apps/server/db/postgres/database.type";
+import { getEnv } from "@apps/server/libs/utils/env";
 
 @Injectable()
 export class DatabaseService {
 	public db: Kysely<DatabaseKysely>;
 
-	constructor(
-		private readonly configService: ConfigService,
-		private readonly logger: PinoLogger,
-	) {
+	constructor(private readonly logger: PinoLogger) {
 		const pool = new Pool({
-			database: configService.getOrThrow("DB_NAME"),
-			host: this.configService.getOrThrow("DB_HOST"),
-			user: this.configService.getOrThrow("DB_USER"),
-			port: this.configService.getOrThrow("DB_PORT"),
-			password: this.configService.getOrThrow("DB_PASSWORD"),
+			database: getEnv("DB_NAME"),
+			host: getEnv("DB_HOST"),
+			user: getEnv("DB_USER"),
+			port: parseInt(getEnv("DB_PORT")),
+			password: getEnv("DB_PASSWORD"),
 			// max: 10,
 		});
 
