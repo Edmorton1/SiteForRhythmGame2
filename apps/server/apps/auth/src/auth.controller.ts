@@ -1,7 +1,7 @@
-import { AuthService } from "@apps/server/auth/auth.service";
+import { AuthService } from "./auth.service";
 import { Body, Controller, Delete, HttpCode, Post, Res } from "@nestjs/common";
 import { ApiBody } from "@nestjs/swagger";
-import { UserDTOSwagger, UserDTOValidation } from "@apps/server/auth/auth.dto";
+import { UserDTOSwagger, UserDTOValidation } from "./auth.dto";
 import { serverPaths } from "@libs/shared/PATHS";
 import type { CookieOptions, Response } from "express";
 
@@ -12,7 +12,6 @@ const cookieOptions: CookieOptions = {
 	sameSite: "strict",
 	maxAge: 1000 * 60 * 60 * 24,
 };
-
 @Controller()
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}

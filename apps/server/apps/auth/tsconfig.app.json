@@ -1,13 +1,9 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"rootDir": ".",
-
-		"lib": ["ESNext"],
-
-		"declaration": true
+		"declaration": false,
+		"outDir": "../../dist/apps/auth"
 	},
-
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

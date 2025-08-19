@@ -4,12 +4,12 @@ import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import fs from "fs";
 import { patchNestJsSwagger, ZodValidationPipe } from "nestjs-zod";
-import { AppModule } from "@apps/server/app.module";
+import { AuthModule } from "./auth.module";
 import { getEnv } from "@server/libs/common/env";
 patchNestJsSwagger();
 
 void (async () => {
-	const app = await NestFactory.create(AppModule, {
+	const app = await NestFactory.create(AuthModule, {
 		bufferLogs: true,
 	});
 

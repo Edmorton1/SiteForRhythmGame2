@@ -1,4 +1,4 @@
-import z from "zod";
+import type { z } from "zod";
 import { UserZodSchema } from "./database.types";
 
 export const UserDTOZodSchema = UserZodSchema.pick({

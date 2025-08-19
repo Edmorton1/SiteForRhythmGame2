@@ -1,4 +1,4 @@
-import { UserDTOValidation } from "@apps/server/auth/auth.dto";
+import { UserDTOValidation } from "./auth.dto";
 import { DatabaseService } from "@server/services/db/postgres/database.service";
 import { User } from "@libs/types/common/database.types";
 //prettier-ignore

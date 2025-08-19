@@ -4,8 +4,12 @@
 	"exports": {
 		"./*": "./src/*.js"
 	},
+	"files": [
+		"dist"
+	],
+	"private": true,
 	"scripts": {
-		"test": "jest"
-	},
-	"private": true
+		"test": "jest",
+		"build": "tsc"
+	}
 }

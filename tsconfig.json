@@ -37,8 +37,8 @@
 		"noUnusedParameters": true,
 
 		// Output Options
-		"declaration": true,
-		"declarationMap": true,
+		// "declaration": true,
+		// "declarationMap": true,
 		"removeComments": true,
 		"importHelpers": true,
 		"skipLibCheck": true,

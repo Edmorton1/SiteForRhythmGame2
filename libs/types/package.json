@@ -4,5 +4,11 @@
 	"exports": {
 		"./*": "./src/*.js"
 	},
-	"private": true
+	"files": [
+		"dist"
+	],
+	"private": true,
+	"scripts": {
+		"build": "tsc"
+	}
 }
