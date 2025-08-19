@@ -11,6 +11,15 @@
 	"monorepo": true,
 	"root": "apps/apps-server",
 	"projects": {
+		"api": {
+			"type": "application",
+			"root": "apps/api",
+			"entryFile": "main",
+			"sourceRoot": "apps/api/src",
+			"compilerOptions": {
+				"tsConfigPath": "apps/api/tsconfig.app.json"
+			}
+		},
 		"apps-server": {
 			"type": "application",
 			"root": "apps/apps-server",

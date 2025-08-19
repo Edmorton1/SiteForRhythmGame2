@@ -1,48 +1,27 @@
 import { AuthService } from "./auth.service";
-import { Body, Controller, Delete, HttpCode, Post, Res } from "@nestjs/common";
-import { ApiBody } from "@nestjs/swagger";
-import { UserDTOSwagger, UserDTOValidation } from "./auth.dto";
+import { Controller } from "@nestjs/common";
+import { UserDTOValidation } from "./auth.dto";
 import { serverPaths } from "@libs/shared/PATHS";
-import type { CookieOptions, Response } from "express";
+import { MessagePattern } from "@nestjs/microservices";
 
-const cookieName = "token";
-const cookieOptions: CookieOptions = {
-	httpOnly: true,
-	secure: true,
-	sameSite: "strict",
-	maxAge: 1000 * 60 * 60 * 24,
-};
 @Controller()
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
-	@Post(serverPaths.registration)
-	@ApiBody({ type: UserDTOSwagger })
-	@HttpCode(201)
-	async registration(
-		@Body() userDto: UserDTOValidation,
-		@Res({ passthrough: true }) res: Response,
-	): Promise<boolean> {
-		const token = await this.authService.registration(userDto);
-		res.cookie(cookieName, token, cookieOptions);
-		return true;
+	@MessagePattern(serverPaths.registration)
+	async registration(userDto: UserDTOValidation): Promise<string> {
+		console.log("REGISTRATION AUTH CONTROLLER");
+		return this.authService.registration(userDto);
 	}
 
-	@Post(serverPaths.login)
-	@ApiBody({ type: UserDTOSwagger })
-	async login(
-		@Body() dto: UserDTOValidation,
-		@Res({ passthrough: true }) res: Response,
-	): Promise<boolean> {
-		console.log(dto);
-		const token = await this.authService.login(dto);
-		res.cookie(cookieName, token, cookieOptions);
-		return true;
+	@MessagePattern(serverPaths.login)
+	async login(userDto: UserDTOValidation): Promise<string> {
+		console.log(userDto);
+		return this.authService.login(userDto);
 	}
 
-	@Delete(serverPaths.logout)
-	logout(@Res({ passthrough: true }) res: Response): string {
-		res.clearCookie("token");
-		return "OK";
+	@MessagePattern("test")
+	test() {
+		return "sadasdads";
 	}
 }

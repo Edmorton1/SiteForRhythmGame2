@@ -21,6 +21,7 @@ export class AuthService {
 	) {}
 
 	async registration(userDto: UserDTOValidation): Promise<string> {
+		console.log("REGISTRATION AUTH SERVICE");
 		console.log(userDto);
 		if (await this.isUserInDB(userDto.email)) {
 			throw new ConflictException("An account with this email already exists.");

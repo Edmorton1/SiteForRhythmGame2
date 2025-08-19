@@ -3,7 +3,7 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { DatabaseModule } from "@server/services/db/postgres/database.module";
 import { LoggerModule } from "nestjs-pino";
-import { getEnv } from "@server/libs/common/env";
+import { getEnv } from "@server/libs/func/env";
 import { JwtModule } from "@nestjs/jwt";
 
 @Module({
