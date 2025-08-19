@@ -23,7 +23,8 @@
 			"@libs/types/*": ["../../libs/types/src/*"],
 			"@libs/shared/*": ["../../libs/shared/src/*"],
 			"@apps/server/*": ["./src/*"],
-			"@server/libs/*": ["./libs/*"]
+			"@server/libs/*": ["./libs/*"],
+			"@server/services/*": ["./services/*"]
 		}
 	}
 }

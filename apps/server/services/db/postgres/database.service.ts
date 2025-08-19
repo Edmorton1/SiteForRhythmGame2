@@ -2,7 +2,7 @@ import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import { Injectable } from "@nestjs/common";
 import { PinoLogger } from "nestjs-pino";
-import { DatabaseKysely } from "@apps/server/db/postgres/database.type";
+import { DatabaseKysely } from "@server/services/db/postgres/database.type";
 import { getEnv } from "@server/libs/common/env";
 
 @Injectable()

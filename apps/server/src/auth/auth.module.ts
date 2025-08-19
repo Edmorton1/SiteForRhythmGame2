@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { DatabaseModule } from "@apps/server/db/postgres/database.module";
+import { DatabaseModule } from "@server/services/db/postgres/database.module";
 import { AuthService } from "@apps/server/auth/auth.service";
 import { AuthController } from "@apps/server/auth/auth.controller";
 import { JwtModule } from "@nestjs/jwt";

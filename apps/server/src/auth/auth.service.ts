@@ -1,5 +1,5 @@
 import { UserDTOValidation } from "@apps/server/auth/auth.dto";
-import { DatabaseService } from "@apps/server/db/postgres/database.service";
+import { DatabaseService } from "@server/services/db/postgres/database.service";
 import { User } from "@libs/types/common/database.types";
 //prettier-ignore
 import {ConflictException, Injectable, UnauthorizedException,} from "@nestjs/common";

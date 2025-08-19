@@ -1,4 +1,4 @@
-import { DatabaseService } from "@apps/server/db/postgres/database.service";
+import { DatabaseService } from "@server/services/db/postgres/database.service";
 import { Module } from "@nestjs/common";
 
 @Module({
