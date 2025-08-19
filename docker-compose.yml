@@ -50,10 +50,10 @@ services:
 volumes:
   pg-data:
     external: true
-    name: da6044db31cae4a77873422d2eb37da0ac6568bfb898d5efbfa05ca268e834ae
+    name: 3058037422fc531287fa90f488ec3176b62308567c01d74414b1897833944ab6
   redis-data:
     external: true
-    name: 0774945432b915ad6145ae6fe86723cf867fb915ef31d5a6c7dbbf118e2cb087
+    name: 223674e28f20e03dcf7098dd30b8514b55fe7c51faebd6ea8e71d8a588934998
 
 # apk add curl
 # docker compose up -d

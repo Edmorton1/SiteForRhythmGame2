@@ -1,6 +1,5 @@
 import { UserDTOValidation } from "@apps/server/auth/auth.dto";
 import { DatabaseService } from "@apps/server/db/postgres/database.service";
-import { RedisService } from "@apps/server/db/redis/redis.service";
 import { User } from "@libs/types/common/database.types";
 //prettier-ignore
 import {ConflictException, Injectable, UnauthorizedException,} from "@nestjs/common";
@@ -18,7 +17,6 @@ interface PayloadDTO {
 export class AuthService {
 	constructor(
 		private readonly databaseService: DatabaseService,
-		private readonly redisService: RedisService,
 		private readonly jwtService: JwtService,
 	) {}
 
@@ -34,7 +32,6 @@ export class AuthService {
 			.values({ email: userDto.email, password: hashPassword, role: "user" })
 			.returningAll()
 			.execute();
-		this.redisService.set("helloFromCompose", "test2");
 		return this.generateToken(user);
 	}
 

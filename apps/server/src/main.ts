@@ -5,7 +5,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import fs from "fs";
 import { patchNestJsSwagger, ZodValidationPipe } from "nestjs-zod";
 import { AppModule } from "@apps/server/app.module";
-import { getEnv } from "@apps/server/libs/utils/env";
+import { getEnv } from "@server/libs/common/env";
 patchNestJsSwagger();
 
 void (async () => {
