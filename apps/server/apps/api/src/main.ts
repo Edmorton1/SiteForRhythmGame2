@@ -1,15 +1,16 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { ApiModule } from "./api.module";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import fs from "fs";
 import { patchNestJsSwagger, ZodValidationPipe } from "nestjs-zod";
 import { getEnv } from "@server/libs/func/env";
+import { AppModule } from "./app.module";
+import { SERVER_PREFIX } from "@libs/shared/CONST";
 patchNestJsSwagger();
 
 void (async () => {
-	const app = await NestFactory.create(ApiModule, {
+	const app = await NestFactory.create(AppModule, {
 		bufferLogs: true,
 	});
 
@@ -26,7 +27,7 @@ void (async () => {
 	SwaggerModule.setup("api", app, document);
 
 	fs.writeFileSync("./openapi.json", JSON.stringify(document));
-	app.setGlobalPrefix("/api");
+	app.setGlobalPrefix(SERVER_PREFIX);
 
 	const server = await app.listen(getEnv("PORT"), getEnv("HOST"));
 

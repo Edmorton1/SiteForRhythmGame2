@@ -1,12 +1,12 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, HttpCode, Inject, Post, Res } from "@nestjs/common";
 import { ApiBody } from "@nestjs/swagger";
-import { UserDTOSwagger, UserDTOValidation } from "./auth.dto";
+import { UserDTOSwagger, UserDTOValidation } from "@server/libs/types/auth.dto";
 import { serverPaths } from "@libs/shared/PATHS";
 import type { CookieOptions, Response } from "express";
 import { HttpController } from "@server/libs/common/http.controller";
 import { ClientProxy } from "@nestjs/microservices";
-import { clientName } from "apps/api/src/_CONST";
+import { AUTH } from "apps/api/src/SERVICE_NAMES";
 
 const cookieName = "token";
 const cookieOptions: CookieOptions = {
@@ -17,8 +17,8 @@ const cookieOptions: CookieOptions = {
 };
 
 @Controller()
-export class ApiController extends HttpController {
-	constructor(@Inject(clientName) client: ClientProxy) {
+export class AuthController extends HttpController {
+	constructor(@Inject(AUTH) client: ClientProxy) {
 		super(client);
 	}
 

@@ -20,15 +20,6 @@
 				"tsConfigPath": "apps/api/tsconfig.app.json"
 			}
 		},
-		"apps-server": {
-			"type": "application",
-			"root": "apps/apps-server",
-			"entryFile": "apps/server/src/main",
-			"sourceRoot": "apps/apps-server/src",
-			"compilerOptions": {
-				"tsConfigPath": "apps/apps-server/tsconfig.app.json"
-			}
-		},
 		"auth": {
 			"type": "application",
 			"root": "apps/auth",

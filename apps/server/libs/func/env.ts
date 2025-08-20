@@ -3,6 +3,8 @@ type Mode = "production" | "development";
 interface Env {
 	PORT: string;
 	HOST: string;
+	AUTH_PORT: string;
+	AUTH_HOST: string;
 	DB_NAME: string;
 	DB_HOST: string;
 	DB_USER: string;
