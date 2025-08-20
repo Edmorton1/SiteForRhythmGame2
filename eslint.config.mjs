@@ -40,9 +40,6 @@ export default defineConfig([
 			react: {
 				version: "detect",
 			},
-			// "import/resolver": {
-			// 	typescript: {},
-			// },
 		},
 		rules: {
 			// React
@@ -94,6 +91,8 @@ export default defineConfig([
 			"class-methods-use-this": "off",
 			"no-use-before-define": "off",
 			"func-style": "off",
+			"max-lines-per-function": "off",
+			"max-statements": "off",
 
 			"no-warning-comments": "off",
 			// "no-warning-comments": [

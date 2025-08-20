@@ -18,8 +18,8 @@
 		"types": ["react", "jest", "@testing-library/react"],
 
 		"paths": {
-			"@libs/types/*": ["../../libs/types/src/*"],
-			"@libs/shared/*": ["../../libs/shared/src/*"],
+			"@libs/types/*": ["./node_modules/@libs/types/dist/*"],
+			"@libs/shared/*": ["./node_modules/@libs/shared/dist/*"],
 			"@apps/client/*": ["./src/*"]
 		}
 	},

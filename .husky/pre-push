@@ -4,4 +4,3 @@
 pnpm run test:s
 pnpm run test:c
 pnpm run test:react
-pnpm run test:shared

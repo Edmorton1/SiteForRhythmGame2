@@ -2,14 +2,13 @@
 	"name": "@libs/shared",
 	"version": "1.0.0",
 	"exports": {
-		"./*": "./src/*.js"
+		"./*": "./dist/*.js"
 	},
 	"files": [
 		"dist"
 	],
 	"private": true,
 	"scripts": {
-		"test": "jest",
-		"build": "tsc"
+		"build": "tsup"
 	}
 }

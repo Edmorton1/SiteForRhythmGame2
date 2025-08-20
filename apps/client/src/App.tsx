@@ -1,5 +1,6 @@
 import { LazyRegistration } from "@apps/client/LazyPages";
 import { SERVER_PREFIX } from "@libs/shared/CONST";
+// import { SERVER_PREFIX } from "@libs/shared/CONST";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 

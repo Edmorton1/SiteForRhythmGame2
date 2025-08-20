@@ -21,8 +21,8 @@
 			// "@libs/types/*": [
 			//   "./node_modules/@libs/types/dist/*"
 			// ],
-			"@libs/shared/*": ["../../libs/shared/src/*"],
-			"@libs/types/*": ["../../libs/types/src/*"],
+			"@libs/shared/*": ["./node_modules/@libs/shared/dist/*"],
+			"@libs/types/*": ["./node_modules/@libs/types/dist/*"],
 			"@server/libs/*": ["./libs/*"],
 			"@server/services/*": ["./services/*"]
 		}

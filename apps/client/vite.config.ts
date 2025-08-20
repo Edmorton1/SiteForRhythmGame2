@@ -38,8 +38,14 @@ export default defineConfig(({ mode }) => {
 		base: "/",
 		resolve: {
 			alias: {
-				"@libs/types": path.resolve(__dirname, "../../libs/types/src"),
-				"@libs/shared": path.resolve(__dirname, "../../libs/shared/src"),
+				"@libs/types": path.resolve(
+					__dirname,
+					"./node_modules/@libs/types/dist",
+				),
+				"@libs/shared": path.resolve(
+					__dirname,
+					"./node_modules/@libs/shared/dist",
+				),
 				"@apps/client": path.resolve(__dirname, "./src"),
 			},
 		},

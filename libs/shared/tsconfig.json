@@ -1,7 +1,8 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"rootDir": ".",
+		"outDir": "dist",
+		"moduleResolution": "node",
 
 		"lib": ["ESNext"],
 		"types": ["jest"],
