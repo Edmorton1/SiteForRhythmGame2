@@ -2,8 +2,8 @@ import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import { Injectable } from "@nestjs/common";
 import { PinoLogger } from "nestjs-pino";
-import { DatabaseKysely } from "@server/services/db/postgres/database.type";
-import { getEnv } from "@server/libs/func/env";
+import { DatabaseKysely } from "./database.type";
+import { getEnv } from "../../../libs/func/env";
 
 @Injectable()
 export class DatabaseService {

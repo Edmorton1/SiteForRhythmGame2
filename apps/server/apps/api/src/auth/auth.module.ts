@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { ClientsModule, Transport } from "@nestjs/microservices";
-import { getEnv } from "@server/libs/func/env";
 import { AUTH } from "../SERVICE_NAMES";
+import { getEnv } from "../../../../libs/func/env";
 
 @Module({
 	imports: [

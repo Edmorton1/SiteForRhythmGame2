@@ -26,8 +26,7 @@
 		"prepare": "husky install || true"
 	},
 	"workspaces": [
-		"apps/*",
-		"libs/*"
+		"/apps/*"
 	],
 	"devDependencies": {
 		"@eslint/js": "^9.32.0",

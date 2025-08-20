@@ -1,11 +1,11 @@
-import { DatabaseService } from "@server/services/db/postgres/database.service";
-import { User } from "@libs/types/common/database.types";
 //prettier-ignore
 import {ConflictException, Injectable, UnauthorizedException,} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import bcrypt from "bcrypt";
 import { sql } from "kysely";
-import { UserDTOValidation } from "@server/libs/types/auth.dto";
+import { UserDTOValidation } from "../../../libs/types/auth.dto";
+import { User } from "../../../../../libs/types/database.types";
+import { DatabaseService } from "../../../services/db/postgres/database.service";
 
 interface PayloadDTO {
 	email: User["email"];

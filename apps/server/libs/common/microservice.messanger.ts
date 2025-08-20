@@ -1,6 +1,7 @@
 import type { ClientProxy } from "@nestjs/microservices";
-import type { serverPaths } from "@libs/shared/PATHS";
 import { firstValueFrom } from "rxjs";
+import { UserDTOZodSchema } from "../../../../libs/types/database.types.dto";
+import type { serverPaths } from "../../../../libs/shared/PATHS";
 
 type Path = keyof typeof serverPaths;
 
@@ -16,3 +17,4 @@ export class MicroserviceMessenger {
 		this.client.emit(path, data ?? {});
 	}
 }
+console.log(UserDTOZodSchema);

@@ -1,5 +1,5 @@
-import type { Role } from "@libs/types/common/database.types";
 import type { ColumnType, GeneratedAlways } from "kysely";
+import type { Role } from "../../../../../libs/types/database.types";
 
 export interface DatabaseKysely {
 	users: {

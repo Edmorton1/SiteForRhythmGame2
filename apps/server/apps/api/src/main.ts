@@ -4,9 +4,9 @@ import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import fs from "fs";
 import { patchNestJsSwagger, ZodValidationPipe } from "nestjs-zod";
-import { getEnv } from "@server/libs/func/env";
 import { AppModule } from "./app.module";
-import { SERVER_PREFIX } from "@libs/shared/CONST";
+import { SERVER_PREFIX } from "../../../../../libs/shared/CONST";
+import { getEnv } from "../../../libs/func/env";
 patchNestJsSwagger();
 
 void (async () => {

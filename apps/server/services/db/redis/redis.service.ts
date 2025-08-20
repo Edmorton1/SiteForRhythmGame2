@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PinoLogger } from "nestjs-pino";
 import Redis from "ioredis";
-import { getEnv } from "@server/libs/func/env";
+import { getEnv } from "../../../libs/func/env";
 
 @Injectable()
 export class RedisService {

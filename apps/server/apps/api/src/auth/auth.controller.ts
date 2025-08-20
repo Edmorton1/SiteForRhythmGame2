@@ -1,12 +1,13 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, HttpCode, Inject, Post, Res } from "@nestjs/common";
 import { ApiBody } from "@nestjs/swagger";
-import { UserDTOSwagger, UserDTOValidation } from "@server/libs/types/auth.dto";
-import { serverPaths } from "@libs/shared/PATHS";
 import type { CookieOptions, Response } from "express";
-import { HttpController } from "@server/libs/common/http.controller";
 import { ClientProxy } from "@nestjs/microservices";
-import { AUTH } from "apps/api/src/SERVICE_NAMES";
+import { AUTH } from "../SERVICE_NAMES";
+import { HttpController } from "../../../../libs/common/http.controller";
+//prettier-ignore
+import { UserDTOSwagger, UserDTOValidation } from "../../../../libs/types/auth.dto";
+import { serverPaths } from "../../../../../../libs/shared/PATHS";
 
 const cookieName = "token";
 const cookieOptions: CookieOptions = {

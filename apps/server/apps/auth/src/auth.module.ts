@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { DatabaseModule } from "@server/services/db/postgres/database.module";
 import { LoggerModule } from "nestjs-pino";
-import { getEnv } from "@server/libs/func/env";
 import { JwtModule } from "@nestjs/jwt";
+import { getEnv } from "../../../libs/func/env";
+import { DatabaseModule } from "../../../services/db/postgres/database.module";
 
 @Module({
 	imports: [

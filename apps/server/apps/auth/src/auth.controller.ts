@@ -1,8 +1,8 @@
 import { AuthService } from "./auth.service";
 import { Controller } from "@nestjs/common";
-import { serverPaths } from "@libs/shared/PATHS";
 import { MessagePattern } from "@nestjs/microservices";
-import { UserDTOValidation } from "@server/libs/types/auth.dto";
+import { serverPaths } from "../../../../../libs/shared/PATHS";
+import { UserDTOValidation } from "../../../libs/types/auth.dto";
 
 @Controller()
 export class AuthController {
