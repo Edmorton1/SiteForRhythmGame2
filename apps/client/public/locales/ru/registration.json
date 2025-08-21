@@ -1,0 +1,8 @@
+{
+	"form": {
+		"email": "Почта",
+		"password": "Пароль",
+		"submit": "Готово"
+	},
+	"loginUsing": "Войти через {{provider}}"
+}
