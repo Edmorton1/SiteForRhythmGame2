@@ -3,15 +3,16 @@
 	"compilerOptions": {
 		"module": "nodenext",
 		"moduleResolution": "nodenext",
-		"target": "ES2023",
 		"resolvePackageJsonExports": true,
 		"declaration": true,
+		"removeComments": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"target": "ES2023",
 		"sourceMap": true,
 		"outDir": "./dist",
 		"incremental": true,
-		// #Listing
-		"strictPropertyInitialization": false,
-		"noUnusedParameters": false,
-		"types": ["node", "jest"]
+		"forceConsistentCasingInFileNames": true,
+		"strictPropertyInitialization": false
 	}
 }

@@ -10,12 +10,6 @@ const config: Config.InitialOptions = {
 	collectCoverageFrom: ["**/*.(t|j)s"],
 	coverageDirectory: "../coverage",
 	testEnvironment: "jsdom",
-
-	moduleNameMapper: {
-		"^@libs/types/(.*)$": "<rootDir>/../../../libs/types/src/$1",
-		"^@libs/shared/(.*)$": "<rootDir>/../../../libs/shared/src/$1",
-		"^@apps/client/(.*)$": "<rootDir>/$1",
-	},
 };
 
 export default config;

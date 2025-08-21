@@ -3,7 +3,7 @@ import { clientPaths } from "../common/const/PATHS";
 import { useTranslation } from "react-i18next";
 import { NAMESPACES } from "../common/const/NAMESPACES";
 
-function Header() {
+export function Header() {
 	const { t, i18n } = useTranslation(NAMESPACES.base);
 
 	const changeLang = (lang: string) => {
@@ -26,5 +26,3 @@ function Header() {
 		</header>
 	);
 }
-
-export default Header;

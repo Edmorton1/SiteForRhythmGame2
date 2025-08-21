@@ -4,7 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import bcrypt from "bcrypt";
 import { sql } from "kysely";
 import { UserDTOValidation } from "../../../libs/types/auth.dto";
-import { User } from "../../../../../libs/types/database.types";
+import { User } from "../../../../../libs/types/subjects.types";
 import { DatabaseService } from "../../../services/db/postgres/database.service";
 
 interface PayloadDTO {

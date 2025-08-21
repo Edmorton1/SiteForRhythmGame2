@@ -1,20 +1,10 @@
 {
 	"compilerOptions": {
-		// File Layout
-		// "rootDir": "./src",
-		// "outDir": "./dist",
-
-		// Module Resolution
-		// "module": "nodenext",
-		// "target": "esnext",
-		"jsx": "react-jsx",
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"isolatedModules": true,
-		// "verbatimModuleSyntax": true,
 		"importsNotUsedAsValues": "remove",
-		// "moduleDetection": "force",
 		"downlevelIteration": true,
 		"useDefineForClassFields": true,
 
@@ -32,24 +22,30 @@
 		"noPropertyAccessFromIndexSignature": true,
 
 		// Unused Code
-		// РУГАЕТСЯ ЕСЛИ ПЕРЕМЕННАЯ НЕ ИСПОЛЬЗУЕТСЯ
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 
 		// Output Options
+		"skipLibCheck": true,
+		// "module": "nodenext",
+		// "target": "esnext",
+		// "moduleResolution": "",
+
 		// "declaration": true,
 		// "declarationMap": true,
-		"removeComments": true,
-		"importHelpers": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
+		// "removeComments": true,
+		// "importHelpers": true,
+		// "forceConsistentCasingInFileNames": true,
+		// "moduleDetection": "force",
+		// "verbatimModuleSyntax": true,
 
 		// Decorators
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
+		// "experimentalDecorators": true,
+		// "emitDecoratorMetadata": true,
 
 		// Side Effects
-		"noUncheckedSideEffectImports": true
+		"noUncheckedSideEffectImports": true,
+		"noEmit": true
 	},
 	"exclude": ["node_modules", "dist", ".jest-cache"]
 }

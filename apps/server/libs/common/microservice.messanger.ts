@@ -1,6 +1,6 @@
 import type { ClientProxy } from "@nestjs/microservices";
 import { firstValueFrom } from "rxjs";
-import { UserDTOZodSchema } from "../../../../libs/types/database.types.dto";
+import { UserDTOZodSchema } from "../../../../libs/types/subjects.types.dto";
 import type { serverPaths } from "../../../../libs/shared/PATHS";
 
 type Path = keyof typeof serverPaths;

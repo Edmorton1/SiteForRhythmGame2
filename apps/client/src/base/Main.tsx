@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import Header from "./Header";
+import { Header } from "./Header";
 
-function Main() {
+export function Main() {
 	return (
 		<>
 			<Header />
@@ -17,5 +17,3 @@ function Main() {
 		</>
 	);
 }
-
-export default Main;

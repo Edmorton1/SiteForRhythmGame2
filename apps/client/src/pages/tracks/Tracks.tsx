@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Tracks() {
+export default function Tracks() {
 	const [state, setState] = useState<string[]>(["asd"]);
 	const [val, setVal] = useState<string>("");
 
@@ -19,5 +19,3 @@ function Tracks() {
 		</>
 	);
 }
-
-export default Tracks;

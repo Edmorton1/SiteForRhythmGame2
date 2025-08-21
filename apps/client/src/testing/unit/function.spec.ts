@@ -1,4 +1,4 @@
-import { calc } from "@apps/client/testing/unit/function";
+import { calc } from "./function";
 
 describe("[FUNCTION TESTING]", () => {
 	it("should be 4", () => {

@@ -3,9 +3,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LazyMain, LazyRegistration, LazyTracks } from "./LazyPages";
 import { SERVER_PREFIX } from "../../../../libs/shared/CONST";
 import { clientPaths } from "../common/const/PATHS";
-import Main from "../base/Main";
+import { Main } from "../base/Main";
 
-function App() {
+export function App() {
 	console.log(SERVER_PREFIX);
 	console.log(import.meta.env["VITE_MY_ENV"]);
 	console.log(_URL_SERVER);
@@ -37,5 +37,3 @@ function App() {
 		</BrowserRouter>
 	);
 }
-
-export default App;

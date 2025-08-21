@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import { UserZodSchema } from "./database.types";
+import { UserZodSchema } from "./subjects.types";
 
 export const UserDTOZodSchema = UserZodSchema.pick({
 	email: true,
