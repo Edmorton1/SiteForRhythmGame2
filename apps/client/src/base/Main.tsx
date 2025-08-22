@@ -5,13 +5,7 @@ export function Main() {
 	return (
 		<>
 			<Header />
-			<main
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					width: "400px",
-					gap: "15px",
-				}}>
+			<main>
 				<Outlet />
 			</main>
 		</>

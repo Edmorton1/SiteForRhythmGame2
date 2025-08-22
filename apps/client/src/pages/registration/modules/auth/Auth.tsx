@@ -1,14 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-//prettier-ignore
-import { UserDTOZodSchema, type UserDTO } from "../../../../../../../libs/types/subjects.types.dto";
+import { UserDTOZodSchema } from "../../../../../../../libs/models/schemas/user";
 import { NAMESPACES } from "../../../../common/const/NAMESPACES";
-import { useRegistrationAuthStore } from "./stores/auth.store";
+import { useRegistrationAuthStore } from "../../common/stores/auth.store";
 
 export function RegistrationAuthModule() {
 	const { t } = useTranslation(NAMESPACES.registration);
-	const { setEmailPassword } = useRegistrationAuthStore();
+	const { setUser: setEmailPassword } = useRegistrationAuthStore();
 
 	const {
 		register,
@@ -18,7 +17,7 @@ export function RegistrationAuthModule() {
 
 	console.log(errors);
 
-	const onSubmit = handleSubmit((data: UserDTO) => setEmailPassword(data));
+	const onSubmit = handleSubmit(data => setEmailPassword(data));
 
 	return (
 		<>
@@ -29,12 +28,14 @@ export function RegistrationAuthModule() {
 					type="text"
 					id="email"
 				/>
+
 				<label htmlFor="password">{t("form.password")}</label>
 				<input
 					{...register("password")}
 					type="password"
 					id="password"
 				/>
+
 				<button>{t("form.submit")}</button>
 			</form>
 			{/* TODO: Authorization with providers */}

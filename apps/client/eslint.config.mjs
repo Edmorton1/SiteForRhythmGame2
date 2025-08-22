@@ -30,7 +30,7 @@ export default defineConfig([
 			ecmaVersion: "latest",
 			globals: { ...globals.browser, ...globals.jest },
 			parserOptions: {
-				project: "./tsconfig.app.json",
+				project: "./tsconfig.eslint.json",
 				tsconfigRootDir: import.meta.dirname,
 			},
 		},

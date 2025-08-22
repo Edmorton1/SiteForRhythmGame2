@@ -2,7 +2,7 @@ CREATE TYPE roles AS ENUM ('user', 'admin');
 -- USER BLOCK
 CREATE TABLE users (
   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  role roles NOT NULL,
+  role roles NOT NULL DEFAULT 'user',
   email VARCHAR(256) UNIQUE NULL,
   -- МОЖЕТ ПОМЕНЯТЬ В БУДУЩЕМ
   provider_id VARCHAR(21) NULL,
@@ -21,7 +21,7 @@ CREATE TABLE profiles (
   name VARCHAR(32) UNIQUE NOT NULL,
   avatar TEXT,
   about VARCHAR(512),
-  country_code CHAR(2),
+  country_code CHAR(2) NOT NULL CHECK(LENGTH(country_code) = 2),
   created_at TIMESTAMP DEFAULT NOW(),
   FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

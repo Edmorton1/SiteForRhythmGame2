@@ -1,27 +1,20 @@
 import { AuthService } from "./auth.service";
 import { Controller } from "@nestjs/common";
-import { MessagePattern } from "@nestjs/microservices";
+import { MessagePattern, Payload } from "@nestjs/microservices";
 import { serverPaths } from "../../../../../libs/shared/PATHS";
-import { UserDTOValidation } from "../../../libs/types/auth.dto";
+import type { AuthDTO, LoginResponse } from "../../../libs/schemas/auth.dto";
 
 @Controller()
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@MessagePattern(serverPaths.registration)
-	async registration(userDto: UserDTOValidation): Promise<string> {
-		console.log("REGISTRATION AUTH CONTROLLER");
-		return this.authService.registration(userDto);
+	async registration(@Payload() authDTO: AuthDTO): Promise<LoginResponse> {
+		return this.authService.registration(authDTO);
 	}
 
-	@MessagePattern(serverPaths.login)
-	async login(userDto: UserDTOValidation): Promise<string> {
-		console.log(userDto);
-		return this.authService.login(userDto);
-	}
-
-	@MessagePattern("test")
-	test() {
-		return "sadasdads";
-	}
+	// @MessagePattern(serverPaths.login)
+	// async login(userDto: UserDTOValidation): Promise<string> {
+	// 	return this.authService.login(userDto);
+	// }
 }

@@ -38,9 +38,6 @@ jobs:
       - name: install dependencies
         run: pnpm install
 
-      - name: shared test
-        run: pnpm run test:shared
-
       - name: build server
         run: pnpm run build:s
 

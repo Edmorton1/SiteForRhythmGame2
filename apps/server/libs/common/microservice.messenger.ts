@@ -1,6 +1,5 @@
 import type { ClientProxy } from "@nestjs/microservices";
 import { firstValueFrom } from "rxjs";
-import { UserDTOZodSchema } from "../../../../libs/types/subjects.types.dto";
 import type { serverPaths } from "../../../../libs/shared/PATHS";
 
 type Path = keyof typeof serverPaths;
@@ -8,13 +7,11 @@ type Path = keyof typeof serverPaths;
 export class MicroserviceMessenger {
 	constructor(private readonly client: ClientProxy) {}
 
-	async send(path: string, data?: any) {
-		console.log("ПАРАМЕТРЫ", path, data);
+	async send<T>(path: string, data?: unknown): Promise<T> {
 		return firstValueFrom(this.client.send(path, data ?? {}));
 	}
 
-	emit(path: Path, data?: any) {
+	emit(path: Path, data?: unknown) {
 		this.client.emit(path, data ?? {});
 	}
 }
-console.log(UserDTOZodSchema);
