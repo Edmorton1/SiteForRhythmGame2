@@ -1,12 +1,14 @@
 import { useForm } from "react-hook-form";
 import { useCountries } from "./hooks/useCountries";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileDTOZodSchema } from "./schemas/profile.dto";
+import { ProfileDTOZodSchema } from "./schemas/auth.dto";
 import { useRegistrationAuthStore } from "../../common/stores/auth.store";
+import { useRegistrationPost } from "./hooks/useRegistration";
 
 export function RegistrationProfileModule() {
 	const { data, isSuccess, error, isError } = useCountries();
 	const { user } = useRegistrationAuthStore();
+	const { mutate } = useRegistrationPost();
 
 	const {
 		register,
@@ -16,8 +18,9 @@ export function RegistrationProfileModule() {
 
 	console.log(errors);
 
-	const onSubmit = handleSubmit(profile => {
-		console.log({ user, profile });
+	const onSubmit = handleSubmit(data => {
+		const auth = { auth: user!, profile: data };
+		mutate(auth);
 	});
 
 	return (

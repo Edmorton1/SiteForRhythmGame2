@@ -1,20 +1,20 @@
-import { UserDTOZodSchema } from "../../../../libs/models/schemas/user";
+import { UserDTOZodSchema } from "../../../../../libs/models/schemas/user";
 // prettier-ignore
-import { Profile, ProfileZodSchema } from "../../../../libs/models/schemas/profile";
+import { Profile, ProfileZodSchema } from "../../../../../libs/models/schemas/profile";
 import z from "zod";
+import { zExpressMulterFile } from "../enums/enums";
 
 const ProfileDTOZodSchema = ProfileZodSchema.pick({
 	name: true,
 	about: true,
 	country_code: true,
-}).extend({
-	avatar: z.file().optional(),
 });
 
 // Завтра переименовать на сервере Auth в Users
 export const AuthDTOZodSchema = z.object({
 	auth: UserDTOZodSchema,
 	profile: ProfileDTOZodSchema,
+	avatar: zExpressMulterFile.optional(),
 });
 
 export type AuthDTO = z.infer<typeof AuthDTOZodSchema>;

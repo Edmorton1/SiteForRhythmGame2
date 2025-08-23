@@ -1,13 +1,15 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, HttpCode, Inject, Post, Res, UploadedFile, UseInterceptors, ValidationError } from "@nestjs/common";
+import { Body, Controller, HttpCode, Inject, Post, Res, UploadedFile, UseInterceptors } from "@nestjs/common";
 import type { CookieOptions, Response } from "express";
 import { ClientProxy } from "@nestjs/microservices";
 import { AUTH } from "../SERVICE_NAMES";
 import { HttpController } from "../../../../libs/common/http.controller";
 //prettier-ignore
-import { type AuthDTO, AuthDTOValidation, LoginResponse } from "../../../../libs/schemas/auth.dto";
+import { AuthDTOZodSchema, LoginResponse } from "../../../../libs/models/schemas/auth.dto";
 import { serverPaths } from "../../../../../../libs/shared/PATHS";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { Profile } from "../../../../../../libs/models/schemas/profile";
+import { zodValidateFormData } from "../../../../libs/common/zod.validate.formdata";
 
 const cookieName = "token";
 const cookieOptions: CookieOptions = {
@@ -27,24 +29,23 @@ export class AuthController extends HttpController {
 	@HttpCode(201)
 	@UseInterceptors(FileInterceptor("avatar"))
 	async registration(
-		@UploadedFile() file: Express.Multer.File,
-		@Body() data: AuthDTO,
+		@UploadedFile() avatar: Express.Multer.File,
+		@Body() data: unknown,
 		@Res({ passthrough: true }) res: Response,
-	): Promise<LoginResponse> {
-		// try {
-		// 	JSON.parse(data.data)
-		// } catch {
-		// 	throw new ValidationError
-		// }
-		// UserZodSchema.parse(data);
-		// console.log(data, file);
-		// const response = await this.messenger.send<LoginResponse>(
-		// 	serverPaths.registration,
-		// 	data,
-		// );
+	): Promise<Profile> {
+		const authDTO = zodValidateFormData({
+			data,
+			name: "data",
+			schema: AuthDTOZodSchema,
+			files: { avatar },
+		});
+		const response = await this.messenger.send<LoginResponse>(
+			serverPaths.registration,
+			authDTO,
+		);
 
-		// res.cookie(cookieName, response.token, cookieOptions);
-		return data;
+		res.cookie(cookieName, response.token, cookieOptions);
+		return response.profile;
 	}
 
 	// @Post(serverPaths.login)

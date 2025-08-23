@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import bcrypt from "bcrypt";
 import { User } from "../../../../../libs/models/schemas/user";
 import { DatabaseService } from "../../../services/db/postgres/database.service";
-import { AuthDTO, LoginResponse } from "../../../libs/schemas/auth.dto";
+import { AuthDTO, LoginResponse } from "../../../libs/models/schemas/auth.dto";
 import { DatabaseKysely } from "../../../services/db/postgres/database.type";
 import { MicroserviceError } from "../../../libs/common/microservice.error";
 import { sql } from "kysely";

@@ -2,7 +2,10 @@ import { AuthService } from "./auth.service";
 import { Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { serverPaths } from "../../../../../libs/shared/PATHS";
-import type { AuthDTO, LoginResponse } from "../../../libs/schemas/auth.dto";
+import type {
+	AuthDTO,
+	LoginResponse,
+} from "../../../libs/models/schemas/auth.dto";
 
 @Controller()
 export class AuthController {
