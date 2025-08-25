@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserDTOZodSchema } from "../../../../../../../libs/models/schemas/user";
 import { NAMESPACES } from "../../../../common/const/NAMESPACES";
-import { useRegistrationAuthStore } from "../../common/stores/auth.store";
+import { useRegistrationAuthStore } from "../../common/stores/user.store";
 
 export function RegistrationAuthModule() {
 	const { t } = useTranslation(NAMESPACES.registration);

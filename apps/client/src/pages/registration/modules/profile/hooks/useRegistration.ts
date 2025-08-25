@@ -4,12 +4,13 @@ import type { AuthDTO } from "../schemas/auth.dto";
 import { useMutation } from "@tanstack/react-query";
 
 const postData = async (data: AuthDTO) => {
-	const { auth, profile } = data;
+	const { user, profile } = data;
 	const { avatar, ...profileWithoutAvatar } = profile;
 	const fd = new FormData();
 	fd.set("avatar", avatar[0]);
-	fd.set("data", JSON.stringify({ auth, profile: profileWithoutAvatar }));
+	fd.set("data", JSON.stringify({ user, profile: profileWithoutAvatar }));
 
+	console.log(fd, fd.get("data"), fd.get("avatar"));
 	return fetch(_URL_SERVER + serverPaths.registration, {
 		method: "POST",
 		body: fd,

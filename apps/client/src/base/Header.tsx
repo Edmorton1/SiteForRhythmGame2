@@ -7,7 +7,6 @@ export function Header() {
 	const { t, i18n } = useTranslation(NAMESPACES.base);
 
 	const changeLang = (lang: string) => {
-		console.log(lang);
 		i18n.changeLanguage(lang);
 	};
 

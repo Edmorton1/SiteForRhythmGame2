@@ -1,12 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import bcrypt from "bcrypt";
 import { User } from "../../../../../libs/models/schemas/user";
-import { DatabaseService } from "../../../services/db/postgres/database.service";
 import { AuthDTO, LoginResponse } from "../../../libs/models/schemas/auth.dto";
-import { DatabaseKysely } from "../../../services/db/postgres/database.type";
 import { MicroserviceError } from "../../../libs/common/microservice.error";
-import { sql } from "kysely";
+import { AuthSQL } from "./auth.sql";
 
 interface PayloadDTO {
 	id: User["id"];
@@ -16,47 +13,24 @@ interface PayloadDTO {
 @Injectable()
 export class AuthService {
 	constructor(
-		private readonly databaseService: DatabaseService,
 		private readonly jwtService: JwtService,
+		private readonly authSQL: AuthSQL,
 	) {}
 
 	async registration(authDTO: AuthDTO): Promise<LoginResponse> {
-		const { auth, profile: profileDTO } = authDTO;
-		if (await this.isInDB("users", "email", auth.email!)) {
+		const { user: auth, profile: profileDTO } = authDTO;
+		if (await this.authSQL.isInDB("users", "email", auth.email!)) {
 			throw new MicroserviceError(
 				409,
 				"An account with this email already exists.",
 			);
 		}
-		if (await this.isInDB("profiles", "name", profileDTO.name)) {
+		if (await this.authSQL.isInDB("profiles", "name", profileDTO.name)) {
 			throw new MicroserviceError(409, "This nickname is already taken");
 		}
 		// TODO: Убрать !, сделать интеграцию с провайдером
 		// TODO: set many salt
-		const hashPassword = await bcrypt.hash(auth.password!, 3);
-		const { user, profile } = await this.databaseService.db
-			.transaction()
-			.execute(async trx => {
-				const [roleId] = await trx
-					.insertInto("users")
-					.values({
-						...auth,
-						password: hashPassword,
-					})
-					.returning(["id", "role"])
-					.execute();
-
-				const [profile] = await trx
-					.insertInto("profiles")
-					.values({
-						...profileDTO,
-						id: roleId.id,
-						avatar: null,
-					})
-					.returningAll()
-					.execute();
-				return { user: roleId, profile };
-			});
+		const { user, profile } = await this.authSQL.registration(authDTO);
 
 		const token = this.generateToken(user);
 		return { token, profile };
@@ -82,23 +56,6 @@ export class AuthService {
 	private generateToken(user: PayloadDTO) {
 		const payload = { id: user.id, role: user.role };
 		return this.jwtService.sign(payload);
-	}
-
-	// TODO: ПРОВЕРИТЬ ОПТИМИЗАЦИЮ
-	private async isInDB<T extends keyof DatabaseKysely>(
-		table: T,
-		param: keyof DatabaseKysely[T],
-		// USER INPUT
-		value: string,
-	) {
-		const { rows } = await sql<{ exists: boolean }>`
-		SELECT EXISTS(
-			SELECT 1
-			FROM ${sql.table(table)}
-			WHERE ${sql.ref(String(param))} = ${value}
-		)`.execute(this.databaseService.db);
-
-		return rows[0].exists;
 	}
 }
 

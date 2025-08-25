@@ -10,9 +10,8 @@ const ProfileDTOZodSchema = ProfileZodSchema.pick({
 	country_code: true,
 });
 
-// Завтра переименовать на сервере Auth в Users
 export const AuthDTOZodSchema = z.object({
-	auth: UserDTOZodSchema,
+	user: UserDTOZodSchema,
 	profile: ProfileDTOZodSchema,
 	avatar: zExpressMulterFile.optional(),
 });

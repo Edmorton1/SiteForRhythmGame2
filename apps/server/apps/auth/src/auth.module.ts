@@ -5,6 +5,7 @@ import { LoggerModule } from "nestjs-pino";
 import { JwtModule } from "@nestjs/jwt";
 import { getEnv } from "../../../libs/func/env";
 import { DatabaseModule } from "../../../services/db/postgres/database.module";
+import { AuthSQL } from "./auth.sql";
 
 @Module({
 	imports: [
@@ -32,6 +33,6 @@ import { DatabaseModule } from "../../../services/db/postgres/database.module";
 		AuthModule,
 	],
 	controllers: [AuthController],
-	providers: [AuthService],
+	providers: [AuthService, AuthSQL],
 })
 export class AuthModule {}

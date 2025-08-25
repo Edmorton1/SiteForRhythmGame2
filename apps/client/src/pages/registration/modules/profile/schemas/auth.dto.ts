@@ -4,7 +4,6 @@ import { UserDTOZodSchema } from "../../../../../../../../libs/models/schemas/us
 
 export const ProfileDTOZodSchema = ProfileZodSchema.pick({
 	name: true,
-	// avatar: true,
 	about: true,
 	country_code: true,
 }).extend({
@@ -13,7 +12,7 @@ export const ProfileDTOZodSchema = ProfileZodSchema.pick({
 export type ProfileDTO = z.infer<typeof ProfileDTOZodSchema>;
 
 export const AuthDTOZodSchema = z.object({
-	auth: UserDTOZodSchema,
+	user: UserDTOZodSchema,
 	profile: ProfileDTOZodSchema,
 });
 export type AuthDTO = z.infer<typeof AuthDTOZodSchema>;
