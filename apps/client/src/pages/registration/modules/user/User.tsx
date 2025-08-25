@@ -21,7 +21,14 @@ export function RegistrationAuthModule() {
 
 	return (
 		<>
-			<form onSubmit={onSubmit}>
+			<form
+				onSubmit={onSubmit}
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					gap: "10px",
+					width: "400px",
+				}}>
 				<label htmlFor="email">{t("form.email")}</label>
 				<input
 					{...register("email")}
@@ -39,11 +46,9 @@ export function RegistrationAuthModule() {
 				<button>{t("form.submit")}</button>
 			</form>
 			{/* TODO: Authorization with providers */}
-			{/* <button onClick={() => addUser("asdsad")}>Добавить</button>
-      <button onClick={() => console.log(users)}>Логнуть</button>
-      <button>{t("loginUsing", { provider: "Google" })}</button>
-      <button>{t("loginUsing", { provider: "Facebook" })}</button>
-      <button>{t("loginUsing", { provider: "Twitter" })}</button> */}
+			<button>{t("loginUsing", { provider: "Google" })}</button>
+			<button>{t("loginUsing", { provider: "Facebook" })}</button>
+			<button>{t("loginUsing", { provider: "Twitter" })}</button>
 		</>
 	);
 }

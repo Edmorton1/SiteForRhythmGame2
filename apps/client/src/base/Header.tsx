@@ -12,7 +12,7 @@ export function Header() {
 
 	return (
 		<header style={{ display: "flex", gap: "15px" }}>
-			<nav>
+			<nav style={{ display: "flex", gap: "15px" }}>
 				<Link to={clientPaths.home}>{t("nav.home")}</Link>
 				<Link to={clientPaths.registration}>{t("nav.registration")}</Link>
 			</nav>

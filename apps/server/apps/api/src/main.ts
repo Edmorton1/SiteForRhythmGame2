@@ -2,15 +2,15 @@ import dotenv from "dotenv";
 dotenv.config();
 import { NestFactory } from "@nestjs/core";
 // import fs from "fs";
-import { AppModule } from "./app.module";
+import { AppModule } from "./app/app.module";
 import { SERVER_PREFIX } from "../../../../../libs/shared/CONST";
 import { getEnv } from "../../../libs/func/env";
 // import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 //prettier-ignore
 import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import swaggerUi from "swagger-ui-express";
-import "./auth/auth.docs";
-import { registry } from "./registry";
+import "./auth/docs/auth.docs";
+import { registry } from "./app/registry";
 
 void (async () => {
 	const app = await NestFactory.create(AppModule, {

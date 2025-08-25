@@ -2,14 +2,15 @@
 import { Body, Controller, HttpCode, Inject, Post, Res, UploadedFile, UseInterceptors } from "@nestjs/common";
 import type { CookieOptions, Response } from "express";
 import { ClientProxy } from "@nestjs/microservices";
-import { AUTH } from "../SERVICE_NAMES";
-import { HttpController } from "../../../../libs/common/http.controller";
+import { AUTH } from "../../app/SERVICE_NAMES";
+import { HttpController } from "../../../../../libs/common/http.controller";
 //prettier-ignore
-import { AuthDTOZodSchema, LoginResponse } from "../../../../libs/models/schemas/auth.dto";
-import { serverPaths } from "../../../../../../libs/shared/PATHS";
+import { AuthDTOZodSchema, LoginResponse } from "../../../../../libs/models/schemas/auth.dto";
+import { serverPaths } from "../../../../../../../libs/shared/PATHS";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { Profile } from "../../../../../../libs/models/schemas/profile";
-import { zodValidateFormData } from "../../../../libs/common/zod.validate.formdata";
+import { Profile } from "../../../../../../../libs/models/schemas/profile";
+import { zodValidateFormData } from "../../../../../libs/common/zod.validate.formdata";
+import { AuthService } from "../services/auth.service";
 
 const cookieName = "token";
 const cookieOptions: CookieOptions = {
@@ -21,7 +22,10 @@ const cookieOptions: CookieOptions = {
 
 @Controller()
 export class AuthController extends HttpController {
-	constructor(@Inject(AUTH) client: ClientProxy) {
+	constructor(
+		@Inject(AUTH) client: ClientProxy,
+		private readonly authService: AuthService,
+	) {
 		super(client);
 	}
 
@@ -46,6 +50,13 @@ export class AuthController extends HttpController {
 
 		res.cookie(cookieName, response.token, cookieOptions);
 		return response.profile;
+	}
+
+	@Post(serverPaths.redirect)
+	@HttpCode(300)
+	async redirect() {
+		const providerId = this.authService.generateProvider();
+		return providerId;
 	}
 
 	// @Post(serverPaths.login)

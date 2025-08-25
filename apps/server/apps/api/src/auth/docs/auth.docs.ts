@@ -1,11 +1,11 @@
 import { z } from "zod";
 import "@asteasolutions/zod-to-openapi";
-import { ProfileZodSchema } from "../../../../../../libs/models/schemas/profile";
-import { serverPaths } from "../../../../../../libs/shared/PATHS";
-import { AuthDTOZodSchema } from "../../../../libs/models/schemas/auth.dto";
-import { registry } from "../registry";
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
-import { SERVER_PREFIX } from "../../../../../../libs/shared/CONST";
+import { registry } from "../../app/registry";
+import { SERVER_PREFIX } from "../../../../../../../libs/shared/CONST";
+import { serverPaths } from "../../../../../../../libs/shared/PATHS";
+import { AuthDTOZodSchema } from "../../../../../libs/models/schemas/auth.dto";
+import { ProfileZodSchema } from "../../../../../../../libs/models/schemas/profile";
 
 extendZodWithOpenApi(z);
 
