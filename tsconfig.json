@@ -22,8 +22,8 @@
 		"noPropertyAccessFromIndexSignature": true,
 
 		// Unused Code
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
+		// "noUnusedLocals": true,
+		// "noUnusedParameters": true,
 
 		// Output Options
 		"skipLibCheck": true,

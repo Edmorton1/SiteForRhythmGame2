@@ -1,0 +1,72 @@
+CREATE TYPE roles AS ENUM ('user', 'admin');
+-- USER BLOCK
+CREATE TABLE users (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  role roles NOT NULL DEFAULT 'user',
+  email VARCHAR(256) UNIQUE NULL,
+  -- МОЖЕТ ПОМЕНЯТЬ В БУДУЩЕМ
+  provider_id VARCHAR(21) NULL,
+  password VARCHAR(128) NULL,
+  banned BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+ALTER TABLE users
+ADD CONSTRAINT auth_method_check
+CHECK ((provider_id IS NOT NULL AND password IS NULL AND email IS NULL)
+OR (provider_id IS NULL AND password IS NOT NULL AND email IS NOT NULL));
+
+-- PROFILES BLOCK
+CREATE TABLE profiles (
+  id INT PRIMARY KEY,
+  name VARCHAR(32) UNIQUE NOT NULL,
+  avatar TEXT,
+  about VARCHAR(512),
+  country_code CHAR(2) NOT NULL CHECK(LENGTH(country_code) = 2),
+  created_at TIMESTAMP DEFAULT NOW(),
+  FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TYPE difficulties AS ENUM ('easy', 'normal', 'hard');
+CREATE TABLE tracks (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name_en VARCHAR(32) NOT NULL,
+  name VARCHAR(32) UNIQUE NOT NULL,
+  file TEXT NOT NULL,
+  likes INT NOT NULL DEFAULT 0,
+  downloads INT NOT NULL DEFAULT 0,
+  difficulty difficulties NOT NULL,
+  bpm INTEGER NOT NULL,
+  image TEXT,
+  about VARCHAR(512),
+  language CHAR(2)
+);
+
+CREATE TABLE tracks_genres_names (
+  name VARCHAR(64) PRIMARY KEY
+);
+
+CREATE TABLE tracks_genres (
+  track_id INT NOT NULL,
+  name VARCHAR(64) NOT NULL,
+  PRIMARY KEY (track_id, name),
+  FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (name) REFERENCES tracks_genres_names(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE likes (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id INT NOT NULL,
+  track_id INT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE comments (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id INT NOT NULL,
+  track_id INT NOT NULL,
+  text VARCHAR(512),
+  date TIMESTAMP DEFAULT NOW(),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
