@@ -3,6 +3,7 @@ type Mode = "production" | "development";
 interface Env {
 	PORT: string;
 	HOST: string;
+	REDIRECT_URL: string;
 	AUTH_PORT: string;
 	AUTH_HOST: string;
 	DB_NAME: string;

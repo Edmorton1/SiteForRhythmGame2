@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { LazyMain, LazyRegistration, LazyTracks } from "./LazyPages";
+import { LazyMain, LazyRegistration } from "./LazyPages";
 import { clientPaths } from "../common/const/PATHS";
 import { Main } from "../base/Main";
 
@@ -15,10 +15,6 @@ export function App() {
 					<Route
 						path={clientPaths.registration}
 						element={<LazyRegistration />}
-					/>
-					<Route
-						path={clientPaths.tracks}
-						element={<LazyTracks />}
 					/>
 				</Route>
 			</Routes>

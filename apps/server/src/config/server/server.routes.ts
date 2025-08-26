@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { container, injectable } from "tsyringe";
-import { controllersClasses } from "../../registrator";
+import { RegistrationController } from "../../routes/registration/registration.controller";
 
 @injectable()
 export class ServerRoutes {
@@ -8,6 +8,8 @@ export class ServerRoutes {
 
 	constructor() {
 		this.router = Router();
+
+		const controllersClasses = [RegistrationController];
 
 		controllersClasses.forEach(controller => {
 			this.router.use(container.resolve(controller).router);

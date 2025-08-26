@@ -1,5 +1,5 @@
 import type { ColumnType, GeneratedAlways } from "kysely";
-import { Role } from "../../../../../../libs/models/schemas/user";
+import { Role } from "../../../../../../../libs/models/schemas/user";
 
 export interface DatabaseKysely {
 	users: {

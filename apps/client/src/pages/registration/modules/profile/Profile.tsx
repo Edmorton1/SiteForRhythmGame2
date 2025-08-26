@@ -9,22 +9,20 @@ export function RegistrationProfileModule() {
 	const { data, isSuccess, error, isError } = useCountries();
 	const { user } = useRegistrationAuthStore();
 	const { mutate } = useRegistrationPost();
-
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm({ resolver: zodResolver(ProfileDTOZodSchema) });
-
 	console.log(errors);
 
-	const onSubmit = handleSubmit(data => {
+	const handleSubmitProfileForm = handleSubmit(data => {
 		const auth = { user: user!, profile: data };
 		mutate(auth);
 	});
 
 	return (
-		<form onSubmit={onSubmit}>
+		<form onSubmit={handleSubmitProfileForm}>
 			<label htmlFor="name">Имя</label>
 			<input
 				{...register("name")}

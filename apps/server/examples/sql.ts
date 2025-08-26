@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
-import { DatabaseService } from "../../common/services/postgres/database.service";
+import { DatabaseService } from "../src/common/services/postgres/database.service";
 
 @injectable()
-export class AuthSQL {
+export class SQL {
 	constructor(private readonly db: DatabaseService) {}
 }

@@ -1,0 +1,97 @@
+import { DatabaseService } from "../../common/services/postgres/database.service";
+import bcrypt from "bcrypt";
+import { AuthDTO } from "../../common/models/schemas/auth.dto";
+import { DatabaseKysely } from "../../common/services/postgres/database.type";
+import { sql, Transaction } from "kysely";
+import { injectable } from "tsyringe";
+import { User, UserDTO } from "../../../../../libs/models/schemas/user";
+import { randomUUID } from "crypto";
+
+type ProfileAvatar = Omit<AuthDTO, "user">;
+
+type RoleId = Pick<User, "id" | "role">;
+
+@injectable()
+export class RegistrationSQL {
+	constructor(private readonly databaseService: DatabaseService) {}
+
+	registrationEmail = async (authDTO: AuthDTO) => {
+		return this.registration(authDTO, trx =>
+			this.createUser(trx, authDTO.user),
+		);
+	};
+
+	registrationProvider = async (authDTO: ProfileAvatar, providerId: string) => {
+		return this.registration(authDTO, trx =>
+			this.insertUser(trx, { provider_id: providerId }),
+		);
+	};
+
+	private registration = async (
+		authDTO: ProfileAvatar,
+		insertUser: (trx: Transaction<DatabaseKysely>) => Promise<RoleId>,
+	) => {
+		const avatar = await this.uploadAvatar(authDTO.avatar);
+
+		return this.databaseService.db.transaction().execute(async trx => {
+			const JWTPayload = await insertUser(trx);
+
+			const [profile] = await trx
+				.insertInto("profiles")
+				.values({ ...authDTO.profile, id: JWTPayload.id, avatar })
+				.returningAll()
+				.execute();
+			return { JWTPayload, profile };
+		});
+	};
+
+	private uploadAvatar = async (
+		avatar: AuthDTO["avatar"],
+	): Promise<string | null> => {
+		if (!avatar) {
+			return null;
+		}
+		// TODO: Mocking upload avatar
+		return randomUUID();
+	};
+
+	private insertUser = async (
+		trx: Transaction<DatabaseKysely>,
+		value: UserDTO | { provider_id: string },
+	): Promise<RoleId> => {
+		const [userRoleId] = await trx
+			.insertInto("users")
+			.values(value)
+			.returning(["id", "role"])
+			.execute();
+		return userRoleId;
+	};
+
+	private createUser = async (
+		trx: Transaction<DatabaseKysely>,
+		userDTO: AuthDTO["user"],
+	): Promise<RoleId> => {
+		// TODO: set many salt
+		const hashPassword = await bcrypt.hash(userDTO.password!, 3);
+		return await this.insertUser(trx, {
+			...userDTO,
+			password: hashPassword,
+		});
+	};
+
+	isInDB = async <T extends keyof DatabaseKysely>(
+		table: T,
+		param: keyof DatabaseKysely[T],
+		// USER INPUT
+		value: string,
+	) => {
+		const { rows } = await sql<{ exists: boolean }>`
+		SELECT EXISTS(
+			SELECT 1
+			FROM ${sql.table(table)}
+			WHERE ${sql.ref(String(param))} = ${value}
+		)`.execute(this.databaseService.db);
+
+		return rows[0].exists;
+	};
+}

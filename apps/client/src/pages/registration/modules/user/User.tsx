@@ -4,24 +4,26 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserDTOZodSchema } from "../../../../../../../libs/models/schemas/user";
 import { NAMESPACES } from "../../../../common/const/NAMESPACES";
 import { useRegistrationAuthStore } from "../../common/stores/user.store";
+import { serverPaths } from "../../../../../../../libs/shared/PATHS";
 
 export function RegistrationAuthModule() {
 	const { t } = useTranslation(NAMESPACES.registration);
 	const { setUser: setEmailPassword } = useRegistrationAuthStore();
-
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm({ resolver: zodResolver(UserDTOZodSchema) });
-
 	console.log(errors);
 
-	const onSubmit = handleSubmit(data => setEmailPassword(data));
+	const handleSubmitUserForm = handleSubmit(data => setEmailPassword(data));
+
+	const handleProviderClick = () =>
+		(window.location.href = _URL_SERVER + serverPaths.redirect);
 
 	return (
 		<>
-			<form onSubmit={onSubmit}>
+			<form onSubmit={handleSubmitUserForm}>
 				<label htmlFor="email">{t("form.email")}</label>
 				<input
 					{...register("email")}
@@ -39,11 +41,9 @@ export function RegistrationAuthModule() {
 				<button>{t("form.submit")}</button>
 			</form>
 			{/* TODO: Authorization with providers */}
-			{/* <button onClick={() => addUser("asdsad")}>Добавить</button>
-      <button onClick={() => console.log(users)}>Логнуть</button>
-      <button>{t("loginUsing", { provider: "Google" })}</button>
-      <button>{t("loginUsing", { provider: "Facebook" })}</button>
-      <button>{t("loginUsing", { provider: "Twitter" })}</button> */}
+			<button onClick={handleProviderClick}>
+				{t("loginUsing", { provider: "Random Provider" })}
+			</button>
 		</>
 	);
 }

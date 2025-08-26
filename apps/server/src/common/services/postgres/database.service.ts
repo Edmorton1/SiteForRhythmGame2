@@ -2,8 +2,8 @@ import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import { DatabaseKysely } from "./database.type";
 import { injectable } from "tsyringe";
-import { LoggerService } from "../../logger/logger.service";
-import { ConfigService } from "../../config/config.service";
+import { LoggerService } from "../logger/logger.service";
+import { ConfigService } from "../config/config.service";
 
 @injectable()
 export class DatabaseService {

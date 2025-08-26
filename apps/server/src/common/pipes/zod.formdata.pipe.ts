@@ -1,19 +1,22 @@
 import { ZodError, ZodType } from "zod";
 import { HttpError } from "../http/http.error";
 
-interface args {
+interface Args<T extends ZodType<any>> {
 	data: unknown;
 	name: string;
-	schema: ZodType;
-	files?: Record<string, Express.Multer.File | Express.Multer.File[]>;
+	schema: T;
+	files?: Record<
+		string,
+		Express.Multer.File | Express.Multer.File[] | undefined
+	>;
 }
 
-export const zodValidateFormData = ({
+export const zodValidateFormData = <T extends ZodType<any>>({
 	data,
 	name,
 	schema,
 	files: file,
-}: args) => {
+}: Args<T>) => {
 	if (typeof data !== "object" || data === null || !(name in data)) {
 		throw new HttpError(400, `The passed FormData has no property ${name}`);
 	}
