@@ -17,7 +17,7 @@ export class TokenService {
 		}
 	};
 
-	generateToken = (payload: object) => {
+	generateToken = (payload: object): string => {
 		return jwt.sign(payload, this.configService.getEnv("JWT_SECRET"));
 	};
 }

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { container, injectable } from "tsyringe";
-import { RegistrationController } from "../../routes/registration/registration.controller";
+import { RegistrationController } from "../../routes/registration/controller/registration.controller";
 
 @injectable()
 export class ServerRoutes {

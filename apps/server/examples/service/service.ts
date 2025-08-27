@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import { SQL } from "./sql";
+import { SQL } from "../sql/sql";
 
 @injectable()
 export class Service {

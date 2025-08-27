@@ -1,16 +1,16 @@
 //prettier-ignore
-import { AuthDTOZodSchema, LoginResponse, ProviderJWTPayload } from "../../common/models/schemas/auth.dto";
-import { RegistrationService } from "./registration.service";
-import { zodValidateFormData } from "../../common/pipes/zod.formdata.pipe";
+import { AuthDTOZodSchema, LoginResponse, ProviderJWTPayload } from "../../../common/models/schemas/auth.dto";
+import { RegistrationService } from "../service/registration.service";
+import { zodValidateFormData } from "../../../common/pipes/zod.formdata.pipe";
 import { injectable } from "tsyringe";
 import { CookieOptions, Request, Response } from "express";
-import { BaseController } from "../../config/server/base.controller";
-import { CryptoService } from "../../common/services/crypto/crypto.service";
-import { serverPaths } from "../../../../../libs/shared/PATHS";
-import { ConfigService } from "../../common/services/config/config.service";
-import { TokenService } from "./token.service";
-import { HttpError } from "../../common/http/http.error";
-import { UserDTO } from "../../../../../libs/models/schemas/user";
+import { BaseController } from "../../../config/server/base.controller";
+import { CryptoService } from "../../../common/services/crypto/crypto.service";
+import { serverPaths } from "../../../../../../libs/shared/PATHS";
+import { ConfigService } from "../../../common/services/config/config.service";
+import { TokenService } from "../token.service";
+import { HttpError } from "../../../common/http/http.error";
+import { UserDTO } from "../../../../../../libs/models/schemas/user";
 import multer from "multer";
 
 const cookieName = "token";
@@ -26,7 +26,7 @@ const cookieOptions: CookieOptions = {
 @injectable()
 export class RegistrationController extends BaseController {
 	constructor(
-		private readonly authService: RegistrationService,
+		private readonly registrationService: RegistrationService,
 		private readonly cryptoService: CryptoService,
 		private readonly configService: ConfigService,
 		private readonly tokenService: TokenService,
@@ -64,11 +64,11 @@ export class RegistrationController extends BaseController {
 
 		let response: LoginResponse;
 		if (authType === "email") {
-			response = await this.authService.registrationWithEmail(authDTO);
+			response = await this.registrationService.registrationWithEmail(authDTO);
 		} else if (authType === "provider") {
 			// TODO: REMOVE !
 			const providerId = await this.validateProviderJWT(token!);
-			response = await this.authService.registrationWithProvider(
+			response = await this.registrationService.registrationWithProvider(
 				profileDTO,
 				providerId,
 			);

@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
 import { Request, Response } from "express";
-import { AuthService } from "./auth.service";
-import { BaseController } from "../../config/server/base.controller";
-import { serverPaths } from "../../../../../libs/shared/PATHS";
+import { AuthService } from "../auth.service";
+import { BaseController } from "../../../config/server/base.controller";
+import { serverPaths } from "../../../../../../libs/shared/PATHS";
 
 @injectable()
 export class AuthController extends BaseController {

@@ -1,10 +1,10 @@
-import { DatabaseService } from "../../common/services/postgres/database.service";
+import { DatabaseService } from "../../../common/services/postgres/database.service";
 import bcrypt from "bcrypt";
-import { AuthDTO } from "../../common/models/schemas/auth.dto";
-import { DatabaseKysely } from "../../common/services/postgres/database.type";
+import { AuthDTO } from "../../../common/models/schemas/auth.dto";
+import { DatabaseKysely } from "../../../common/services/postgres/database.type";
 import { sql, Transaction } from "kysely";
 import { injectable } from "tsyringe";
-import { User, UserDTO } from "../../../../../libs/models/schemas/user";
+import { User, UserDTO } from "../../../../../../libs/models/schemas/user";
 import { randomUUID } from "crypto";
 
 type ProfileAvatar = Omit<AuthDTO, "user">;
@@ -21,8 +21,11 @@ export class RegistrationSQL {
 		);
 	};
 
-	registrationProvider = async (authDTO: ProfileAvatar, providerId: string) => {
-		return this.registration(authDTO, trx =>
+	registrationProvider = async (
+		profileDTO: ProfileAvatar,
+		providerId: string,
+	) => {
+		return this.registration(profileDTO, trx =>
 			this.insertUser(trx, { provider_id: providerId }),
 		);
 	};
@@ -31,7 +34,9 @@ export class RegistrationSQL {
 		authDTO: ProfileAvatar,
 		insertUser: (trx: Transaction<DatabaseKysely>) => Promise<RoleId>,
 	) => {
-		const avatar = await this.uploadAvatar(authDTO.avatar);
+		const avatar = authDTO.avatar
+			? await this.uploadAvatar(authDTO.avatar)
+			: null;
 
 		return this.databaseService.db.transaction().execute(async trx => {
 			const JWTPayload = await insertUser(trx);
@@ -46,11 +51,8 @@ export class RegistrationSQL {
 	};
 
 	private uploadAvatar = async (
-		avatar: AuthDTO["avatar"],
+		avatar: Express.Multer.File,
 	): Promise<string | null> => {
-		if (!avatar) {
-			return null;
-		}
 		// TODO: Mocking upload avatar
 		return randomUUID();
 	};
