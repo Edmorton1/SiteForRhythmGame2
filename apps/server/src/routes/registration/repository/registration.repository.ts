@@ -15,7 +15,7 @@ type RoleId = Pick<User, "id" | "role">;
 type RegistrationResponse = { JWTPayload: RoleId; profile: Profile };
 
 @injectable()
-export class RegistrationSQL {
+export class RegistrationRepository {
 	constructor(private readonly databaseService: DatabaseService) {}
 
 	registrationEmail = async (

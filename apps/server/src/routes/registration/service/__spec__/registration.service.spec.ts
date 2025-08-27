@@ -1,7 +1,7 @@
 import "reflect-metadata";
-import { HttpError } from "../../../common/http/http.error";
+import { HttpError } from "../../../../common/http/http.error";
 //prettier-ignore
-import { mockProfileDTO, mockRegistrationService, mockResult } from "./__mocks__/services.mock";
+import { mockProfileDTO, mockRegistrationService, mockResult } from "./services.mock";
 
 const userDTO = { email: "q@w.er", password: "123123" };
 

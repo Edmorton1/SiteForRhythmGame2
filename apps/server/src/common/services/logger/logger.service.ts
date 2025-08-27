@@ -12,5 +12,8 @@ export class LoggerService {
 				? { transport: { target: "pino-pretty" } }
 				: undefined,
 		);
+
+		const example = Math.random();
+		console.log("_____________________________________ЭТОТ ЭКЗЕМПЛЯР", example);
 	}
 }

@@ -20,7 +20,7 @@ CREATE TABLE profiles (
   id INT PRIMARY KEY,
   name VARCHAR(32) UNIQUE NOT NULL,
   avatar TEXT,
-  about VARCHAR(512),
+  about VARCHAR(512) NOT NULL DEFAULT '',
   country_code CHAR(2) NOT NULL CHECK(LENGTH(country_code) = 2),
   created_at TIMESTAMP DEFAULT NOW(),
   FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE

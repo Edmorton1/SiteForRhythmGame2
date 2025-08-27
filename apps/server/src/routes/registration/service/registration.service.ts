@@ -1,7 +1,7 @@
 //prettier-ignore
 import { AuthDTO, LoginResponse, ProviderJWTPayload } from "../../../common/models/schemas/auth.dto";
 import { injectable } from "tsyringe";
-import { RegistrationSQL } from "../sql/registration.sql";
+import { RegistrationRepository } from "../repository/registration.repository";
 import { HttpError } from "../../../common/http/http.error";
 import { TokenService } from "../token.service";
 import { UserDTO } from "../../../../../../libs/models/schemas/user";
@@ -10,7 +10,7 @@ import { CryptoService } from "../../../common/services/crypto/crypto.service";
 @injectable()
 export class RegistrationService {
 	constructor(
-		private readonly registrationSQL: RegistrationSQL,
+		private readonly registrationSQL: RegistrationRepository,
 		private readonly tokenService: TokenService,
 		private readonly cryptoService: CryptoService,
 	) {}

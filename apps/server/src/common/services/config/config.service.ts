@@ -1,4 +1,4 @@
-type Mode = "production" | "development";
+type Mode = "production" | "development" | "test";
 
 interface Env {
 	PORT: string;
@@ -41,7 +41,7 @@ export class ConfigService {
 	}
 
 	private isMode(value: unknown): asserts value is Mode {
-		if (value !== "production" && value !== "development") {
+		if (value !== "production" && value !== "development" && value !== "test") {
 			throw new Error(
 				`NODE_ENV должен быть production или development! Сейчас это ${value}`,
 			);

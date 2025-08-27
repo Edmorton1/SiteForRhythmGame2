@@ -8,7 +8,6 @@ import { ConfigService } from "../config/config.service";
 @injectable()
 export class DatabaseService {
 	db: Kysely<DatabaseKysely>;
-
 	constructor(
 		private readonly loggerService: LoggerService,
 		private readonly configService: ConfigService,
@@ -32,4 +31,9 @@ export class DatabaseService {
 
 		this.db = new Kysely<DatabaseKysely>({ dialect });
 	}
+
+	disconnect = async () => {
+		await this.db.destroy();
+		this.loggerService.logger.info("POSTGRES DISCONNECT");
+	};
 }

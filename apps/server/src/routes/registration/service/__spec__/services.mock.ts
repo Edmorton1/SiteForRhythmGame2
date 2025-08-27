@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { CryptoService } from "../../../../common/services/crypto/crypto.service";
 import { RegistrationService } from "../registration.service";
 import { TokenService } from "../../token.service";
-import { RegistrationSQL } from "../../sql/registration.sql";
+import { RegistrationRepository } from "../../repository/registration.repository";
 import { AuthDTO } from "../../../../common/models/schemas/auth.dto";
 import { Profile } from "../../../../../../../libs/models/schemas/profile";
 
@@ -31,7 +31,7 @@ const tokenServiceMock: jest.Mocked<Partial<TokenService>> = {
 	generateToken: jest.fn().mockReturnValue("V7fHc9LpQ2xDkR6wMzS1"),
 };
 
-const registrationSQLMock: jest.Mocked<Partial<RegistrationSQL>> = {
+const registrationSQLMock: jest.Mocked<Partial<RegistrationRepository>> = {
 	isInDB: jest.fn().mockResolvedValue(false),
 	registrationEmail: jest.fn().mockResolvedValue(mockResult),
 	registrationProvider: jest.fn().mockResolvedValue(mockResult),
@@ -41,7 +41,7 @@ const cryptoServiceMock: jest.Mocked<Partial<CryptoService>> = {};
 
 export const mockRegistrationService: RegistrationService =
 	new RegistrationService(
-		registrationSQLMock as unknown as RegistrationSQL,
+		registrationSQLMock as unknown as RegistrationRepository,
 		tokenServiceMock as unknown as TokenService,
 		cryptoServiceMock as unknown as CryptoService,
 	);
