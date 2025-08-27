@@ -1,16 +1,11 @@
-//prettier-ignore
-import { AuthDTOZodSchema, LoginResponse, ProviderJWTPayload } from "../../../common/models/schemas/auth.dto";
+import { AuthDTOZodSchema } from "../../../common/models/schemas/auth.dto";
 import { RegistrationService } from "../service/registration.service";
 import { zodValidateFormData } from "../../../common/pipes/zod.formdata.pipe";
 import { injectable } from "tsyringe";
 import { CookieOptions, Request, Response } from "express";
 import { BaseController } from "../../../config/server/base.controller";
-import { CryptoService } from "../../../common/services/crypto/crypto.service";
 import { serverPaths } from "../../../../../../libs/shared/PATHS";
 import { ConfigService } from "../../../common/services/config/config.service";
-import { TokenService } from "../token.service";
-import { HttpError } from "../../../common/http/http.error";
-import { UserDTO } from "../../../../../../libs/models/schemas/user";
 import multer from "multer";
 
 const cookieName = "token";
@@ -27,9 +22,7 @@ const cookieOptions: CookieOptions = {
 export class RegistrationController extends BaseController {
 	constructor(
 		private readonly registrationService: RegistrationService,
-		private readonly cryptoService: CryptoService,
 		private readonly configService: ConfigService,
-		private readonly tokenService: TokenService,
 	) {
 		super();
 		this.bindRoutes([
@@ -56,28 +49,13 @@ export class RegistrationController extends BaseController {
 			files: { avatar: req.file },
 		});
 
-		const { user, ...profileDTO } = authDTO;
 		const token: string | undefined = req.cookies[cookieOauth];
-
-		const authType = this.getAuthType(token, user);
 		res.clearCookie(cookieOauth);
 
-		let response: LoginResponse;
-		if (authType === "email") {
-			response = await this.registrationService.registrationWithEmail(authDTO);
-		} else if (authType === "provider") {
-			// TODO: REMOVE !
-			const providerId = await this.validateProviderJWT(token!);
-			response = await this.registrationService.registrationWithProvider(
-				profileDTO,
-				providerId,
-			);
-		} else {
-			throw new HttpError(
-				400,
-				"There can't be a token, email and password at the same time, choose one authorization method",
-			);
-		}
+		const response = await this.registrationService.registration(
+			authDTO,
+			token,
+		);
 
 		res
 			.cookie(cookieName, response.token, cookieOptions)
@@ -85,29 +63,9 @@ export class RegistrationController extends BaseController {
 			.json(response.profile);
 	};
 
-	private getAuthType = (
-		token: string | undefined,
-		user: UserDTO,
-	): "email" | "provider" | "none" => {
-		if (token && user.email === null && user.password === null)
-			return "provider";
-		if (!token && user.email && user.password) return "email";
-		return "none";
-	};
-
-	private validateProviderJWT = async (token: string) => {
-		const providerId =
-			this.tokenService.verifyToken<ProviderJWTPayload>(token)?.providerId;
-		if (!providerId) {
-			throw new HttpError(400, "Token is invalid");
-		}
-		return providerId;
-	};
-
-	redirect = async (req: Request, res: Response) => {
+	redirect = (req: Request, res: Response) => {
 		// МОК ТИПА ПРОВАЙДЕР ПЕРЕДАЛ РЕАЛЬНЫЙ OPEN_ID
-		const providerId = this.cryptoService.generateProvider();
-		const token = await this.tokenService.generateToken({ providerId });
+		const token = this.registrationService.redirect();
 		res.cookie(cookieOauth, token, cookieOptions);
 		res
 			.status(300)

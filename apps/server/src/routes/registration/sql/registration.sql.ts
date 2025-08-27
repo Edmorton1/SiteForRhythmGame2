@@ -6,16 +6,21 @@ import { sql, Transaction } from "kysely";
 import { injectable } from "tsyringe";
 import { User, UserDTO } from "../../../../../../libs/models/schemas/user";
 import { randomUUID } from "crypto";
+import { Profile } from "../../../../../../libs/models/schemas/profile";
 
 type ProfileAvatar = Omit<AuthDTO, "user">;
 
 type RoleId = Pick<User, "id" | "role">;
 
+type RegistrationResponse = { JWTPayload: RoleId; profile: Profile };
+
 @injectable()
 export class RegistrationSQL {
 	constructor(private readonly databaseService: DatabaseService) {}
 
-	registrationEmail = async (authDTO: AuthDTO) => {
+	registrationEmail = async (
+		authDTO: AuthDTO,
+	): Promise<RegistrationResponse> => {
 		return this.registration(authDTO, trx =>
 			this.createUser(trx, authDTO.user),
 		);
@@ -24,7 +29,7 @@ export class RegistrationSQL {
 	registrationProvider = async (
 		profileDTO: ProfileAvatar,
 		providerId: string,
-	) => {
+	): Promise<RegistrationResponse> => {
 		return this.registration(profileDTO, trx =>
 			this.insertUser(trx, { provider_id: providerId }),
 		);
@@ -33,7 +38,7 @@ export class RegistrationSQL {
 	private registration = async (
 		authDTO: ProfileAvatar,
 		insertUser: (trx: Transaction<DatabaseKysely>) => Promise<RoleId>,
-	) => {
+	): Promise<RegistrationResponse> => {
 		const avatar = authDTO.avatar
 			? await this.uploadAvatar(authDTO.avatar)
 			: null;
@@ -86,7 +91,7 @@ export class RegistrationSQL {
 		param: keyof DatabaseKysely[T],
 		// USER INPUT
 		value: string,
-	) => {
+	): Promise<boolean> => {
 		const { rows } = await sql<{ exists: boolean }>`
 		SELECT EXISTS(
 			SELECT 1
