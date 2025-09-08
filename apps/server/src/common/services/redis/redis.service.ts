@@ -1,18 +1,36 @@
-import Redis from "ioredis";
-import { getEnv } from "../../../libs/func/env";
-import { injectable } from "tsyringe";
-import { LoggerService } from "../../logger/logger.service";
+import { inject, injectable } from "inversify";
+import { LoggerService } from "../logger/logger.service";
+import { TYPES } from "../../../containers/TYPES";
+import { ConfigService } from "../config/config.service";
+import { createClient, RedisClientType } from "redis";
+import { RedisStore } from "connect-redis";
 
 @injectable()
 export class RedisService {
-	private readonly client: Redis;
+	private readonly client: RedisClientType;
+	readonly store: RedisStore;
 
-	constructor(private readonly loggerService: LoggerService) {
-		this.client = new Redis({
-			host: getEnv("REDIS_HOST"),
-			port: parseInt(getEnv("REDIS_PORT")),
-			connectTimeout: 15000,
+	constructor(
+		@inject(TYPES.services.logger)
+		private readonly loggerService: LoggerService,
+		@inject(TYPES.services.config)
+		private readonly configService: ConfigService,
+	) {
+		this.client = createClient({
+			socket: {
+				host: this.configService.getEnv("REDIS_HOST"),
+				port: parseInt(this.configService.getEnv("REDIS_PORT")),
+				connectTimeout: 15000,
+			},
 		});
+		this.client.connect();
+
+		// TODO: Создаёт 2 сессии, потом пофиксить
+		this.store = new RedisStore({
+			client: this.client,
+			prefix: "session-",
+		});
+
 		this.setLogs();
 	}
 

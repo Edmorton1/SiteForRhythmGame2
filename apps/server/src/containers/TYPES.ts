@@ -4,12 +4,14 @@ export const TYPES = {
 		token: Symbol.for("TokenService"),
 		crypto: Symbol.for("CryptoService"),
 		logger: Symbol.for("LoggerService"),
-		database: Symbol.for("Database"),
+		database: Symbol.for("DatabaseService"),
+		redis: Symbol.for("RedisService"),
 	},
 
 	app: {
 		ServerRoutes: Symbol.for("ServerRoutes"),
 		ExpressError: Symbol.for("ErrorMiddleware"),
+		ExpressSession: Symbol.for("ExpressSession"),
 		ServerExpress: Symbol.for("ServerExpress"),
 	},
 

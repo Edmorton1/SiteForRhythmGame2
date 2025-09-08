@@ -10,6 +10,7 @@ import swaggerUi from "swagger-ui-express";
 import { openapiDocs } from "./swagger/openapi.config";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../containers/TYPES";
+import { ExpressSession } from "../middlewares/express.session";
 
 @injectable()
 export class ServerExpress {
@@ -24,6 +25,8 @@ export class ServerExpress {
 		private readonly expressError: ExpressError,
 		@inject(TYPES.services.logger)
 		private readonly loggerService: LoggerService,
+		@inject(TYPES.app.ExpressSession)
+		private readonly expressSession: ExpressSession,
 	) {
 		this.app = express();
 	}
@@ -32,6 +35,7 @@ export class ServerExpress {
 		this.app.use(cookieParser());
 		this.app.use(helmet());
 		this.app.use(json());
+		this.app.use(this.expressSession.expressSession);
 
 		return this;
 	};

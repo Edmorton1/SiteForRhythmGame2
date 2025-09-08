@@ -54,6 +54,9 @@ export class RegistrationController extends BaseController {
 
 		const token: string | undefined = req.cookies[cookieOauth];
 		res.clearCookie(cookieOauth);
+		console.log("SESSIJA", req.session);
+		//@ts-ignore
+		req.session.user = "asdasd";
 
 		const response = await this.registrationService.registration(
 			authDTO,

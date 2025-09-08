@@ -5,6 +5,7 @@ import { ConfigService } from "../common/services/config/config.service";
 import { CryptoService } from "../common/services/crypto/crypto.service";
 import { LoggerService } from "../common/services/logger/logger.service";
 import { DatabaseService } from "../common/services/postgres/database.service";
+import { RedisService } from "../common/services/redis/redis.service";
 
 export const serviceBindings = new ContainerModule(({ bind }) => {
 	bind<TokenService>(TYPES.services.token).to(TokenService).inSingletonScope();
@@ -20,7 +21,7 @@ export const serviceBindings = new ContainerModule(({ bind }) => {
 	bind<DatabaseService>(TYPES.services.database)
 		.to(DatabaseService)
 		.inSingletonScope();
-	// bind<>(TYPES.services).to().inSingletonScope();
+	bind<RedisService>(TYPES.services.redis).to(RedisService).inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();
