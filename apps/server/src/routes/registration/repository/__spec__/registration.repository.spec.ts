@@ -31,7 +31,7 @@ describe("[REGISTRATION] Repository", () => {
 	beforeAll(() => {});
 
 	it("Email method", async () => {
-		const { profile } = await registrationRepository.registrationEmail({
+		const profile = await registrationRepository.registrationEmail({
 			user: { email: "_test", password: "123123" },
 			profile: profileDTO,
 		});
@@ -39,7 +39,7 @@ describe("[REGISTRATION] Repository", () => {
 	});
 
 	it("Provider method", async () => {
-		const { profile } = await registrationRepository.registrationProvider(
+		const profile = await registrationRepository.registrationProvider(
 			{ profile: profileDTO },
 			provider,
 		);

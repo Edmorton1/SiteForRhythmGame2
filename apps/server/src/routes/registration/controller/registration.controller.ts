@@ -9,8 +9,9 @@ import multer from "multer";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../../containers/TYPES";
 
-const cookieName = "token";
-const cookieOauth = "redirect";
+// TODO: Сделать чтобы провайдер записывался в сессию
+
+const cookieOauthName = "redirect";
 // TODO: Make normal age
 const cookieOptions: CookieOptions = {
 	httpOnly: true,
@@ -52,27 +53,22 @@ export class RegistrationController extends BaseController {
 			files: { avatar: req.file },
 		});
 
-		const token: string | undefined = req.cookies[cookieOauth];
-		res.clearCookie(cookieOauth);
-		console.log("SESSIJA", req.session);
-		//@ts-ignore
-		req.session.user = "asdasd";
+		const providerId: string | undefined = req.cookies[cookieOauthName];
+		res.clearCookie(cookieOauthName);
+		console.log("SESSION", req.session);
 
-		const response = await this.registrationService.registration(
+		const profile = await this.registrationService.registration(
 			authDTO,
-			token,
+			providerId,
 		);
 
-		res
-			.cookie(cookieName, response.token, cookieOptions)
-			.status(201)
-			.json(response.profile);
+		res.status(201).json(profile);
 	};
 
 	redirect = (req: Request, res: Response) => {
 		// МОК ТИПА ПРОВАЙДЕР ПЕРЕДАЛ РЕАЛЬНЫЙ OPEN_ID
-		const token = this.registrationService.redirect();
-		res.cookie(cookieOauth, token, cookieOptions);
+		const providerId = this.registrationService.redirect();
+		res.cookie(cookieOauthName, providerId, cookieOptions);
 		res
 			.status(300)
 			.redirect(this.configService.getEnv("REDIRECT_URL") + "?oauth=true");

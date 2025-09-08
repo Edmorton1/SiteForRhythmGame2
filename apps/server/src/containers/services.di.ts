@@ -1,5 +1,4 @@
 import { ContainerModule } from "inversify";
-import { TokenService } from "../routes/registration/token.service";
 import { TYPES } from "./TYPES";
 import { ConfigService } from "../common/services/config/config.service";
 import { CryptoService } from "../common/services/crypto/crypto.service";
@@ -8,7 +7,6 @@ import { DatabaseService } from "../common/services/postgres/database.service";
 import { RedisService } from "../common/services/redis/redis.service";
 
 export const serviceBindings = new ContainerModule(({ bind }) => {
-	bind<TokenService>(TYPES.services.token).to(TokenService).inSingletonScope();
 	bind<ConfigService>(TYPES.services.config)
 		.to(ConfigService)
 		.inSingletonScope();

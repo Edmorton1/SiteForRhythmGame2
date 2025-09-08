@@ -1,0 +1,204 @@
+import { type SessionData, Store } from "express-session";
+import type { default as Redis, Cluster } from "ioredis";
+
+type Callback = (_err?: unknown, _data?: any) => any;
+
+function optionalCb(err: unknown, data: unknown, cb?: Callback) {
+	if (cb) return cb(err, data);
+	if (err) throw err;
+	return data;
+}
+
+interface Serializer {
+	parse(s: string): SessionData | Promise<SessionData>;
+	stringify(s: SessionData): string;
+}
+
+interface RedisStoreOptions {
+	client: Redis | Cluster;
+	prefix?: string;
+	scanCount?: number;
+	serializer?: Serializer;
+	ttl?: number | ((sess: SessionData) => number);
+	disableTTL?: boolean;
+	disableTouch?: boolean;
+}
+
+export class RedisStore extends Store {
+	client: Redis | Cluster;
+	prefix: string;
+	scanCount: number;
+	serializer: Serializer;
+	ttl: number | ((sess: SessionData) => number);
+	disableTTL: boolean;
+	disableTouch: boolean;
+
+	constructor(opts: RedisStoreOptions) {
+		super();
+		this.prefix = opts.prefix ?? "sess:";
+		this.scanCount = opts.scanCount ?? 100;
+		this.serializer = opts.serializer ?? JSON;
+		this.ttl = opts.ttl ?? 86400;
+		this.disableTTL = opts.disableTTL ?? false;
+		this.disableTouch = opts.disableTouch ?? false;
+		this.client = opts.client;
+	}
+
+	async get(sid: string, cb?: Callback) {
+		const key = this.prefix + sid;
+		try {
+			const data = await this.client.get(key);
+			if (!data) return optionalCb(null, null, cb);
+			return optionalCb(
+				null,
+				await Promise.resolve(this.serializer.parse(data)),
+				cb,
+			);
+		} catch (err) {
+			return optionalCb(err, null, cb);
+		}
+	}
+
+	async set(sid: string, sess: SessionData, cb?: Callback) {
+		const key = this.prefix + sid;
+		const ttl = this.getTTL(sess);
+		try {
+			if (ttl > 0) {
+				const val = this.serializer.stringify(sess);
+				if (this.disableTTL) {
+					await this.client.set(key, val);
+				} else {
+					await this.client.set(key, val, "EX", ttl);
+				}
+				return optionalCb(null, null, cb);
+			}
+			return this.destroy(sid, cb);
+		} catch (err) {
+			return optionalCb(err, null, cb);
+		}
+	}
+
+	override async touch(sid: string, sess: SessionData, cb?: Callback) {
+		if (this.disableTouch || this.disableTTL) return optionalCb(null, null, cb);
+		const key = this.prefix + sid;
+		try {
+			const ttl = this.getTTL(sess);
+			if (ttl <= 0) return optionalCb(null, null, cb);
+			await this.client.expire(key, ttl);
+			return optionalCb(null, null, cb);
+		} catch (err) {
+			return optionalCb(err, null, cb);
+		}
+	}
+
+	async destroy(sid: string, cb?: Callback) {
+		const key = this.prefix + sid;
+		try {
+			await this.client.del(key);
+			return optionalCb(null, null, cb);
+		} catch (err) {
+			return optionalCb(err, null, cb);
+		}
+	}
+
+	override async clear(cb?: Callback) {
+		try {
+			const keys = await this.getAllKeys();
+			if (!keys.length) return optionalCb(null, null, cb);
+			await this.client.del(...keys);
+			return optionalCb(null, null, cb);
+		} catch (err) {
+			return optionalCb(err, null, cb);
+		}
+	}
+
+	override async length(cb?: Callback) {
+		try {
+			const keys = await this.getAllKeys();
+			return optionalCb(null, keys.length, cb);
+		} catch (err) {
+			return optionalCb(err, null, cb);
+		}
+	}
+
+	async ids(cb?: Callback) {
+		const len = this.prefix.length;
+		try {
+			const keys = await this.getAllKeys();
+			return optionalCb(
+				null,
+				keys.map(k => k.substring(len)),
+				cb,
+			);
+		} catch (err) {
+			return optionalCb(err, null, cb);
+		}
+	}
+
+	override async all(cb?: Callback) {
+		const len = this.prefix.length;
+		try {
+			const keys = await this.getAllKeys();
+			if (!keys.length) return optionalCb(null, [], cb);
+
+			const values = await this.client.mget(...keys);
+			const results = await Promise.all(
+				values.map((raw, idx) => {
+					if (!raw) return null;
+					return Promise.resolve(this.serializer.parse(raw))
+						.then((sess: any) => {
+							sess.id = keys[idx].substring(len);
+							return sess;
+						})
+						.catch(() => null);
+				}),
+			);
+			return optionalCb(null, results.filter(Boolean), cb);
+		} catch (err) {
+			return optionalCb(err, null, cb);
+		}
+	}
+
+	private getTTL(sess: SessionData) {
+		if (typeof this.ttl === "function") return this.ttl(sess);
+
+		let ttl;
+		if (sess?.cookie?.expires) {
+			const ms = Number(new Date(sess.cookie.expires)) - Date.now();
+			ttl = Math.ceil(ms / 1000);
+		} else {
+			ttl = this.ttl;
+		}
+		return ttl;
+	}
+
+	private async getAllKeys() {
+		const pattern = this.prefix + "*";
+		const set = new Set<string>();
+
+		if ("nodes" in this.client) {
+			// ioredis Cluster
+			for (const node of this.client.nodes("master")) {
+				for await (const keys of this.scanStreamIterator(node, pattern)) {
+					keys.forEach((k: any) => set.add(k));
+				}
+			}
+		} else {
+			// Standalone Redis
+			for await (const keys of this.scanStreamIterator(this.client, pattern)) {
+				keys.forEach((k: any) => set.add(k));
+			}
+		}
+
+		return Array.from(set);
+	}
+
+	private scanStreamIterator(client: Redis, pattern: string) {
+		return (async function* () {
+			const stream = client.scanStream({ match: pattern, count: 100 });
+			for await (const keys of stream) {
+				yield keys;
+			}
+		})();
+	}
+}

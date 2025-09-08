@@ -1,7 +1,6 @@
 export const TYPES = {
 	services: {
 		config: Symbol.for("ConfigService"),
-		token: Symbol.for("TokenService"),
 		crypto: Symbol.for("CryptoService"),
 		logger: Symbol.for("LoggerService"),
 		database: Symbol.for("DatabaseService"),

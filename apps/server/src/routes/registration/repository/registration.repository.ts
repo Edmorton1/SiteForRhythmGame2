@@ -13,8 +13,6 @@ type ProfileAvatar = Omit<AuthDTO, "user">;
 
 type RoleId = Pick<User, "id" | "role">;
 
-type RegistrationResponse = { JWTPayload: RoleId; profile: Profile };
-
 @injectable()
 export class RegistrationRepository {
 	constructor(
@@ -22,9 +20,7 @@ export class RegistrationRepository {
 		private readonly databaseService: DatabaseService,
 	) {}
 
-	registrationEmail = async (
-		authDTO: AuthDTO,
-	): Promise<RegistrationResponse> => {
+	registrationEmail = async (authDTO: AuthDTO): Promise<Profile> => {
 		return this.registration(authDTO, trx =>
 			this.createUser(trx, authDTO.user),
 		);
@@ -33,7 +29,7 @@ export class RegistrationRepository {
 	registrationProvider = async (
 		profileDTO: ProfileAvatar,
 		providerId: string,
-	): Promise<RegistrationResponse> => {
+	): Promise<Profile> => {
 		return this.registration(profileDTO, trx =>
 			this.insertUser(trx, { provider_id: providerId }),
 		);
@@ -42,20 +38,20 @@ export class RegistrationRepository {
 	private registration = async (
 		authDTO: ProfileAvatar,
 		insertUser: (trx: Transaction<DatabaseKysely>) => Promise<RoleId>,
-	): Promise<RegistrationResponse> => {
+	): Promise<Profile> => {
 		const avatar = authDTO.avatar
 			? await this.uploadAvatar(authDTO.avatar)
 			: null;
 
 		return this.databaseService.db.transaction().execute(async trx => {
-			const JWTPayload = await insertUser(trx);
+			const Payload = await insertUser(trx);
 
 			const [profile] = await trx
 				.insertInto("profiles")
-				.values({ ...authDTO.profile, id: JWTPayload.id, avatar })
+				.values({ ...authDTO.profile, id: Payload.id, avatar })
 				.returningAll()
 				.execute();
-			return { JWTPayload, profile };
+			return profile;
 		});
 	};
 

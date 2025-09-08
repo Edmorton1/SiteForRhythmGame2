@@ -2,12 +2,12 @@ import { inject, injectable } from "inversify";
 import { LoggerService } from "../logger/logger.service";
 import { TYPES } from "../../../containers/TYPES";
 import { ConfigService } from "../config/config.service";
-import { createClient, RedisClientType } from "redis";
-import { RedisStore } from "connect-redis";
+import { RedisStore } from "./redis.store";
+import Redis from "ioredis";
 
 @injectable()
 export class RedisService {
-	private readonly client: RedisClientType;
+	private readonly client: Redis;
 	readonly store: RedisStore;
 
 	constructor(
@@ -16,14 +16,13 @@ export class RedisService {
 		@inject(TYPES.services.config)
 		private readonly configService: ConfigService,
 	) {
-		this.client = createClient({
-			socket: {
-				host: this.configService.getEnv("REDIS_HOST"),
-				port: parseInt(this.configService.getEnv("REDIS_PORT")),
-				connectTimeout: 15000,
-			},
+		this.client = new Redis({
+			// socket: {
+			host: this.configService.getEnv("REDIS_HOST"),
+			port: parseInt(this.configService.getEnv("REDIS_PORT")),
+			connectTimeout: 15000,
+			// },
 		});
-		this.client.connect();
 
 		// TODO: Создаёт 2 сессии, потом пофиксить
 		this.store = new RedisStore({
