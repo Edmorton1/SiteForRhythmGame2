@@ -1,0 +1,8 @@
+import { ContainerModule } from "inversify";
+import { TYPES } from "./TYPES";
+
+const controllerBindings = new ContainerModule(({ bind }) => {
+	bind<>(TYPES.modules.).to();
+	bind<>(TYPES.modules.).to();
+	bind<>(TYPES.modules.).to();
+});

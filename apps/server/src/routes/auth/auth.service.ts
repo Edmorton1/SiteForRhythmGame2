@@ -1,9 +1,13 @@
-import { injectable } from "tsyringe";
-import { AuthSQL } from "./auth.sql";
+import { inject, injectable } from "inversify";
+import { AuthRepository } from "./auth.repository";
+import { TYPES } from "../../containers/TYPES";
 
 @injectable()
 export class AuthService {
-	constructor(private readonly SQL: AuthSQL) {}
+	constructor(
+		@inject(TYPES.modules.auth.repository)
+		private readonly SQL: AuthRepository,
+	) {}
 
 	// async login(userDto: AuthDTO): Promise<string> {
 	// 	const [user] = await this.databaseService.db

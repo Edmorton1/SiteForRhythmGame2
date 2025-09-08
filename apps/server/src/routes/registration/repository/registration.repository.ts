@@ -3,10 +3,11 @@ import bcrypt from "bcrypt";
 import { AuthDTO } from "../../../common/models/schemas/auth.dto";
 import { DatabaseKysely } from "../../../common/services/postgres/database.type";
 import { sql, Transaction } from "kysely";
-import { injectable } from "tsyringe";
 import { User, UserDTO } from "../../../../../../libs/models/schemas/user";
 import { randomUUID } from "crypto";
 import { Profile } from "../../../../../../libs/models/schemas/profile";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../../containers/TYPES";
 
 type ProfileAvatar = Omit<AuthDTO, "user">;
 
@@ -16,7 +17,10 @@ type RegistrationResponse = { JWTPayload: RoleId; profile: Profile };
 
 @injectable()
 export class RegistrationRepository {
-	constructor(private readonly databaseService: DatabaseService) {}
+	constructor(
+		@inject(TYPES.services.database)
+		private readonly databaseService: DatabaseService,
+	) {}
 
 	registrationEmail = async (
 		authDTO: AuthDTO,

@@ -1,17 +1,21 @@
 //prettier-ignore
 import { AuthDTO, LoginResponse, ProviderJWTPayload } from "../../../common/models/schemas/auth.dto";
-import { injectable } from "tsyringe";
 import { RegistrationRepository } from "../repository/registration.repository";
 import { HttpError } from "../../../common/http/http.error";
 import { TokenService } from "../token.service";
 import { UserDTO } from "../../../../../../libs/models/schemas/user";
 import { CryptoService } from "../../../common/services/crypto/crypto.service";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../../containers/TYPES";
 
 @injectable()
 export class RegistrationService {
 	constructor(
+		@inject(TYPES.modules.registration.repository)
 		private readonly registrationSQL: RegistrationRepository,
+		@inject(TYPES.services.token)
 		private readonly tokenService: TokenService,
+		@inject(TYPES.services.crypto)
 		private readonly cryptoService: CryptoService,
 	) {}
 

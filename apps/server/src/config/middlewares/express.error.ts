@@ -1,12 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { LoggerService } from "../../common/services/logger/logger.service";
-import { injectable } from "tsyringe";
 import { HttpError } from "../../common/http/http.error";
 import { STATUS_CODES } from "http";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../containers/TYPES";
 
 @injectable()
 export class ExpressError {
-	constructor(private readonly loggerService: LoggerService) {}
+	constructor(
+		@inject(TYPES.services.logger)
+		private readonly loggerService: LoggerService,
+	) {}
 	expressError = (
 		err: any,
 		req: Request,

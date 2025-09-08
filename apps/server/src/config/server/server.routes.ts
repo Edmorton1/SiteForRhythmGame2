@@ -1,18 +1,20 @@
 import { Router } from "express";
-import { container, injectable } from "tsyringe";
-import { RegistrationController } from "../../routes/registration/controller/registration.controller";
+import { TYPES } from "../../containers/TYPES";
+import { container } from "../../containers/container.di";
+import { BaseController } from "./base.controller";
 
-@injectable()
 export class ServerRoutes {
 	router: Router;
 
 	constructor() {
 		this.router = Router();
 
-		const controllersClasses = [RegistrationController];
+		const controllers: BaseController[] = Object.values(TYPES.modules).map(e =>
+			container.get(e.controller),
+		);
 
-		controllersClasses.forEach(controller => {
-			this.router.use(container.resolve(controller).router);
+		controllers.forEach(controller => {
+			this.router.use(controller.router);
 		});
 	}
 }

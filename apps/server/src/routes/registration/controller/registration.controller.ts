@@ -1,12 +1,13 @@
 import { AuthDTOZodSchema } from "../../../common/models/schemas/auth.dto";
 import { RegistrationService } from "../service/registration.service";
 import { zodValidateFormData } from "../../../common/pipes/zod.formdata.pipe";
-import { injectable } from "tsyringe";
 import { CookieOptions, Request, Response } from "express";
 import { BaseController } from "../../../config/server/base.controller";
 import { serverPaths } from "../../../../../../libs/shared/PATHS";
 import { ConfigService } from "../../../common/services/config/config.service";
 import multer from "multer";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../../containers/TYPES";
 
 const cookieName = "token";
 const cookieOauth = "redirect";
@@ -21,7 +22,9 @@ const cookieOptions: CookieOptions = {
 @injectable()
 export class RegistrationController extends BaseController {
 	constructor(
+		@inject(TYPES.modules.registration.service)
 		private readonly registrationService: RegistrationService,
+		@inject(TYPES.services.config)
 		private readonly configService: ConfigService,
 	) {
 		super();

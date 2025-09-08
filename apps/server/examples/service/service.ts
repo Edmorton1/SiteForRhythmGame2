@@ -1,7 +1,10 @@
-import { injectable } from "tsyringe";
-import { SQL } from "../sql/sql";
+import { inject, injectable } from "inversify";
+import { Repository } from "../sql/repository";
 
 @injectable()
 export class Service {
-	constructor(private readonly SQL: SQL) {}
+	constructor(
+		@inject()
+		private readonly repository: Repository,
+	) {}
 }

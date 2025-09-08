@@ -1,10 +1,14 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { injectable } from "tsyringe";
 import { ConfigService } from "../../common/services/config/config.service";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../containers/TYPES";
 
 @injectable()
 export class TokenService {
-	constructor(private readonly configService: ConfigService) {}
+	constructor(
+		@inject(TYPES.services.config)
+		private readonly configService: ConfigService,
+	) {}
 
 	verifyToken = <T extends JwtPayload>(token: string): T | null => {
 		try {

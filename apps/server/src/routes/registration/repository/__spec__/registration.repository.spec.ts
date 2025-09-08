@@ -1,25 +1,24 @@
 import "reflect-metadata";
 import dotenv from "dotenv";
 dotenv.config();
-import { container } from "tsyringe";
 import { RegistrationRepository } from "../registration.repository";
 import { DatabaseService } from "../../../../common/services/postgres/database.service";
-import { ConfigService } from "../../../../common/services/config/config.service";
 import { LoggerService } from "../../../../common/services/logger/logger.service";
 import { AuthDTO } from "../../../../common/models/schemas/auth.dto";
+import { container } from "../../../../containers/container.di";
+import { TYPES } from "../../../../containers/TYPES";
 
 const provider = "AasdhashdASHDAhdasdha";
 const email = "_test";
-// БЕЗ ЭТОГО ЗАВИСАЕТ
-container.registerSingleton(ConfigService, ConfigService);
-container.registerSingleton(LoggerService, LoggerService);
-container.registerSingleton(DatabaseService, DatabaseService);
+
 // SELECT pid, usename, datname, client_addr, state, query
 // FROM pg_stat_activity;
 
-const databaseService = container.resolve(DatabaseService);
-const loggerService = container.resolve(LoggerService);
-const registrationRepository = container.resolve(RegistrationRepository);
+const databaseService = container.get<DatabaseService>(TYPES.services.database);
+const loggerService = container.get<LoggerService>(TYPES.services.logger);
+const registrationRepository = container.get<RegistrationRepository>(
+	TYPES.modules.registration.repository,
+);
 
 const profileDTO: AuthDTO["profile"] = {
 	about: "",

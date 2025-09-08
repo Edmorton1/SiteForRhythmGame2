@@ -1,7 +1,0 @@
-import { injectable } from "tsyringe";
-import { DatabaseService } from "../../common/services/postgres/database.service";
-
-@injectable()
-export class AuthSQL {
-	constructor(private readonly db: DatabaseService) {}
-}

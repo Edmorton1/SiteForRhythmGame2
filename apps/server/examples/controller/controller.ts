@@ -1,12 +1,15 @@
-import { injectable } from "tsyringe";
 import { BaseController } from "../../src/config/server/base.controller";
 import { Request, Response } from "express";
 import { serverPaths } from "../../../../libs/shared/PATHS";
 import { Service } from "../service/service";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class Controller extends BaseController {
-	constructor(private readonly service: Service) {
+	constructor(
+		@inject()
+		private readonly service: Service,
+	) {
 		super();
 		this.bindRoutes([
 			{

@@ -5,7 +5,7 @@ CREATE TABLE users (
   role roles NOT NULL DEFAULT 'user',
   email VARCHAR(256) UNIQUE NULL,
   -- МОЖЕТ ПОМЕНЯТЬ В БУДУЩЕМ
-  provider_id VARCHAR(21) NULL,
+  provider_id VARCHAR(21) NULL UNIQUE,
   password VARCHAR(128) NULL,
   banned BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -26,47 +26,47 @@ CREATE TABLE profiles (
   FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TYPE difficulties AS ENUM ('easy', 'normal', 'hard');
-CREATE TABLE tracks (
-  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name_en VARCHAR(32) NOT NULL,
-  name VARCHAR(32) UNIQUE NOT NULL,
-  file TEXT NOT NULL,
-  likes INT NOT NULL DEFAULT 0,
-  downloads INT NOT NULL DEFAULT 0,
-  difficulty difficulties NOT NULL,
-  bpm INTEGER NOT NULL,
-  image TEXT,
-  about VARCHAR(512),
-  language CHAR(2)
-);
+-- CREATE TYPE difficulties AS ENUM ('easy', 'normal', 'hard');
+-- CREATE TABLE tracks (
+--   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+--   name_en VARCHAR(32) NOT NULL,
+--   name VARCHAR(32) UNIQUE NOT NULL,
+--   file TEXT NOT NULL,
+--   likes INT NOT NULL DEFAULT 0,
+--   downloads INT NOT NULL DEFAULT 0,
+--   difficulty difficulties NOT NULL,
+--   bpm INTEGER NOT NULL,
+--   image TEXT,
+--   about VARCHAR(512),
+--   language CHAR(2)
+-- );
 
-CREATE TABLE tracks_genres_names (
-  name VARCHAR(64) PRIMARY KEY
-);
+-- CREATE TABLE tracks_genres_names (
+--   name VARCHAR(64) PRIMARY KEY
+-- );
 
-CREATE TABLE tracks_genres (
-  track_id INT NOT NULL,
-  name VARCHAR(64) NOT NULL,
-  PRIMARY KEY (track_id, name),
-  FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (name) REFERENCES tracks_genres_names(name) ON DELETE CASCADE ON UPDATE CASCADE
-);
+-- CREATE TABLE tracks_genres (
+--   track_id INT NOT NULL,
+--   name VARCHAR(64) NOT NULL,
+--   PRIMARY KEY (track_id, name),
+--   FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE,
+--   FOREIGN KEY (name) REFERENCES tracks_genres_names(name) ON DELETE CASCADE ON UPDATE CASCADE
+-- );
 
-CREATE TABLE likes (
-  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id INT NOT NULL,
-  track_id INT NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+-- CREATE TABLE likes (
+--   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+--   user_id INT NOT NULL,
+--   track_id INT NOT NULL,
+--   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+--   FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE
+-- );
 
-CREATE TABLE comments (
-  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id INT NOT NULL,
-  track_id INT NOT NULL,
-  text VARCHAR(512),
-  date TIMESTAMP DEFAULT NOW(),
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+-- CREATE TABLE comments (
+--   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+--   user_id INT NOT NULL,
+--   track_id INT NOT NULL,
+--   text VARCHAR(512),
+--   date TIMESTAMP DEFAULT NOW(),
+--   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+--   FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE
+-- );

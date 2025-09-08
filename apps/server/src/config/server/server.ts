@@ -1,7 +1,6 @@
 import express, { Express, json } from "express";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
-import { inject, injectable } from "tsyringe";
 import { ServerRoutes } from "./server.routes";
 import { SERVER_PREFIX } from "../../../../../libs/shared/CONST";
 import { ConfigService } from "../../common/services/config/config.service";
@@ -9,16 +8,21 @@ import { ExpressError } from "../middlewares/express.error";
 import { LoggerService } from "../../common/services/logger/logger.service";
 import swaggerUi from "swagger-ui-express";
 import { openapiDocs } from "./swagger/openapi.config";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../containers/TYPES";
 
 @injectable()
 export class ServerExpress {
 	app: Express;
 
 	constructor(
-		@inject(ServerRoutes)
+		@inject(TYPES.app.ServerRoutes)
 		private readonly serverRoutes: ServerRoutes,
+		@inject(TYPES.services.config)
 		private readonly configService: ConfigService,
+		@inject(TYPES.app.ExpressError)
 		private readonly expressError: ExpressError,
+		@inject(TYPES.services.logger)
 		private readonly loggerService: LoggerService,
 	) {
 		this.app = express();

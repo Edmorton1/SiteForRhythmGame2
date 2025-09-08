@@ -1,12 +1,16 @@
 import pino, { Logger } from "pino";
 import { ConfigService } from "../config/config.service";
-import { injectable } from "tsyringe";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../../containers/TYPES";
 
 @injectable()
 export class LoggerService {
 	logger: Logger;
 
-	constructor(private readonly configService: ConfigService) {
+	constructor(
+		@inject(TYPES.services.config)
+		private readonly configService: ConfigService,
+	) {
 		this.logger = pino(
 			this.configService.getEnv("NODE_ENV") === "development"
 				? { transport: { target: "pino-pretty" } }

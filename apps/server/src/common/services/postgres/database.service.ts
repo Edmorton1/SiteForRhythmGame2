@@ -1,15 +1,18 @@
 import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import { DatabaseKysely } from "./database.type";
-import { injectable } from "tsyringe";
 import { LoggerService } from "../logger/logger.service";
 import { ConfigService } from "../config/config.service";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../../containers/TYPES";
 
 @injectable()
 export class DatabaseService {
 	db: Kysely<DatabaseKysely>;
 	constructor(
+		@inject(TYPES.services.logger)
 		private readonly loggerService: LoggerService,
+		@inject(TYPES.services.config)
 		private readonly configService: ConfigService,
 	) {
 		const logger = this.loggerService.logger;
