@@ -3,12 +3,12 @@ import { z } from "zod";
 import { serverPaths } from "../../../../../libs/shared/PATHS";
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import { ProfileZodSchema } from "../../../../../libs/models/schemas/profile";
-import { registry } from "../../config/server/swagger/registry";
+import { registry } from "../../config/swagger/registry";
 import { SERVER_PREFIX } from "../../../../../libs/shared/CONST";
-import { AuthDTOZodSchema } from "../../common/models/schemas/auth.dto";
+import { RegistrationDTOZodSchema } from "../../common/models/schemas/registration.dto";
 
 extendZodWithOpenApi(z);
-
+// TODO: Add errors variables
 registry.registerPath({
 	method: "post",
 	path: SERVER_PREFIX + serverPaths.registration,
@@ -20,7 +20,7 @@ registry.registerPath({
 			content: {
 				"application/json": {
 					schema: z.object({
-						data: AuthDTOZodSchema.omit({ avatar: true }),
+						data: RegistrationDTOZodSchema.omit({ avatar: true }),
 						avatar: z.string().openapi({ example: "file/img" }),
 					}),
 				},

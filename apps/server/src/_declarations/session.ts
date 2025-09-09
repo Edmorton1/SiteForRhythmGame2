@@ -1,12 +1,9 @@
 import "express-session";
-import { Role } from "../../../../libs/models/schemas/user";
+import { Payload } from "../common/models/schemas/auth.dto";
 
 declare module "express-session" {
 	interface SessionData {
-		payload?: {
-			id: number;
-			role: Role;
-		};
+		payload?: Payload;
 		provider_id?: string | undefined;
 	}
 }

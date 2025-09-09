@@ -1,7 +1,10 @@
-import { ZodType } from "zod";
+import z, { ZodType } from "zod";
 import { HttpError } from "../http/http.error";
 
-export const ZodValidateSchema = (schema: ZodType, value: any) => {
+export const ZodValidateSchema = <T extends ZodType<any>>(
+	schema: T,
+	value: unknown,
+): z.infer<T> => {
 	const parsed = schema.safeParse(value);
 	if (!parsed.success) {
 		throw new HttpError(400, parsed.error);

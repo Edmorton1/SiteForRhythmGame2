@@ -1,8 +1,8 @@
-import { AuthDTOZodSchema } from "../../../common/models/schemas/auth.dto";
+import { RegistrationDTOZodSchema } from "../../../common/models/schemas/registration.dto";
 import { RegistrationService } from "../service/registration.service";
 import { zodValidateFormData } from "../../../common/pipes/zod.formdata.pipe";
 import { Request, Response } from "express";
-import { BaseController } from "../../../config/server/base.controller";
+import { BaseController } from "../../../config/base.controller";
 import { serverPaths } from "../../../../../../libs/shared/PATHS";
 import { ConfigService } from "../../../common/services/config/config.service";
 import multer from "multer";
@@ -38,7 +38,7 @@ export class RegistrationController extends BaseController {
 		const authDTO = zodValidateFormData({
 			data: req.body,
 			name: "data",
-			schema: AuthDTOZodSchema,
+			schema: RegistrationDTOZodSchema,
 			files: { avatar: req.file },
 		});
 

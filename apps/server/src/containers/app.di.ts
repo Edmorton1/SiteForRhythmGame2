@@ -1,8 +1,8 @@
 import { ContainerModule } from "inversify";
 import { TYPES } from "./TYPES";
-import { ServerRoutes } from "../config/server/server.routes";
+import { ServerRoutes } from "../config/server.routes";
 import { ExpressError } from "../config/middlewares/express.error";
-import { ServerExpress } from "../config/server/server";
+import { ServerExpress } from "../config/server";
 import { ExpressSession } from "../config/middlewares/express.session";
 
 export const appBindings = new ContainerModule(({ bind }) => {

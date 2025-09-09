@@ -3,10 +3,10 @@ import { CryptoService } from "../../../../common/services/crypto/crypto.service
 import { RegistrationService } from "../registration.service";
 import { TokenService } from "../../token.service";
 import { RegistrationRepository } from "../../repository/registration.repository";
-import { AuthDTO } from "../../../../common/models/schemas/auth.dto";
+import { RegistrationDTO } from "../../../../common/models/schemas/registration.dto";
 import { Profile } from "../../../../../../../libs/models/schemas/profile";
 
-export const mockProfileDTO: AuthDTO["profile"] = {
+export const mockProfileDTO: RegistrationDTO["profile"] = {
 	name: "name",
 	about: "about",
 	country_code: "RU",

@@ -2,15 +2,15 @@ import express, { Express, json } from "express";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { ServerRoutes } from "./server.routes";
-import { SERVER_PREFIX } from "../../../../../libs/shared/CONST";
-import { ConfigService } from "../../common/services/config/config.service";
-import { ExpressError } from "../middlewares/express.error";
-import { LoggerService } from "../../common/services/logger/logger.service";
+import { SERVER_PREFIX } from "../../../../libs/shared/CONST";
+import { ConfigService } from "../common/services/config/config.service";
+import { ExpressError } from "./middlewares/express.error";
+import { LoggerService } from "../common/services/logger/logger.service";
 import swaggerUi from "swagger-ui-express";
 import { openapiDocs } from "./swagger/openapi.config";
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../containers/TYPES";
-import { ExpressSession } from "../middlewares/express.session";
+import { TYPES } from "../containers/TYPES";
+import { ExpressSession } from "./middlewares/express.session";
 
 @injectable()
 export class ServerExpress {

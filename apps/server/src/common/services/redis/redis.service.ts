@@ -17,14 +17,11 @@ export class RedisService {
 		private readonly configService: ConfigService,
 	) {
 		this.client = new Redis({
-			// socket: {
 			host: this.configService.getEnv("REDIS_HOST"),
 			port: parseInt(this.configService.getEnv("REDIS_PORT")),
 			connectTimeout: 15000,
-			// },
 		});
 
-		// TODO: Создаёт 2 сессии, потом пофиксить
 		this.store = new RedisStore({
 			client: this.client,
 			prefix: "session-",

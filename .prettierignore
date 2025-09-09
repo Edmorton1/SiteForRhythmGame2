@@ -8,3 +8,4 @@ build
 *.jpg
 *.ico
 apps/server/openapi.json
+apps/server/examples

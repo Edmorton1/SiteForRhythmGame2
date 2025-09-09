@@ -9,6 +9,7 @@ import { TYPES } from "../../../containers/TYPES";
 @injectable()
 export class DatabaseService {
 	db: Kysely<DatabaseKysely>;
+
 	constructor(
 		@inject(TYPES.services.logger)
 		private readonly loggerService: LoggerService,

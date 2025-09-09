@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import { DatabaseService } from "../../src/common/services/postgres/database.service";
-import { TYPES } from "../../src/containers/TYPES";
+import { TYPES } from "../../../containers/TYPES";
+import { DatabaseService } from "../../../common/services/postgres/database.service";
 
 @injectable()
 export class Repository {

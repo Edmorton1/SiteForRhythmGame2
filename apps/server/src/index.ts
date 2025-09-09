@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { container } from "./containers/container.di";
 import { TYPES } from "./containers/TYPES";
-import { ServerExpress } from "./config/server/server";
+import { ServerExpress } from "./config/server";
 import "./_declarations/session";
 
 (async () => {

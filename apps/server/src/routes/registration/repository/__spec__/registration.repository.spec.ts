@@ -4,7 +4,7 @@ dotenv.config();
 import { RegistrationRepository } from "../registration.repository";
 import { DatabaseService } from "../../../../common/services/postgres/database.service";
 import { LoggerService } from "../../../../common/services/logger/logger.service";
-import { AuthDTO } from "../../../../common/models/schemas/auth.dto";
+import { RegistrationDTO } from "../../../../common/models/schemas/registration.dto";
 import { container } from "../../../../containers/container.di";
 import { TYPES } from "../../../../containers/TYPES";
 
@@ -20,7 +20,7 @@ const registrationRepository = container.get<RegistrationRepository>(
 	TYPES.modules.registration.repository,
 );
 
-const profileDTO: AuthDTO["profile"] = {
+const profileDTO: RegistrationDTO["profile"] = {
 	about: "",
 	country_code: "RU",
 	// TODO: make name without collision

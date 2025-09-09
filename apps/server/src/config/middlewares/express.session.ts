@@ -13,13 +13,17 @@ export class ExpressSession {
 		private readonly redisService: RedisService,
 	) {}
 	expressSession = session({
-		secret: this.configService.getEnv("JWT_SECRET"),
+		name: this.configService.getEnv("COOKIE_NAME"),
+		secret: this.configService.getEnv("SESSION_SECRET"),
 		store: this.redisService.store,
-		resave: false,
 		saveUninitialized: false,
 		cookie: {
+			// TODO: В проде уменьшить
 			maxAge: 1000 * 60 * 60 * 24,
 			httpOnly: true,
+			// TODO: Сделать норм безопасность
+			// secure: true,
+			// sameSite: "strict",
 		},
 	});
 }

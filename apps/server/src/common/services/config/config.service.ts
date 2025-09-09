@@ -13,7 +13,8 @@ interface Env {
 	DB_PASSWORD: string;
 	REDIS_HOST: string;
 	REDIS_PORT: string;
-	JWT_SECRET: string;
+	SESSION_SECRET: string;
+	COOKIE_NAME: string;
 	NODE_ENV: Mode;
 }
 

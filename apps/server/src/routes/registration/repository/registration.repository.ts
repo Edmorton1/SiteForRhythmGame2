@@ -1,6 +1,6 @@
 import { DatabaseService } from "../../../common/services/postgres/database.service";
 import bcrypt from "bcrypt";
-import { AuthDTO } from "../../../common/models/schemas/auth.dto";
+import { RegistrationDTO } from "../../../common/models/schemas/registration.dto";
 import { DatabaseKysely } from "../../../common/services/postgres/database.type";
 import { sql, Transaction } from "kysely";
 import { User, UserDTO } from "../../../../../../libs/models/schemas/user";
@@ -9,7 +9,7 @@ import { Profile } from "../../../../../../libs/models/schemas/profile";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../../containers/TYPES";
 
-type ProfileAvatar = Omit<AuthDTO, "user">;
+type ProfileAvatar = Omit<RegistrationDTO, "user">;
 
 type RoleId = Pick<User, "id" | "role">;
 
@@ -20,7 +20,7 @@ export class RegistrationRepository {
 		private readonly databaseService: DatabaseService,
 	) {}
 
-	registrationEmail = async (authDTO: AuthDTO): Promise<Profile> => {
+	registrationEmail = async (authDTO: RegistrationDTO): Promise<Profile> => {
 		return this.registration(authDTO, trx =>
 			this.createUser(trx, authDTO.user),
 		);
@@ -46,11 +46,11 @@ export class RegistrationRepository {
 		return this.databaseService.db.transaction().execute(async trx => {
 			const Payload = await insertUser(trx);
 
-			const [profile] = await trx
+			const profile = await trx
 				.insertInto("profiles")
 				.values({ ...authDTO.profile, id: Payload.id, avatar })
 				.returningAll()
-				.execute();
+				.executeTakeFirstOrThrow();
 			return profile;
 		});
 	};
@@ -66,17 +66,17 @@ export class RegistrationRepository {
 		trx: Transaction<DatabaseKysely>,
 		value: UserDTO | { provider_id: string },
 	): Promise<RoleId> => {
-		const [userRoleId] = await trx
+		const userRoleId = await trx
 			.insertInto("users")
 			.values(value)
 			.returning(["id", "role"])
-			.execute();
+			.executeTakeFirstOrThrow();
 		return userRoleId;
 	};
 
 	private createUser = async (
 		trx: Transaction<DatabaseKysely>,
-		userDTO: AuthDTO["user"],
+		userDTO: RegistrationDTO["user"],
 	): Promise<RoleId> => {
 		// TODO: set many salt
 		const hashPassword = await bcrypt.hash(userDTO.password!, 3);

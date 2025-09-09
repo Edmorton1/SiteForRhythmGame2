@@ -1,22 +1,8 @@
 import z from "zod";
-import { zExpressMulterFile } from "../enums/enums";
-import { UserDTOZodSchema } from "../../../../../../libs/models/schemas/user";
-import { ProfileZodSchema } from "../../../../../../libs/models/schemas/profile";
+import { UserZodSchema } from "../../../../../../libs/models/schemas/user";
 
-const ProfileDTOZodSchema = ProfileZodSchema.pick({
-	name: true,
-	about: true,
-	country_code: true,
+export const PayloadZodSchema = UserZodSchema.pick({
+	id: true,
+	role: true,
 });
-
-export const AuthDTOZodSchema = z.object({
-	user: UserDTOZodSchema,
-	profile: ProfileDTOZodSchema,
-	avatar: zExpressMulterFile.optional(),
-});
-
-export type AuthDTO = z.infer<typeof AuthDTOZodSchema>;
-
-export const ProviderTokenZodSchema = z.object({
-	provider_id: z.string(),
-});
+export type Payload = z.infer<typeof PayloadZodSchema>;

@@ -1,4 +1,4 @@
-import { AuthDTO } from "../../../common/models/schemas/auth.dto";
+import { RegistrationDTO } from "../../../common/models/schemas/registration.dto";
 import { RegistrationRepository } from "../repository/registration.repository";
 import { HttpError } from "../../../common/http/http.error";
 import { UserDTO } from "../../../../../../libs/models/schemas/user";
@@ -17,7 +17,7 @@ export class RegistrationService {
 	) {}
 
 	registration = async (
-		authDTO: AuthDTO,
+		authDTO: RegistrationDTO,
 		provider_id: string | undefined,
 	): Promise<Profile> => {
 		const { user, ...profileDTO } = authDTO;
@@ -25,6 +25,7 @@ export class RegistrationService {
 		if (authType === "email") {
 			return await this.registrationWithEmail(authDTO);
 		} else if (authType === "provider") {
+			// TODO: Delete !
 			return await this.registrationWithProvider(profileDTO, provider_id!);
 		} else {
 			throw new HttpError(
@@ -49,7 +50,7 @@ export class RegistrationService {
 	};
 
 	private registrationWithEmail = async (
-		authDTO: AuthDTO,
+		authDTO: RegistrationDTO,
 	): Promise<Profile> => {
 		await this.isEmailIsFree(authDTO.user.email!);
 		await this.isNameIsFree(authDTO.profile.name);
@@ -58,7 +59,7 @@ export class RegistrationService {
 	};
 
 	private registrationWithProvider = async (
-		authDTO: Omit<AuthDTO, "user">,
+		authDTO: Omit<RegistrationDTO, "user">,
 		provider_id: string,
 	): Promise<Profile> => {
 		await this.isNameIsFree(authDTO.profile.name);
