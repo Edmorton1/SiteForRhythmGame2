@@ -18,14 +18,14 @@ export class RegistrationService {
 
 	registration = async (
 		authDTO: AuthDTO,
-		providerId: string | undefined,
+		provider_id: string | undefined,
 	): Promise<Profile> => {
 		const { user, ...profileDTO } = authDTO;
-		const authType = this.getAuthType(providerId, user);
+		const authType = this.getAuthType(provider_id, user);
 		if (authType === "email") {
 			return await this.registrationWithEmail(authDTO);
 		} else if (authType === "provider") {
-			return await this.registrationWithProvider(profileDTO, providerId!);
+			return await this.registrationWithProvider(profileDTO, provider_id!);
 		} else {
 			throw new HttpError(
 				400,
@@ -39,12 +39,12 @@ export class RegistrationService {
 	};
 
 	private getAuthType = (
-		providerId: string | undefined,
+		provider_id: string | undefined,
 		user: UserDTO,
 	): "email" | "provider" | "none" => {
-		if (providerId && user.email === null && user.password === null)
+		if (provider_id && user.email === null && user.password === null)
 			return "provider";
-		if (!providerId && user.email && user.password) return "email";
+		if (!provider_id && user.email && user.password) return "email";
 		return "none";
 	};
 
@@ -59,11 +59,14 @@ export class RegistrationService {
 
 	private registrationWithProvider = async (
 		authDTO: Omit<AuthDTO, "user">,
-		providerId: string,
+		provider_id: string,
 	): Promise<Profile> => {
 		await this.isNameIsFree(authDTO.profile.name);
 
-		return await this.registrationSQL.registrationProvider(authDTO, providerId);
+		return await this.registrationSQL.registrationProvider(
+			authDTO,
+			provider_id,
+		);
 	};
 
 	private isEmailIsFree = async (email: string) => {

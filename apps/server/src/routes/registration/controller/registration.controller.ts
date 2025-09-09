@@ -1,24 +1,13 @@
 import { AuthDTOZodSchema } from "../../../common/models/schemas/auth.dto";
 import { RegistrationService } from "../service/registration.service";
 import { zodValidateFormData } from "../../../common/pipes/zod.formdata.pipe";
-import { CookieOptions, Request, Response } from "express";
+import { Request, Response } from "express";
 import { BaseController } from "../../../config/server/base.controller";
 import { serverPaths } from "../../../../../../libs/shared/PATHS";
 import { ConfigService } from "../../../common/services/config/config.service";
 import multer from "multer";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../../containers/TYPES";
-
-// TODO: Сделать чтобы провайдер записывался в сессию
-
-const cookieOauthName = "redirect";
-// TODO: Make normal age
-const cookieOptions: CookieOptions = {
-	httpOnly: true,
-	secure: true,
-	sameSite: "strict",
-	maxAge: 1000 * 60 * 60 * 24,
-};
 
 @injectable()
 export class RegistrationController extends BaseController {
@@ -53,22 +42,24 @@ export class RegistrationController extends BaseController {
 			files: { avatar: req.file },
 		});
 
-		const providerId: string | undefined = req.cookies[cookieOauthName];
-		res.clearCookie(cookieOauthName);
+		const provider_id: string | undefined = req.session.provider_id;
+		req.session.provider_id = undefined;
 		console.log("SESSION", req.session);
 
 		const profile = await this.registrationService.registration(
 			authDTO,
-			providerId,
+			provider_id,
 		);
+
+		req.session.payload = { id: profile.id, role: "user" };
 
 		res.status(201).json(profile);
 	};
 
 	redirect = (req: Request, res: Response) => {
 		// МОК ТИПА ПРОВАЙДЕР ПЕРЕДАЛ РЕАЛЬНЫЙ OPEN_ID
-		const providerId = this.registrationService.redirect();
-		res.cookie(cookieOauthName, providerId, cookieOptions);
+		const provider_id = this.registrationService.redirect();
+		req.session.provider_id = provider_id;
 		res
 			.status(300)
 			.redirect(this.configService.getEnv("REDIRECT_URL") + "?oauth=true");

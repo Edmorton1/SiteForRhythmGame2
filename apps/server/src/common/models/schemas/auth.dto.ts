@@ -18,5 +18,5 @@ export const AuthDTOZodSchema = z.object({
 export type AuthDTO = z.infer<typeof AuthDTOZodSchema>;
 
 export const ProviderTokenZodSchema = z.object({
-	providerId: z.string(),
+	provider_id: z.string(),
 });

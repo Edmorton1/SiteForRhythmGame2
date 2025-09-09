@@ -1,6 +1,5 @@
-// types/express-session.d.ts
 import "express-session";
-import { Role } from "../../libs/models/schemas/user";
+import { Role } from "../../../../libs/models/schemas/user";
 
 declare module "express-session" {
 	interface SessionData {
@@ -8,5 +7,6 @@ declare module "express-session" {
 			id: number;
 			role: Role;
 		};
+		provider_id?: string | undefined;
 	}
 }

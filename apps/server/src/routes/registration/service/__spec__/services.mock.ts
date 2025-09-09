@@ -27,7 +27,7 @@ export const mockResult = {
 const tokenServiceMock: jest.Mocked<Partial<TokenService>> = {
 	verifyToken: jest
 		.fn()
-		.mockReturnValue({ providerId: "G8mYq3RwT5vKpL2sNzX4" }),
+		.mockReturnValue({ provider_id: "G8mYq3RwT5vKpL2sNzX4" }),
 	generateToken: jest.fn().mockReturnValue("V7fHc9LpQ2xDkR6wMzS1"),
 };
 

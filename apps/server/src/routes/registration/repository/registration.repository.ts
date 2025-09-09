@@ -28,10 +28,10 @@ export class RegistrationRepository {
 
 	registrationProvider = async (
 		profileDTO: ProfileAvatar,
-		providerId: string,
+		provider_id: string,
 	): Promise<Profile> => {
 		return this.registration(profileDTO, trx =>
-			this.insertUser(trx, { provider_id: providerId }),
+			this.insertUser(trx, { provider_id }),
 		);
 	};
 
