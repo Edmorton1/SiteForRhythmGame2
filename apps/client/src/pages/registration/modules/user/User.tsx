@@ -2,11 +2,11 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserDTOZodSchema } from "../../../../../../../libs/models/schemas/user";
-import { NAMESPACES } from "../../../../common/const/NAMESPACES";
+import { NAMESPACES } from "../../../../common/consts/NAMESPACES";
 import { useRegistrationAuthStore } from "../../common/stores/user.store";
 import { serverPaths } from "../../../../../../../libs/shared/PATHS";
 
-export function RegistrationAuthModule() {
+export const RegistrationAuthModule = () => {
 	const { t } = useTranslation(NAMESPACES.registration);
 	const { setUser: setEmailPassword } = useRegistrationAuthStore();
 	const {
@@ -46,4 +46,4 @@ export function RegistrationAuthModule() {
 			</button>
 		</>
 	);
-}
+};

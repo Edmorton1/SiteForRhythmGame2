@@ -27,7 +27,7 @@ export class AuthRepository {
 		return { ...user, password: user.password };
 	};
 
-	getProfile = async (id: number): Promise<UserProfile> => {
+	getProfileById = async (id: number): Promise<UserProfile> => {
 		return await this.databaseService.db
 			.selectFrom("profiles")
 			.select(["id", "name", "avatar", "country_code"])

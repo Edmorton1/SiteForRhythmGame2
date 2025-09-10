@@ -31,6 +31,11 @@ export class AuthController extends BaseController {
 				path: serverPaths.logout,
 				middlewares: [userGuard],
 			},
+			{
+				handle: this.init,
+				method: "get",
+				path: serverPaths.init,
+			},
 		]);
 	}
 
@@ -42,11 +47,20 @@ export class AuthController extends BaseController {
 		res.json(profile);
 	};
 
-	logout = (req: Request, res: Response<UserProfile>) => {
-		console.log(req.session);
+	logout = (req: Request, res: Response) => {
 		req.session.destroy(err => {
 			if (err) console.error("ERROR COOKIE DON'T WORK!!!", err);
 			res.clearCookie(this.configService.getEnv("COOKIE_NAME")).sendStatus(204);
 		});
+	};
+
+	init = async (req: Request, res: Response<UserProfile>) => {
+		if (!req.session.payload) {
+			res.sendStatus(200);
+			return;
+		}
+		const id = req.session.payload.id;
+		const profile = await this.authService.getProfileById(id);
+		res.json(profile);
 	};
 }

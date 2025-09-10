@@ -3,8 +3,7 @@ import { RegistrationProfileModule } from "./modules/profile/Profile";
 import { useRegistrationAuthStore } from "./common/stores/user.store";
 import { useSearchParams } from "react-router-dom";
 
-// TODO: Будет в 2 этапа. Сначала вводится авторизация данные, потом пользователя, они должны хранится между перезагрузкой страницы
-export default function Registration() {
+export const Registration = () => {
 	const { user } = useRegistrationAuthStore();
 	const [searchParams] = useSearchParams();
 	const isOauth = searchParams.get("oauth") === "true";
@@ -14,4 +13,4 @@ export default function Registration() {
 	}
 
 	return <RegistrationAuthModule />;
-}
+};

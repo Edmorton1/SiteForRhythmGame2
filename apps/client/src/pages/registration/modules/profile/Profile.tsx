@@ -5,7 +5,7 @@ import { ProfileDTOZodSchema } from "./schemas/auth.dto";
 import { useRegistrationAuthStore } from "../../common/stores/user.store";
 import { useRegistrationPost } from "./hooks/useRegistration";
 
-export function RegistrationProfileModule() {
+export const RegistrationProfileModule = () => {
 	const { data, isSuccess, error, isError } = useCountries();
 	const { user } = useRegistrationAuthStore();
 	const { mutate } = useRegistrationPost();
@@ -62,4 +62,4 @@ export function RegistrationProfileModule() {
 			<button>Готово</button>
 		</form>
 	);
-}
+};

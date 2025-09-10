@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { clientPaths } from "../common/const/PATHS";
+import { clientPaths } from "../common/consts/PATHS";
 import { useTranslation } from "react-i18next";
-import { NAMESPACES } from "../common/const/NAMESPACES";
+import { NAMESPACES } from "../common/consts/NAMESPACES";
 
-export function Header() {
+export const Header = () => {
 	const { t, i18n } = useTranslation(NAMESPACES.base);
 
 	const changeLang = (lang: string) => {
@@ -24,4 +24,4 @@ export function Header() {
 			</select>
 		</header>
 	);
-}
+};

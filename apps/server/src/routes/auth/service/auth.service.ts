@@ -26,7 +26,11 @@ export class AuthService {
 			throw new HttpError(401, "Password is incorrect");
 		}
 
-		const profile = await this.authRepository.getProfile(payload.id);
+		const profile = await this.authRepository.getProfileById(payload.id);
 		return { payload, profile };
+	};
+
+	getProfileById = async (id: number) => {
+		return await this.authRepository.getProfileById(id);
 	};
 }

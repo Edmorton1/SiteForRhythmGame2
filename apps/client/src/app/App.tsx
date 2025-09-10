@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { LazyMain, LazyRegistration } from "./LazyPages";
-import { clientPaths } from "../common/const/PATHS";
+import { LazyLogin, LazyMain, LazyRegistration } from "./LazyPages";
+import { clientPaths } from "../common/consts/PATHS";
 import { Main } from "../base/Main";
 
-export function App() {
+export const App = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -16,8 +16,12 @@ export function App() {
 						path={clientPaths.registration}
 						element={<LazyRegistration />}
 					/>
+					<Route
+						path={clientPaths.login}
+						element={<LazyLogin />}
+					/>
 				</Route>
 			</Routes>
 		</BrowserRouter>
 	);
-}
+};

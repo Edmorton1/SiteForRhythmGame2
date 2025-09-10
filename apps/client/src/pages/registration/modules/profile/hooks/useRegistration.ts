@@ -2,6 +2,7 @@ import { serverPaths } from "../../../../../../../../libs/shared/PATHS";
 import {} from "../../../../../../../../libs/models/schemas/user";
 import type { AuthDTO } from "../schemas/auth.dto";
 import { useMutation } from "@tanstack/react-query";
+import { PROFILE } from "../../../../../common/consts/QUERY_KEYS";
 
 const postData = async (data: AuthDTO) => {
 	const { user, profile } = data;
@@ -17,11 +18,11 @@ const postData = async (data: AuthDTO) => {
 	}).then(res => res.json());
 };
 
-export function useRegistrationPost() {
+export const useRegistrationPost = () => {
 	const result = useMutation({
-		mutationKey: ["profile"],
+		mutationKey: [PROFILE],
 		mutationFn: (data: AuthDTO) => postData(data),
 	});
 
 	return result;
-}
+};

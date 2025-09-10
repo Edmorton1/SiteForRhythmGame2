@@ -7,7 +7,7 @@ interface Post {
 	title: string;
 }
 
-export default function Home() {
+export const Home = () => {
 	const { mutate, isPending } = useMutation({
 		mutationKey: ["add post"],
 		mutationFn: async (newPost: Post) =>
@@ -38,4 +38,4 @@ export default function Home() {
 			{isSuccess && data.map(post => <div key={post.id}>{post.title}</div>)}
 		</>
 	);
-}
+};

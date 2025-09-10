@@ -16,6 +16,7 @@ export class ExpressSession {
 		name: this.configService.getEnv("COOKIE_NAME"),
 		secret: this.configService.getEnv("SESSION_SECRET"),
 		store: this.redisService.store,
+		resave: false,
 		saveUninitialized: false,
 		cookie: {
 			// TODO: В проде уменьшить

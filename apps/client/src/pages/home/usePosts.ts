@@ -13,7 +13,7 @@ const getData = async () => {
 	return response.json();
 };
 
-export function usePosts() {
+export const usePosts = () => {
 	const result = useQuery<Post[]>({
 		queryKey: ["posts"],
 		queryFn: getData,
@@ -34,4 +34,4 @@ export function usePosts() {
 	}, [result.isError]);
 
 	return result;
-}
+};
