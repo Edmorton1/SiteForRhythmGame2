@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useCountries } from "./hooks/useCountries";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileDTOZodSchema } from "./schemas/auth.dto";
+import { ProfileDTOZodSchema } from "./schemas/registration.dto";
 import { useRegistrationAuthStore } from "../../common/stores/user.store";
 import { useRegistrationPost } from "./hooks/useRegistration";
 
@@ -16,13 +16,13 @@ export const RegistrationProfileModule = () => {
 	} = useForm({ resolver: zodResolver(ProfileDTOZodSchema) });
 	console.log(errors);
 
-	const handleSubmitProfileForm = handleSubmit(data => {
+	const onSubmit = handleSubmit(data => {
 		const auth = { user: user!, profile: data };
 		mutate(auth);
 	});
 
 	return (
-		<form onSubmit={handleSubmitProfileForm}>
+		<form onSubmit={onSubmit}>
 			<label htmlFor="name">Имя</label>
 			<input
 				{...register("name")}

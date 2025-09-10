@@ -6,7 +6,7 @@ import { NAMESPACES } from "../../../../common/consts/NAMESPACES";
 import { useRegistrationAuthStore } from "../../common/stores/user.store";
 import { serverPaths } from "../../../../../../../libs/shared/PATHS";
 
-export const RegistrationAuthModule = () => {
+export const RegistrationUserModule = () => {
 	const { t } = useTranslation(NAMESPACES.registration);
 	const { setUser: setEmailPassword } = useRegistrationAuthStore();
 	const {
@@ -16,14 +16,14 @@ export const RegistrationAuthModule = () => {
 	} = useForm({ resolver: zodResolver(UserDTOZodSchema) });
 	console.log(errors);
 
-	const handleSubmitUserForm = handleSubmit(data => setEmailPassword(data));
+	const onSubmit = handleSubmit(data => setEmailPassword(data));
 
 	const handleProviderClick = () =>
 		(window.location.href = _URL_SERVER + serverPaths.redirect);
 
 	return (
 		<>
-			<form onSubmit={handleSubmitUserForm}>
+			<form onSubmit={onSubmit}>
 				<label htmlFor="email">{t("form.email")}</label>
 				<input
 					{...register("email")}

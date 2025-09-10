@@ -1,4 +1,4 @@
-import { RegistrationAuthModule } from "./modules/user/User";
+import { RegistrationUserModule } from "./modules/user/User";
 import { RegistrationProfileModule } from "./modules/profile/Profile";
 import { useRegistrationAuthStore } from "./common/stores/user.store";
 import { useSearchParams } from "react-router-dom";
@@ -12,5 +12,5 @@ export const Registration = () => {
 		return <RegistrationProfileModule />;
 	}
 
-	return <RegistrationAuthModule />;
+	return <RegistrationUserModule />;
 };

@@ -1,7 +1,7 @@
 import z, { ZodType } from "zod";
 import { HttpError } from "../http/http.error";
 
-export const ZodValidateSchema = <T extends ZodType<any>>(
+export const ZodValidateSchema = <T extends ZodType>(
 	schema: T,
 	value: unknown,
 ): z.infer<T> => {

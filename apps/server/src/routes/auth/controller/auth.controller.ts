@@ -42,6 +42,10 @@ export class AuthController extends BaseController {
 	login = async (req: Request, res: Response<UserProfile>) => {
 		const userDTO = ZodValidateSchema(LoginDTOZodSchema, req.body);
 		const { payload, profile } = await this.authService.login(userDTO);
+
+		// TODO: СДЕЛАТЬ УДАЛЕНИЕ СТАРОЙ СЕССИИ ПРИ ЛОГИНЕ И РЕГИСТРАЦИИ
+		// req.session.destroy(err => console.error(err));
+
 		req.session.payload = payload;
 
 		res.json(profile);

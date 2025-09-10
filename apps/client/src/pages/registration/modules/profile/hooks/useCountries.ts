@@ -7,11 +7,6 @@ interface Country {
 }
 
 const getCountries = () =>
-	// fetch("/data/countries.json")
-	// 	.then(response => response.json())
-	// 	.catch(() => {
-	// 		throw new Error("Failed to load file countries.json");
-	// 	});
 	taipan<Country[]>("/data/countries.json")
 		.then(res => res.data)
 		.catch(() => {
