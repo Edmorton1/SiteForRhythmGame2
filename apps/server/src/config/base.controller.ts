@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from 'express';
 
 interface IControllerRoute {
 	path: string;
 	handle: (req: Request, res: Response) => Promise<void> | void;
-	method: keyof Pick<Router, "get" | "post" | "delete" | "patch" | "put">;
+	method: keyof Pick<Router, 'get' | 'post' | 'delete' | 'patch' | 'put'>;
 	middlewares?: ((req: Request, res: Response, next: NextFunction) => any)[];
 }
 

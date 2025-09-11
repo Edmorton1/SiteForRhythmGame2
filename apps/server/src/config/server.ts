@@ -1,16 +1,17 @@
-import express, { Express, json } from "express";
-import cookieParser from "cookie-parser";
-import helmet from "helmet";
-import { ServerRoutes } from "./server.routes";
-import { SERVER_PREFIX } from "../../../../libs/shared/CONST";
-import { ConfigService } from "../common/services/config/config.service";
-import { ExpressError } from "./middlewares/express.error";
-import { LoggerService } from "../common/services/logger/logger.service";
-import swaggerUi from "swagger-ui-express";
-import { openapiDocs } from "./swagger/openapi.config";
-import { inject, injectable } from "inversify";
-import { TYPES } from "../containers/TYPES";
-import { ExpressSession } from "./middlewares/express.session";
+import express, { Express, json } from 'express';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import { ServerRoutes } from './server.routes';
+import { SERVER_PREFIX } from '../../../../libs/shared/CONST';
+import { ConfigService } from '../common/services/config/config.service';
+import { ExpressError } from './middlewares/express.error';
+import { LoggerService } from '../common/services/logger/logger.service';
+import swaggerUi from 'swagger-ui-express';
+import { openapiDocs } from './swagger/openapi.config';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../containers/TYPES';
+import { ExpressSession } from './middlewares/express.session';
+import passport from 'passport';
 
 @injectable()
 export class ServerExpress {
@@ -36,6 +37,8 @@ export class ServerExpress {
 		this.app.use(helmet());
 		this.app.use(json());
 		this.app.use(this.expressSession.expressSession);
+		this.app.use(passport.initialize());
+		this.app.use(passport.session());
 
 		return this;
 	};
@@ -50,7 +53,7 @@ export class ServerExpress {
 		this.applyMiddlewares().useRoutes();
 		this.app.use(this.expressError.expressError);
 		this.app.use(
-			SERVER_PREFIX + "/docs",
+			SERVER_PREFIX + '/docs',
 			swaggerUi.serve,
 			swaggerUi.setup(openapiDocs),
 		);
@@ -58,8 +61,8 @@ export class ServerExpress {
 
 	init = async () => {
 		this.configureApp();
-		const port = parseInt(this.configService.getEnv("PORT"));
-		const host = this.configService.getEnv("HOST");
+		const port = parseInt(this.configService.getEnv('PORT'));
+		const host = this.configService.getEnv('HOST');
 
 		this.app.listen(port, host);
 		this.loggerService.logger.info(

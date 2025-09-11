@@ -1,10 +1,10 @@
-import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UserDTOZodSchema } from "../../../../../../../libs/models/schemas/user";
-import { NAMESPACES } from "../../../../common/consts/NAMESPACES";
-import { useRegistrationAuthStore } from "../../common/stores/user.store";
-import { serverPaths } from "../../../../../../../libs/shared/PATHS";
+import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UserDTOZodSchema } from '../../../../../../../libs/models/schemas/user';
+import { NAMESPACES } from '../../../../common/consts/NAMESPACES';
+import { useRegistrationAuthStore } from '../../common/stores/user.store';
+import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 
 export const RegistrationUserModule = () => {
 	const { t } = useTranslation(NAMESPACES.registration);
@@ -18,32 +18,30 @@ export const RegistrationUserModule = () => {
 
 	const onSubmit = handleSubmit(data => setEmailPassword(data));
 
-	const handleProviderClick = () =>
-		(window.location.href = _URL_SERVER + serverPaths.redirect);
-
 	return (
 		<>
 			<form onSubmit={onSubmit}>
-				<label htmlFor="email">{t("form.email")}</label>
+				<label htmlFor='email'>{t('form.email')}</label>
 				<input
-					{...register("email")}
-					type="text"
-					id="email"
+					{...register('email')}
+					type='text'
+					id='email'
 				/>
 
-				<label htmlFor="password">{t("form.password")}</label>
+				<label htmlFor='password'>{t('form.password')}</label>
 				<input
-					{...register("password")}
-					type="password"
-					id="password"
+					{...register('password')}
+					type='password'
+					id='password'
 				/>
 
-				<button>{t("form.submit")}</button>
+				<button>{t('form.submit')}</button>
 			</form>
 			{/* TODO: Authorization with providers */}
-			<button onClick={handleProviderClick}>
-				{t("loginUsing", { provider: "Random Provider" })}
-			</button>
+			<a href='/api/auth/google'>Google</a>
+			{/* <button onClick={handleProviderClick}>
+				{t("loginUsing", { provider: "Google" })}
+			</button> */}
 		</>
 	);
 };

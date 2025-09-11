@@ -1,15 +1,13 @@
-import { RegistrationDTOZodSchema } from "../../../common/models/schemas/registration.dto";
-import { RegistrationService } from "../service/registration.service";
-import { zodValidateFormData } from "../../../common/pipes/zod.formdata.pipe";
-import { Request, Response } from "express";
-import { BaseController } from "../../../config/base.controller";
-import { serverPaths } from "../../../../../../libs/shared/PATHS";
-import { ConfigService } from "../../../common/services/config/config.service";
-import multer from "multer";
-import { inject, injectable } from "inversify";
-import { TYPES } from "../../../containers/TYPES";
-
-// Теперь будет не мок регистрация. Эндпойнт регистрации будет принимать в сессии данные о пользователе и сохранять их в бд
+import { RegistrationDTOZodSchema } from '../../../common/models/schemas/registration.dto';
+import { RegistrationService } from '../service/registration.service';
+import { zodValidateFormData } from '../../../common/pipes/zod.formdata.pipe';
+import { Request, Response } from 'express';
+import { BaseController } from '../../../config/base.controller';
+import { serverPaths } from '../../../../../../libs/shared/PATHS';
+import { ConfigService } from '../../../common/services/config/config.service';
+import multer from 'multer';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../../../containers/TYPES';
 
 @injectable()
 export class RegistrationController extends BaseController {
@@ -23,9 +21,9 @@ export class RegistrationController extends BaseController {
 		this.bindRoutes([
 			{
 				handle: this.registration,
-				method: "post",
+				method: 'post',
 				path: serverPaths.registration,
-				middlewares: [multer({}).single("avatar")],
+				middlewares: [multer({}).single('avatar')],
 			},
 			// {
 			// 	handle: this.redirect,
@@ -37,24 +35,24 @@ export class RegistrationController extends BaseController {
 	}
 
 	registration = async (req: Request, res: Response) => {
-		console.log("[REQUEST]: REGISTRATION");
+		console.log('[REQUEST]: REGISTRATION');
 		const authDTO = zodValidateFormData({
 			data: req.body,
-			name: "data",
+			name: 'data',
 			schema: RegistrationDTOZodSchema,
 			files: { avatar: req.file },
 		});
 
 		const provider_id: string | undefined = req.session.provider_id;
 		req.session.provider_id = undefined;
-		console.log("SESSION", req.session);
+		console.log('SESSION', req.session);
 
 		const profile = await this.registrationService.registration(
 			authDTO,
 			provider_id,
 		);
 
-		req.session.payload = { id: profile.id, role: "user" };
+		req.session.payload = { id: profile.id, role: 'user' };
 
 		res.status(201).json(profile);
 	};

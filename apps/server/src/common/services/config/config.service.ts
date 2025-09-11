@@ -1,9 +1,9 @@
-type Mode = "production" | "development" | "test";
+type Mode = 'production' | 'development' | 'test';
 
 interface Env {
 	PORT: string;
 	HOST: string;
-	REDIRECT_URL: string;
+	URL_SERVER: string;
 	AUTH_PORT: string;
 	AUTH_HOST: string;
 	DB_NAME: string;
@@ -32,19 +32,19 @@ export class ConfigService {
 		param: K,
 	): asserts value is Env[K] {
 		this.isString(value, param);
-		if (param === "NODE_ENV") {
+		if (param === 'NODE_ENV') {
 			this.isMode(value);
 		}
 	}
 
 	private isString(value: unknown, param: keyof Env): asserts value is string {
-		if (typeof value !== "string") {
+		if (typeof value !== 'string') {
 			throw new Error(`Укажите обязательный параметр ${param}!`);
 		}
 	}
 
 	private isMode(value: unknown): asserts value is Mode {
-		if (value !== "production" && value !== "development" && value !== "test") {
+		if (value !== 'production' && value !== 'development' && value !== 'test') {
 			throw new Error(
 				`NODE_ENV должен быть production или development! Сейчас это ${value}`,
 			);
