@@ -1,9 +1,9 @@
-import { useForm } from "react-hook-form";
-import { useCountries } from "./hooks/useCountries";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileDTOZodSchema } from "./schemas/registration.dto";
-import { useRegistrationAuthStore } from "../../common/stores/user.store";
-import { useRegistrationPost } from "./hooks/useRegistration";
+import { useForm } from 'react-hook-form';
+import { useCountries } from './hooks/useCountries';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ProfileDTOZodSchema } from './schemas/registration.dto';
+import { useRegistrationAuthStore } from '../../common/stores/user.store';
+import { useRegistrationPost } from './hooks/useRegistration';
 
 export const RegistrationProfileModule = () => {
 	const { data, isSuccess, error, isError } = useCountries();
@@ -23,32 +23,32 @@ export const RegistrationProfileModule = () => {
 
 	return (
 		<form onSubmit={onSubmit}>
-			<label htmlFor="name">Имя</label>
+			<label htmlFor='name'>Имя</label>
 			<input
-				{...register("name")}
-				type="text"
-				id="name"
+				{...register('name')}
+				type='text'
+				id='name'
 			/>
 
-			<label htmlFor="avatar">Аватар</label>
+			<label htmlFor='avatar'>Аватар</label>
 			<input
-				{...register("avatar")}
-				type="file"
-				id="avatar"
+				{...register('avatar')}
+				type='file'
+				id='avatar'
 			/>
 
-			<label htmlFor="about">About</label>
+			<label htmlFor='about'>About</label>
 			<textarea
-				{...register("about")}
-				id="about"></textarea>
+				{...register('about')}
+				id='about'></textarea>
 
-			<label htmlFor="country">Страна</label>
+			<label htmlFor='country'>Страна</label>
 			{isError && <div>ERROR: {error.message}!</div>}
 			{isSuccess && (
 				<select
-					{...register("country_code")}
-					id="country">
-					<option value="">Выберите страну</option>
+					{...register('country_code')}
+					id='country'>
+					<option value=''>Выберите страну</option>
 					{data.map(country => (
 						<option
 							key={country.code}

@@ -1,27 +1,27 @@
-import "@asteasolutions/zod-to-openapi";
-import { z } from "zod";
-import { serverPaths } from "../../../../../libs/shared/PATHS";
-import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
-import { ProfileZodSchema } from "../../../../../libs/models/schemas/profile";
-import { registry } from "../../config/swagger/registry";
-import { SERVER_PREFIX } from "../../../../../libs/shared/CONST";
-import { RegistrationDTOZodSchema } from "../../common/models/schemas/registration.dto";
+import '@asteasolutions/zod-to-openapi';
+import { z } from 'zod';
+import { serverPaths } from '../../../../../libs/shared/PATHS';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import { ProfileZodSchema } from '../../../../../libs/models/schemas/profile';
+import { registry } from '../../config/swagger/registry';
+import { SERVER_PREFIX } from '../../../../../libs/shared/CONST';
+import { RegistrationDTOZodSchema } from '../../common/models/schemas/registration.dto';
 
 extendZodWithOpenApi(z);
 // TODO: Add errors variables
 registry.registerPath({
-	method: "post",
+	method: 'post',
 	path: SERVER_PREFIX + serverPaths.registration,
 	request: {
 		body: {
 			required: true,
 			description:
-				"WARNING!!! Send in form-data, key data as JSON, avatar as Image",
+				'WARNING!!! Send in form-data, key data as JSON, avatar as Image',
 			content: {
-				"application/json": {
+				'application/json': {
 					schema: z.object({
 						data: RegistrationDTOZodSchema.omit({ avatar: true }),
-						avatar: z.string().openapi({ example: "file/img" }),
+						avatar: z.string().openapi({ example: 'file/img' }),
 					}),
 				},
 			},
@@ -29,9 +29,9 @@ registry.registerPath({
 	},
 	responses: {
 		201: {
-			description: "Returns profile",
+			description: 'Returns profile',
 			content: {
-				"application/json": {
+				'application/json': {
 					schema: ProfileZodSchema,
 				},
 			},

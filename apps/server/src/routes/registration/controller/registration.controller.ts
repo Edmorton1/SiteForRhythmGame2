@@ -35,7 +35,7 @@ export class RegistrationController extends BaseController {
 	}
 
 	registration = async (req: Request, res: Response) => {
-		console.log('[REQUEST]: REGISTRATION');
+		console.log('[REQUEST]: REGISTRATION', req.session.provider);
 		const authDTO = zodValidateFormData({
 			data: req.body,
 			name: 'data',
@@ -43,13 +43,14 @@ export class RegistrationController extends BaseController {
 			files: { avatar: req.file },
 		});
 
-		const provider_id: string | undefined = req.session.provider_id;
-		req.session.provider_id = undefined;
+		const provider = req.session.provider;
+		req.session.provider = undefined;
 		console.log('SESSION', req.session);
 
 		const profile = await this.registrationService.registration(
 			authDTO,
-			provider_id,
+			//@ts-ignore
+			provider,
 		);
 
 		req.session.payload = { id: profile.id, role: 'user' };

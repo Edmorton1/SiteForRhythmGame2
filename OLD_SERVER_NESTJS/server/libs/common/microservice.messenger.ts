@@ -1,6 +1,6 @@
-import type { ClientProxy } from "@nestjs/microservices";
-import { firstValueFrom } from "rxjs";
-import type { serverPaths } from "../../../../libs/shared/PATHS";
+import type { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
+import type { serverPaths } from '../../../../libs/shared/PATHS';
 
 type Path = keyof typeof serverPaths;
 

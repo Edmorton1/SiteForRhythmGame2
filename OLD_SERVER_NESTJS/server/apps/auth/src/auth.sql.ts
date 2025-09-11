@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { DatabaseService } from "../../../services/db/postgres/database.service";
-import bcrypt from "bcrypt";
-import { AuthDTO } from "../../../libs/models/schemas/auth.dto";
-import { DatabaseKysely } from "../../../services/db/postgres/database.type";
-import { sql } from "kysely";
+import { Injectable } from '@nestjs/common';
+import { DatabaseService } from '../../../services/db/postgres/database.service';
+import bcrypt from 'bcrypt';
+import { AuthDTO } from '../../../libs/models/schemas/auth.dto';
+import { DatabaseKysely } from '../../../services/db/postgres/database.type';
+import { sql } from 'kysely';
 
 @Injectable()
 export class AuthSQL {
@@ -14,16 +14,16 @@ export class AuthSQL {
 		const hashPassword = await bcrypt.hash(user.password!, 3);
 		return this.databaseService.db.transaction().execute(async trx => {
 			const [roleId] = await trx
-				.insertInto("users")
+				.insertInto('users')
 				.values({
 					...user,
 					password: hashPassword,
 				})
-				.returning(["id", "role"])
+				.returning(['id', 'role'])
 				.execute();
 
 			const [profile] = await trx
-				.insertInto("profiles")
+				.insertInto('profiles')
 				.values({
 					...profileDTO,
 					id: roleId.id,

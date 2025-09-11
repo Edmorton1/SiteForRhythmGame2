@@ -1,5 +1,5 @@
-import type { ClientProxy } from "@nestjs/microservices";
-import { MicroserviceMessenger } from "./microservice.messenger";
+import type { ClientProxy } from '@nestjs/microservices';
+import { MicroserviceMessenger } from './microservice.messenger';
 
 export abstract class HttpController {
 	protected readonly messenger: MicroserviceMessenger;

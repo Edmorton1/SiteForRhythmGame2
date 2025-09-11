@@ -1,28 +1,28 @@
-import { Module } from "@nestjs/common";
-import { AuthController } from "./auth.controller";
-import { AuthService } from "./auth.service";
-import { LoggerModule } from "nestjs-pino";
-import { JwtModule } from "@nestjs/jwt";
-import { getEnv } from "../../../libs/func/env";
-import { DatabaseModule } from "../../../services/db/postgres/database.module";
-import { AuthSQL } from "./auth.sql";
+import { Module } from '@nestjs/common';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { LoggerModule } from 'nestjs-pino';
+import { JwtModule } from '@nestjs/jwt';
+import { getEnv } from '../../../libs/func/env';
+import { DatabaseModule } from '../../../services/db/postgres/database.module';
+import { AuthSQL } from './auth.sql';
 
 @Module({
 	imports: [
 		DatabaseModule,
 		JwtModule.register({
-			secret: getEnv("JWT_SECRET"),
+			secret: getEnv('JWT_SECRET'),
 			signOptions: {
-				expiresIn: "24h",
+				expiresIn: '24h',
 			},
 		}),
 		LoggerModule.forRoot({
 			pinoHttp: (() => {
 				const options: any = { autoLogging: false };
 
-				if (getEnv("NODE_ENV") === "development") {
+				if (getEnv('NODE_ENV') === 'development') {
 					options.transport = {
-						target: "pino-pretty",
+						target: 'pino-pretty',
 						options: { colorize: true },
 					};
 				}

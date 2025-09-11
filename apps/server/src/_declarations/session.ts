@@ -1,9 +1,27 @@
-import "express-session";
-import { Payload } from "../common/models/schemas/auth.dto";
+import 'express-session';
+import { Payload } from '../common/models/schemas/auth.dto';
 
-declare module "express-session" {
+// export interface OauthUser {
+// 	id: string;
+// 	email: string;
+// 	provider: 'google';
+// }
+
+declare module 'express-session' {
 	interface SessionData {
 		payload?: Payload;
-		provider_id?: string | undefined;
+		provider?:
+			| {
+					id: string;
+					email: string;
+					provider: string;
+			  }
+			| undefined;
 	}
 }
+
+// declare global {
+// 	namespace Express {
+// 		interface User extends OauthUser {}
+// 	}
+// }

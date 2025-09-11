@@ -1,8 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { useLoginPost } from "./stores/useLogin";
-import { LogoutButton } from "./LogoutButton";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
+import { useLoginPost } from './stores/useLogin';
+import { LogoutButton } from './LogoutButton';
 
 export const LoginFormModule = () => {
 	// TODO: ДУБЛИРОВАНИЕ ПОТОМ УБРАТЬ!!!
@@ -15,10 +15,10 @@ export const LoginFormModule = () => {
 	});
 	const { mutate } = useLoginPost();
 
-	console.log("ERRORS", errors);
+	console.log('ERRORS', errors);
 
 	const onSubmit = handleSubmit(data => {
-		console.log("DATA", data);
+		console.log('DATA', data);
 		mutate(data);
 	});
 
@@ -26,26 +26,26 @@ export const LoginFormModule = () => {
 		<form
 			onSubmit={onSubmit}
 			style={{
-				display: "flex",
-				flexDirection: "column",
-				width: "400px",
-				gap: "10px",
+				display: 'flex',
+				flexDirection: 'column',
+				width: '400px',
+				gap: '10px',
 			}}>
-			<label htmlFor="email">Почта</label>
+			<label htmlFor='email'>Почта</label>
 			<input
-				{...register("email")}
-				value={"alexo@example.com"}
-				type="text"
-				id="email"
+				{...register('email')}
+				value={'alexo@example.com'}
+				type='text'
+				id='email'
 			/>
-			<label htmlFor="password">Пароль</label>
+			<label htmlFor='password'>Пароль</label>
 			<input
-				{...register("password")}
-				value={"123123"}
-				type="password"
-				id="password"
+				{...register('password')}
+				value={'123123'}
+				type='password'
+				id='password'
 			/>
-			<button type="submit">Готово</button>
+			<button type='submit'>Готово</button>
 
 			<LogoutButton />
 		</form>

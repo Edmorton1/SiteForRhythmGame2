@@ -1,5 +1,5 @@
-import { type SessionData, Store } from "express-session";
-import type { default as Redis, Cluster } from "ioredis";
+import { type SessionData, Store } from 'express-session';
+import type { default as Redis, Cluster } from 'ioredis';
 
 type Callback = (_err?: unknown, _data?: any) => any;
 
@@ -35,7 +35,7 @@ export class RedisStore extends Store {
 
 	constructor(opts: RedisStoreOptions) {
 		super();
-		this.prefix = opts.prefix == null ? "sess:" : opts.prefix;
+		this.prefix = opts.prefix == null ? 'sess:' : opts.prefix;
 		this.scanCount = opts.scanCount || 100;
 		this.serializer = opts.serializer || JSON;
 		this.ttl = opts.ttl || 86400; // One day in seconds.
@@ -62,7 +62,7 @@ export class RedisStore extends Store {
 			if (ttl > 0) {
 				const val = this.serializer.stringify(sess);
 				if (this.disableTTL) await this.client.set(key, val);
-				else await this.client.set(key, val, "EX", ttl);
+				else await this.client.set(key, val, 'EX', ttl);
 				return optionalCb(null, null, cb);
 			}
 			return this.destroy(sid, cb);
@@ -147,7 +147,7 @@ export class RedisStore extends Store {
 	}
 
 	private getTTL(sess: SessionData) {
-		if (typeof this.ttl === "function") {
+		if (typeof this.ttl === 'function') {
 			return this.ttl(sess);
 		}
 
@@ -162,7 +162,7 @@ export class RedisStore extends Store {
 	}
 
 	private async getAllKeys() {
-		const pattern = this.prefix + "*";
+		const pattern = this.prefix + '*';
 		const set = new Set<string>();
 		for await (const keys of this.scanIterator(pattern, this.scanCount)) {
 			for (const key of keys) {
@@ -196,7 +196,7 @@ export class RedisStore extends Store {
 		const client = this.client;
 
 		// Standalone Redis
-		if (!("nodes" in client)) {
+		if (!('nodes' in client)) {
 			const redis = client;
 			return (async function* () {
 				const stream = redis.scanStream({ match, count });
@@ -209,7 +209,7 @@ export class RedisStore extends Store {
 		// Cluster Redis
 		const cluster = client;
 		return (async function* () {
-			for (const node of cluster.nodes("master")) {
+			for (const node of cluster.nodes('master')) {
 				const stream = node.scanStream({ match, count });
 				for await (const keys of stream) {
 					yield keys as string[];

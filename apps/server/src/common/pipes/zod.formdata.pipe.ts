@@ -1,5 +1,5 @@
-import { ZodError, ZodType } from "zod";
-import { HttpError } from "../http/http.error";
+import { ZodError, ZodType } from 'zod';
+import { HttpError } from '../http/http.error';
 
 interface Args<T extends ZodType<any>> {
 	data: unknown;
@@ -17,7 +17,7 @@ export const zodValidateFormData = <T extends ZodType<any>>({
 	schema,
 	files: file,
 }: Args<T>) => {
-	if (typeof data !== "object" || data === null || !(name in data)) {
+	if (typeof data !== 'object' || data === null || !(name in data)) {
 		throw new HttpError(400, `The passed FormData has no property ${name}`);
 	}
 

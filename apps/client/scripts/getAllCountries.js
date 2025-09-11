@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 //prettier-ignore
 const countries = await fetch("https://restcountries.com/v3.1/all?fields=name,cca2,independent")
@@ -11,6 +11,6 @@ const countries = await fetch("https://restcountries.com/v3.1/all?fields=name,cc
 			.sort((a, b) => a.name.localeCompare(b.name)),
 	);
 
-const fileName = "countries.json";
-const filePath = path.join("public", "data", fileName);
-fs.writeFileSync(filePath, JSON.stringify(countries, null, 2), "UTF-8");
+const fileName = 'countries.json';
+const filePath = path.join('public', 'data', fileName);
+fs.writeFileSync(filePath, JSON.stringify(countries, null, 2), 'UTF-8');

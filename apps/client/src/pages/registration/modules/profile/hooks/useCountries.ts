@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 interface Country {
 	name: string;
@@ -7,11 +7,11 @@ interface Country {
 }
 
 const getCountries = async () =>
-	axios.get<Country[]>("/data/countries.json").then(({ data }) => data);
+	axios.get<Country[]>('/data/countries.json').then(({ data }) => data);
 
 export const useCountries = () => {
 	const result = useQuery({
-		queryKey: ["countries"],
+		queryKey: ['countries'],
 		queryFn: getCountries,
 		retry: false,
 	});

@@ -1,8 +1,8 @@
-import { UserDTOZodSchema } from "../../../../../libs/models/schemas/user";
+import { UserDTOZodSchema } from '../../../../../libs/models/schemas/user';
 // prettier-ignore
 import { Profile, ProfileZodSchema } from "../../../../../libs/models/schemas/profile";
-import z from "zod";
-import { zExpressMulterFile } from "../enums/enums";
+import z from 'zod';
+import { zExpressMulterFile } from '../enums/enums';
 
 const ProfileDTOZodSchema = ProfileZodSchema.pick({
 	name: true,

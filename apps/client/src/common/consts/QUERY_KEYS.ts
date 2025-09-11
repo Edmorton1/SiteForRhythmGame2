@@ -1,1 +1,1 @@
-export const PROFILE = "profile";
+export const PROFILE = 'profile';

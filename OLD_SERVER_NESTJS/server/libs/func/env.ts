@@ -1,4 +1,4 @@
-type Mode = "production" | "development";
+type Mode = 'production' | 'development';
 
 interface Env {
 	PORT: string;
@@ -27,19 +27,19 @@ function validateEnv<K extends keyof Env>(
 	param: K,
 ): asserts value is Env[K] {
 	isString(value, param);
-	if (param === "NODE_ENV") {
+	if (param === 'NODE_ENV') {
 		isMode(value);
 	}
 }
 
 function isString(value: unknown, param: keyof Env): asserts value is string {
-	if (typeof value !== "string") {
+	if (typeof value !== 'string') {
 		throw new Error(`Укажите обязательный параметр ${param}!`);
 	}
 }
 
 function isMode(value: unknown): asserts value is Mode {
-	if (value !== "production" && value !== "development") {
+	if (value !== 'production' && value !== 'development') {
 		throw new Error(
 			`NODE_ENV должен быть production или development! Сейчас это ${value}`,
 		);

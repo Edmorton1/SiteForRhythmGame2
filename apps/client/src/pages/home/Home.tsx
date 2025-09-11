@@ -1,6 +1,6 @@
 //prettier-ignore
 import { useIsMutating, useMutation, useQueryClient } from "@tanstack/react-query";
-import { usePosts } from "./usePosts";
+import { usePosts } from './usePosts';
 
 interface Post {
 	id: number;
@@ -9,10 +9,10 @@ interface Post {
 
 export const Home = () => {
 	const { mutate, isPending } = useMutation({
-		mutationKey: ["add post"],
+		mutationKey: ['add post'],
 		mutationFn: async (newPost: Post) =>
-			fetch("https://jsonplaceholder.typicode.com/posts/", {
-				method: "POST",
+			fetch('https://jsonplaceholder.typicode.com/posts/', {
+				method: 'POST',
 				body: JSON.stringify(newPost),
 			}),
 	});
@@ -28,11 +28,11 @@ export const Home = () => {
 		<>
 			<button
 				disabled={isPending}
-				onClick={() => mutate({ id: 1, title: "asdasd" })}>
+				onClick={() => mutate({ id: 1, title: 'asdasd' })}>
 				Добавить
 			</button>
 			<button
-				onClick={() => queryClient.invalidateQueries({ queryKey: ["posts"] })}>
+				onClick={() => queryClient.invalidateQueries({ queryKey: ['posts'] })}>
 				Invalidate Props
 			</button>
 			{isSuccess && data.map(post => <div key={post.id}>{post.title}</div>)}

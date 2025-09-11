@@ -1,10 +1,10 @@
-import { Pool } from "pg";
-import { Kysely, PostgresDialect } from "kysely";
-import { DatabaseKysely } from "./database.type";
-import { LoggerService } from "../logger/logger.service";
-import { ConfigService } from "../config/config.service";
-import { inject, injectable } from "inversify";
-import { TYPES } from "../../../containers/TYPES";
+import { Pool } from 'pg';
+import { Kysely, PostgresDialect } from 'kysely';
+import { DatabaseKysely } from './database.type';
+import { LoggerService } from '../logger/logger.service';
+import { ConfigService } from '../config/config.service';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../../../containers/TYPES';
 
 @injectable()
 export class DatabaseService {
@@ -18,18 +18,18 @@ export class DatabaseService {
 	) {
 		const logger = this.loggerService.logger;
 		const pool = new Pool({
-			database: this.configService.getEnv("DB_NAME"),
-			host: this.configService.getEnv("DB_HOST"),
-			user: this.configService.getEnv("DB_USER"),
-			port: parseInt(this.configService.getEnv("DB_PORT")),
-			password: this.configService.getEnv("DB_PASSWORD"),
+			database: this.configService.getEnv('DB_NAME'),
+			host: this.configService.getEnv('DB_HOST'),
+			user: this.configService.getEnv('DB_USER'),
+			port: parseInt(this.configService.getEnv('DB_PORT')),
+			password: this.configService.getEnv('DB_PASSWORD'),
 			// max: 10,
 		});
 
-		pool.on("connect", () => logger.info("POSTGRES CONNECT"));
-		pool.on("acquire", () => logger.info("POSTGRES ACQUIRE"));
-		pool.on("error", error => logger.error({ POSTGRES_ERROR: error }));
-		pool.on("release", () => logger.info("POSTGRES RELEASE"));
+		pool.on('connect', () => logger.info('POSTGRES CONNECT'));
+		pool.on('acquire', () => logger.info('POSTGRES ACQUIRE'));
+		pool.on('error', error => logger.error({ POSTGRES_ERROR: error }));
+		pool.on('release', () => logger.info('POSTGRES RELEASE'));
 
 		const dialect = new PostgresDialect({ pool });
 
@@ -38,6 +38,6 @@ export class DatabaseService {
 
 	disconnect = async () => {
 		await this.db.destroy();
-		this.loggerService.logger.info("POSTGRES DISCONNECT");
+		this.loggerService.logger.info('POSTGRES DISCONNECT');
 	};
 }

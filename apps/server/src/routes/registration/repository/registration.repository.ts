@@ -1,17 +1,17 @@
-import { DatabaseService } from "../../../common/services/postgres/database.service";
-import bcrypt from "bcrypt";
-import { RegistrationDTO } from "../../../common/models/schemas/registration.dto";
-import { DatabaseKysely } from "../../../common/services/postgres/database.type";
-import { sql, Transaction } from "kysely";
-import { User, UserDTO } from "../../../../../../libs/models/schemas/user";
-import { randomUUID } from "crypto";
-import { Profile } from "../../../../../../libs/models/schemas/profile";
-import { inject, injectable } from "inversify";
-import { TYPES } from "../../../containers/TYPES";
+import { DatabaseService } from '../../../common/services/postgres/database.service';
+import bcrypt from 'bcrypt';
+import { RegistrationDTO } from '../../../common/models/schemas/registration.dto';
+import { DatabaseKysely } from '../../../common/services/postgres/database.type';
+import { sql, Transaction } from 'kysely';
+import { User, UserDTO } from '../../../../../../libs/models/schemas/user';
+import { randomUUID } from 'crypto';
+import { Profile } from '../../../../../../libs/models/schemas/profile';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../../../containers/TYPES';
 
-type ProfileAvatar = Omit<RegistrationDTO, "user">;
+type ProfileAvatar = Omit<RegistrationDTO, 'user'>;
 
-type RoleId = Pick<User, "id" | "role">;
+type RoleId = Pick<User, 'id' | 'role'>;
 
 @injectable()
 export class RegistrationRepository {
@@ -47,7 +47,7 @@ export class RegistrationRepository {
 			const Payload = await insertUser(trx);
 
 			const profile = await trx
-				.insertInto("profiles")
+				.insertInto('profiles')
 				.values({ ...authDTO.profile, id: Payload.id, avatar })
 				.returningAll()
 				.executeTakeFirstOrThrow();
@@ -67,16 +67,16 @@ export class RegistrationRepository {
 		value: UserDTO | { provider_id: string },
 	): Promise<RoleId> => {
 		const userRoleId = await trx
-			.insertInto("users")
+			.insertInto('users')
 			.values(value)
-			.returning(["id", "role"])
+			.returning(['id', 'role'])
 			.executeTakeFirstOrThrow();
 		return userRoleId;
 	};
 
 	private createUser = async (
 		trx: Transaction<DatabaseKysely>,
-		userDTO: RegistrationDTO["user"],
+		userDTO: RegistrationDTO['user'],
 	): Promise<RoleId> => {
 		// TODO: set many salt
 		const hashPassword = await bcrypt.hash(userDTO.password!, 3);

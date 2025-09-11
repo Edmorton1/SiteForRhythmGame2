@@ -1,8 +1,8 @@
-import { inject, injectable } from "inversify";
-import { TYPES } from "../../containers/TYPES";
-import { ConfigService } from "../../common/services/config/config.service";
-import session from "express-session";
-import { RedisService } from "../../common/services/redis/redis.service";
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../../containers/TYPES';
+import { ConfigService } from '../../common/services/config/config.service';
+import session from 'express-session';
+import { RedisService } from '../../common/services/redis/redis.service';
 
 @injectable()
 export class ExpressSession {
@@ -13,8 +13,8 @@ export class ExpressSession {
 		private readonly redisService: RedisService,
 	) {}
 	expressSession = session({
-		name: this.configService.getEnv("COOKIE_NAME"),
-		secret: this.configService.getEnv("SESSION_SECRET"),
+		name: this.configService.getEnv('COOKIE_NAME'),
+		secret: this.configService.getEnv('SESSION_SECRET'),
 		store: this.redisService.store,
 		resave: false,
 		saveUninitialized: false,

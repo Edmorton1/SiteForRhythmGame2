@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { zid } from "../enums/zod";
+import { z } from 'zod';
+import { zid } from '../enums/zod';
 
-export const rolesZodSchema = z.enum(["user", "admin"]);
+export const rolesZodSchema = z.enum(['user', 'admin']);
 export type Role = z.infer<typeof rolesZodSchema>;
 
 export const zEmailPassword = {

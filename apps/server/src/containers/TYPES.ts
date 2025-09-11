@@ -5,6 +5,7 @@ export const TYPES = {
 		logger: Symbol.for('LoggerService'),
 		database: Symbol.for('DatabaseService'),
 		redis: Symbol.for('RedisService'),
+		dbQueries: Symbol.for('DbQueries'),
 	},
 
 	oauth: {
@@ -31,6 +32,7 @@ export const TYPES = {
 		},
 		google: {
 			controller: Symbol.for('GoogleController'),
+			repository: Symbol.for('GoogleRepository'),
 		},
 	},
 };

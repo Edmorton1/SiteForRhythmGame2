@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { zid, zISOString } from "../enums/zod";
+import { z } from 'zod';
+import { zid, zISOString } from '../enums/zod';
 
 export const ProfileZodSchema = z.object({
 	id: zid,

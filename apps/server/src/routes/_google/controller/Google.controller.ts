@@ -5,10 +5,13 @@ import { BaseController } from '../../../config/base.controller';
 import passport from 'passport';
 import { TYPES } from '../../../containers/TYPES';
 import { Passport } from '../passport';
+import { ConfigService } from '../../../common/services/config/config.service';
 
 @injectable()
 export class GoogleController extends BaseController {
 	constructor(
+		@inject(TYPES.services.config)
+		private readonly configService: ConfigService,
 		@inject(TYPES.oauth.PassportGoogle)
 		private readonly pass: Passport,
 	) {
@@ -32,15 +35,23 @@ export class GoogleController extends BaseController {
 		]);
 	}
 
-	getLink = passport.authenticate('google', { scope: ['email', 'profile'] });
+	getLink = passport.authenticate('google', { scope: ['email'] });
 
-	callback = passport.authenticate('google', {
-		successFlash: '/protected',
-		failureRedirect: '/fail',
-	});
+	callback = (req: Request, res: Response) => {
+		passport.authenticate('google', { failureRedirect: '/fail' }, () => {
+			if (req.session.payload) {
+				// TODO: ХАРДКОД
+				res.redirect('http://localhost:5000');
+			} else if (req.session.provider) {
+				res.redirect('http://localhost:5000/registration?oauth=true');
+			}
+		})(req, res);
+	};
 
 	protected = async (req: Request, res: Response) => {
-		console.log(req);
+		//@ts-ignore
+		console.log(req.session.passport);
+		console.log('EQEQWEQW');
 		res.sendStatus(201);
 	};
 }

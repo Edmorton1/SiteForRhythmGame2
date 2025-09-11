@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import type { UserDTO } from "../../../../../../../libs/models/schemas/user";
+import { create } from 'zustand';
+import type { UserDTO } from '../../../../../../../libs/models/schemas/user';
 
 interface UserState {
 	user: UserDTO;

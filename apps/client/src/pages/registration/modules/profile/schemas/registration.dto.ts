@@ -1,6 +1,6 @@
-import z from "zod";
-import { ProfileZodSchema } from "../../../../../../../../libs/models/schemas/profile";
-import { UserDTOZodSchema } from "../../../../../../../../libs/models/schemas/user";
+import z from 'zod';
+import { ProfileZodSchema } from '../../../../../../../../libs/models/schemas/profile';
+import { UserDTOZodSchema } from '../../../../../../../../libs/models/schemas/user';
 
 export const ProfileDTOZodSchema = ProfileZodSchema.pick({
 	name: true,

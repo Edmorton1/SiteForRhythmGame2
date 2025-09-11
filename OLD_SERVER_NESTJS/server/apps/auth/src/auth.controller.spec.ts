@@ -1,1 +1,1 @@
-it("Test", () => expect(true).toBe(true));
+it('Test', () => expect(true).toBe(true));

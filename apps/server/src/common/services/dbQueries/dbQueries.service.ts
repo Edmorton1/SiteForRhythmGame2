@@ -1,11 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../containers/TYPES';
-import { DatabaseService } from '../../../common/services/postgres/database.service';
+import { DatabaseService } from '../postgres/database.service';
 
 @injectable()
-export class Repository {
+export class DbQueriesService {
 	constructor(
 		@inject(TYPES.services.database)
-		private readonly database: DatabaseService,
+		private readonly databaseService: DatabaseService,
 	) {}
 }

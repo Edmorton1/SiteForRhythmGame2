@@ -4,12 +4,16 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { TYPES } from '../../containers/TYPES';
 import { ConfigService } from '../../common/services/config/config.service';
 import { serverPaths } from '../../../../../libs/shared/PATHS';
+import { DbQueriesService } from '../../common/services/dbQueries/dbQueries.service';
+import { GoogleRepository } from './repository/Google.repository';
 
 @injectable()
 export class Passport {
 	constructor(
 		@inject(TYPES.services.config)
 		private readonly configService: ConfigService,
+		@inject(TYPES.modules.google.repository)
+		private readonly googleRepository: GoogleRepository,
 	) {
 		console.log(
 			'СОЗДАЛСЯ ЭКЗЕМПЛЯР PASSPORT',
@@ -25,13 +29,31 @@ export class Passport {
 						serverPaths.authGoogleCallback,
 					passReqToCallback: true,
 				},
-				(req, accessToken, refreshToken, profile, done) => {
-					return done(profile);
+				async (req, accessToken, refreshToken, profile, done) => {
+					const id = await this.googleRepository.getUserId(profile.id);
+					if (id) {
+						req.session.payload = { id, role: 'user' };
+					} else {
+						const email = profile._json.email;
+						if (!email) {
+							throw new Error('Email not found');
+						}
+						req.session.provider = {
+							id: profile.id,
+							email,
+							provider: profile.provider,
+						};
+					}
+
+					return done(null, false);
 				},
 			),
 		);
-		passport.serializeUser((user, done) => {
-			done(null, user);
-		});
+
+		// passport.serializeUser((user, done) => {
+		// 	done(null, user);
+		// });
+
+		// passport.deserializeUser(async (user, done) => done(null, user as any));
 	}
 }

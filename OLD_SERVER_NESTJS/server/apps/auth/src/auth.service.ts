@@ -1,13 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { User } from "../../../../../libs/models/schemas/user";
-import { AuthDTO, LoginResponse } from "../../../libs/models/schemas/auth.dto";
-import { MicroserviceError } from "../../../libs/common/microservice.error";
-import { AuthSQL } from "./auth.sql";
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '../../../../../libs/models/schemas/user';
+import { AuthDTO, LoginResponse } from '../../../libs/models/schemas/auth.dto';
+import { MicroserviceError } from '../../../libs/common/microservice.error';
+import { AuthSQL } from './auth.sql';
 
 interface PayloadDTO {
-	id: User["id"];
-	role: User["role"];
+	id: User['id'];
+	role: User['role'];
 }
 
 @Injectable()
@@ -19,14 +19,14 @@ export class AuthService {
 
 	async registration(authDTO: AuthDTO): Promise<LoginResponse> {
 		const { user: auth, profile: profileDTO } = authDTO;
-		if (await this.authSQL.isInDB("users", "email", auth.email!)) {
+		if (await this.authSQL.isInDB('users', 'email', auth.email!)) {
 			throw new MicroserviceError(
 				409,
-				"An account with this email already exists.",
+				'An account with this email already exists.',
 			);
 		}
-		if (await this.authSQL.isInDB("profiles", "name", profileDTO.name)) {
-			throw new MicroserviceError(409, "This nickname is already taken");
+		if (await this.authSQL.isInDB('profiles', 'name', profileDTO.name)) {
+			throw new MicroserviceError(409, 'This nickname is already taken');
 		}
 		// TODO: Убрать !, сделать интеграцию с провайдером
 		// TODO: set many salt

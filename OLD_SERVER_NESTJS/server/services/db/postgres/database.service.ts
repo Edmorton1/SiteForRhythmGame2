@@ -1,9 +1,9 @@
-import { Pool } from "pg";
-import { Kysely, PostgresDialect } from "kysely";
-import { Injectable } from "@nestjs/common";
-import { PinoLogger } from "nestjs-pino";
-import { DatabaseKysely } from "./database.type";
-import { getEnv } from "../../../libs/func/env";
+import { Pool } from 'pg';
+import { Kysely, PostgresDialect } from 'kysely';
+import { Injectable } from '@nestjs/common';
+import { PinoLogger } from 'nestjs-pino';
+import { DatabaseKysely } from './database.type';
+import { getEnv } from '../../../libs/func/env';
 
 @Injectable()
 export class DatabaseService {
@@ -11,18 +11,18 @@ export class DatabaseService {
 
 	constructor(private readonly logger: PinoLogger) {
 		const pool = new Pool({
-			database: getEnv("DB_NAME"),
-			host: getEnv("DB_HOST"),
-			user: getEnv("DB_USER"),
-			port: parseInt(getEnv("DB_PORT")),
-			password: getEnv("DB_PASSWORD"),
+			database: getEnv('DB_NAME'),
+			host: getEnv('DB_HOST'),
+			user: getEnv('DB_USER'),
+			port: parseInt(getEnv('DB_PORT')),
+			password: getEnv('DB_PASSWORD'),
 			// max: 10,
 		});
 
-		pool.on("connect", () => this.logger.info("POSTGRES CONNECT"));
-		pool.on("acquire", () => this.logger.info("POSTGRES ACQUIRE"));
-		pool.on("error", error => this.logger.error({ POSTGRES_ERROR: error }));
-		pool.on("release", () => this.logger.info("POSTGRES RELEASE"));
+		pool.on('connect', () => this.logger.info('POSTGRES CONNECT'));
+		pool.on('acquire', () => this.logger.info('POSTGRES ACQUIRE'));
+		pool.on('error', error => this.logger.error({ POSTGRES_ERROR: error }));
+		pool.on('release', () => this.logger.info('POSTGRES RELEASE'));
 
 		const dialect = new PostgresDialect({ pool });
 

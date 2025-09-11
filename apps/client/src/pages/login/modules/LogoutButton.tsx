@@ -1,4 +1,4 @@
-import { useLogout } from "./stores/useLogout";
+import { useLogout } from './stores/useLogout';
 
 export const LogoutButton = () => {
 	const { mutate } = useLogout();
@@ -8,7 +8,7 @@ export const LogoutButton = () => {
 	return (
 		<button
 			onClick={handleClick}
-			type="button">
+			type='button'>
 			Выйти
 		</button>
 	);

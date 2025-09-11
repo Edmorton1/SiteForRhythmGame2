@@ -1,7 +1,7 @@
-import { Router } from "express";
-import { TYPES } from "../containers/TYPES";
-import { container } from "../containers/container.di";
-import { BaseController } from "./base.controller";
+import { Router } from 'express';
+import { TYPES } from '../containers/TYPES';
+import { container } from '../containers/container.di';
+import { BaseController } from './base.controller';
 
 export class ServerRoutes {
 	router: Router;

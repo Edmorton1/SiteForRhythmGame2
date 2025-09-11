@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     ports:
-      - "5000:80"
+      - '5000:80'
     depends_on:
       - server
   server:
@@ -23,7 +23,7 @@ services:
     env_file:
       - .env
     ports:
-      - "3000:80"
+      - '3000:80'
   pg:
     image: postgres:latest
     environment:
@@ -31,7 +31,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_DB: ${DB_NAME}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -40,7 +40,7 @@ services:
   redis:
     image: redis:latest
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 10s
       timeout: 3s
       retries: 5
@@ -54,6 +54,5 @@ volumes:
   redis-data:
     external: true
     name: 223674e28f20e03dcf7098dd30b8514b55fe7c51faebd6ea8e71d8a588934998
-
 # apk add curl
 # docker compose up -d

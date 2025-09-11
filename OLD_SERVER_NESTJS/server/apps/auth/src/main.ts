@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
-import { NestFactory } from "@nestjs/core";
-import { type MicroserviceOptions, Transport } from "@nestjs/microservices";
-import { AuthModule } from "./auth.module";
-import { getEnv } from "../../../libs/func/env";
+import { NestFactory } from '@nestjs/core';
+import { type MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { AuthModule } from './auth.module';
+import { getEnv } from '../../../libs/func/env';
 
 void (async () => {
 	const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -11,8 +11,8 @@ void (async () => {
 		{
 			transport: Transport.TCP,
 			options: {
-				port: parseInt(getEnv("AUTH_PORT")),
-				host: getEnv("AUTH_HOST"),
+				port: parseInt(getEnv('AUTH_PORT')),
+				host: getEnv('AUTH_HOST'),
 			},
 		},
 	);

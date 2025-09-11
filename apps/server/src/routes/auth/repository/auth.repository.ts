@@ -1,8 +1,8 @@
-import { inject, injectable } from "inversify";
-import { TYPES } from "../../../containers/TYPES";
-import { DatabaseService } from "../../../common/services/postgres/database.service";
-import { HttpError } from "../../../common/http/http.error";
-import { UserProfile } from "../../../../../../libs/models/schemas/profile";
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../../../containers/TYPES';
+import { DatabaseService } from '../../../common/services/postgres/database.service';
+import { HttpError } from '../../../common/http/http.error';
+import { UserProfile } from '../../../../../../libs/models/schemas/profile';
 
 @injectable()
 export class AuthRepository {
@@ -13,15 +13,15 @@ export class AuthRepository {
 
 	getPassword = async (email: string) => {
 		const user = await this.databaseService.db
-			.selectFrom("users")
-			.select(["id", "role", "password"])
-			.where("email", "=", email)
+			.selectFrom('users')
+			.select(['id', 'role', 'password'])
+			.where('email', '=', email)
 			.executeTakeFirst();
 
-		console.log("USER", user);
+		console.log('USER', user);
 
 		if (!user?.password) {
-			throw new HttpError(401, "No user with such email");
+			throw new HttpError(401, 'No user with such email');
 		}
 
 		return { ...user, password: user.password };
@@ -29,9 +29,9 @@ export class AuthRepository {
 
 	getProfileById = async (id: number): Promise<UserProfile> => {
 		return await this.databaseService.db
-			.selectFrom("profiles")
-			.select(["id", "name", "avatar", "country_code"])
-			.where("id", "=", id)
+			.selectFrom('profiles')
+			.select(['id', 'name', 'avatar', 'country_code'])
+			.where('id', '=', id)
 			.executeTakeFirstOrThrow();
 	};
 }

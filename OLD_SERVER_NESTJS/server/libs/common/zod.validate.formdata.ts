@@ -1,5 +1,5 @@
-import { BadRequestException } from "@nestjs/common";
-import { ZodError, ZodType } from "zod";
+import { BadRequestException } from '@nestjs/common';
+import { ZodError, ZodType } from 'zod';
 
 interface args {
 	data: unknown;
@@ -10,7 +10,7 @@ interface args {
 
 export function zodValidateFormData({ data, name, schema, files: file }: args) {
 	console.log(data);
-	if (typeof data !== "object" || data === null || !(name in data)) {
+	if (typeof data !== 'object' || data === null || !(name in data)) {
 		throw new BadRequestException(
 			`The passed FormData has no property ${name}`,
 		);

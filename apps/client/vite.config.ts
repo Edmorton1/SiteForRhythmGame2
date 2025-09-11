@@ -1,18 +1,18 @@
-import { defineConfig, loadEnv } from "vite";
-import react from "@vitejs/plugin-react";
-import path from "path";
-import { SERVER_PREFIX } from "../../libs/shared/CONST";
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+import { SERVER_PREFIX } from '../../libs/shared/CONST';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
 	process.env = { ...loadEnv(mode, process.cwd()), ...process.env };
 
-	const protocol = process.env["VITE_PROTOCOL"];
-	const host = process.env["VITE_HOST"];
-	const port_client = process.env["VITE_PORT"];
-	const port_server = process.env["VITE_PORT_SERVER"];
+	const protocol = process.env['VITE_PROTOCOL'];
+	const host = process.env['VITE_HOST'];
+	const port_client = process.env['VITE_PORT'];
+	const port_server = process.env['VITE_PORT_SERVER'];
 
-	if (protocol !== "http" && protocol !== "https") {
+	if (protocol !== 'http' && protocol !== 'https') {
 		throw new Error(`Укажите переменную VITE_PROTOCOL`);
 	}
 	if (!host) {
@@ -28,25 +28,25 @@ export default defineConfig(({ mode }) => {
 	const baseUrl = `${protocol}://${host}`;
 	let url_server = baseUrl;
 	let url_client = baseUrl;
-	if (host === "localhost" || host.split(".").length === 4) {
+	if (host === 'localhost' || host.split('.').length === 4) {
 		url_client += `:${port_client}`;
 		url_server += `:${port_server}`;
 	}
 
 	return {
 		plugins: [react()],
-		base: "/",
+		base: '/',
 		resolve: {
 			alias: {
-				"@libs/types": path.resolve(
+				'@libs/types': path.resolve(
 					__dirname,
-					"./node_modules/@libs/types/dist",
+					'./node_modules/@libs/types/dist',
 				),
-				"@libs/shared": path.resolve(
+				'@libs/shared': path.resolve(
 					__dirname,
-					"./node_modules/@libs/shared/dist",
+					'./node_modules/@libs/shared/dist',
 				),
-				"@apps/client": path.resolve(__dirname, "./src"),
+				'@apps/client': path.resolve(__dirname, './src'),
 			},
 		},
 		server: {
