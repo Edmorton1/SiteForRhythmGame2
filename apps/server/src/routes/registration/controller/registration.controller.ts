@@ -9,6 +9,8 @@ import multer from "multer";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../../containers/TYPES";
 
+// Теперь будет не мок регистрация. Эндпойнт регистрации будет принимать в сессии данные о пользователе и сохранять их в бд
+
 @injectable()
 export class RegistrationController extends BaseController {
 	constructor(
@@ -25,12 +27,12 @@ export class RegistrationController extends BaseController {
 				path: serverPaths.registration,
 				middlewares: [multer({}).single("avatar")],
 			},
-			{
-				handle: this.redirect,
-				// TODO: Change on POST
-				method: "get",
-				path: serverPaths.redirect,
-			},
+			// {
+			// 	handle: this.redirect,
+			// 	// TODO: Change on POST
+			// 	method: "get",
+			// 	path: serverPaths.redirect,
+			// },
 		]);
 	}
 
@@ -57,12 +59,12 @@ export class RegistrationController extends BaseController {
 		res.status(201).json(profile);
 	};
 
-	redirect = (req: Request, res: Response) => {
-		// МОК ТИПА ПРОВАЙДЕР ПЕРЕДАЛ РЕАЛЬНЫЙ OPEN_ID
-		const provider_id = this.registrationService.redirect();
-		req.session.provider_id = provider_id;
-		res
-			.status(300)
-			.redirect(this.configService.getEnv("REDIRECT_URL") + "?oauth=true");
-	};
+	// redirect = (req: Request, res: Response) => {
+	// 	// МОК ТИПА ПРОВАЙДЕР ПЕРЕДАЛ РЕАЛЬНЫЙ OPEN_ID
+	// 	const provider_id = this.registrationService.redirect();
+	// 	req.session.provider_id = provider_id;
+	// 	res
+	// 		.status(300)
+	// 		.redirect(this.configService.getEnv("REDIRECT_URL") + "?oauth=true");
+	// };
 }

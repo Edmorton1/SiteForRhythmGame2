@@ -35,9 +35,9 @@ export class RegistrationService {
 		}
 	};
 
-	redirect = () => {
-		return this.cryptoService.generateProvider();
-	};
+	// redirect = () => {
+	// 	return this.cryptoService.generateProvider();
+	// };
 
 	private getAuthType = (
 		provider_id: string | undefined,

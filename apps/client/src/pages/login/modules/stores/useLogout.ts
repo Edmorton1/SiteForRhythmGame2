@@ -1,23 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { PROFILE } from "../../../../common/consts/QUERY_KEYS";
-import { taipan } from "../../../../common/taipan/taipan";
 import { serverPaths } from "../../../../../../../libs/shared/PATHS";
 import { queryClient } from "../../../../app/queryClient";
+import axios from "axios";
 
-const deleteLogout = () => {
-	console.log("ЛОГАУТ");
-	return taipan(_URL_SERVER + serverPaths.logout, {
-		method: "DELETE",
-	});
-};
+const deleteLogout = async () => axios.delete(_URL_SERVER + serverPaths.logout);
 
 export const useLogout = () =>
 	useMutation({
 		mutationKey: [PROFILE],
 		mutationFn: deleteLogout,
 		onSuccess: () => {
-			queryClient.removeQueries({ queryKey: [PROFILE] });
-			// queryClient.setQueryData([PROFILE], { name: "LEXA" });
+			queryClient.setQueryData([PROFILE], null);
 		},
-		onError: err => console.log(err),
 	});

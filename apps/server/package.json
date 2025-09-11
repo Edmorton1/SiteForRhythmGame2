@@ -22,6 +22,8 @@
 		"@types/express-session": "^1.18.2",
 		"@types/multer": "^2.0.0",
 		"@types/node": "^22.10.7",
+		"@types/passport": "^1.0.17",
+		"@types/passport-google-oauth20": "^2.0.16",
 		"@types/pg": "^8.15.5",
 		"@types/supertest": "^6.0.2",
 		"@types/swagger-ui-express": "^4.1.8",
@@ -47,6 +49,7 @@
 		"kysely": "^0.28.4",
 		"multer": "^2.0.2",
 		"passport": "^0.7.0",
+		"passport-google-oauth20": "^2.0.0",
 		"pg": "^8.16.3",
 		"reflect-metadata": "^0.2.2",
 		"swagger-ui-express": "^5.0.1"

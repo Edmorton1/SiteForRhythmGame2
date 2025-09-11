@@ -63,8 +63,8 @@ export class AuthController extends BaseController {
 	init = async (req: Request, res: Response<UserProfile>) => {
 		console.log("[REQUEST]: INIT");
 		if (!req.session.payload) {
-			// res.sendStatus(200);
-			res.json({ avatar: null, country_code: "BE", id: 1, name: "amon" });
+			res.sendStatus(200);
+			// res.json({ avatar: null, country_code: "BE", id: 1, name: "amon" });
 			return;
 		}
 		const id = req.session.payload.id;

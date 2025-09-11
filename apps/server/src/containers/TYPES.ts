@@ -7,6 +7,10 @@ export const TYPES = {
 		redis: Symbol.for("RedisService"),
 	},
 
+	oauth: {
+		Google: Symbol.for("GoogleOauth"),
+	},
+
 	app: {
 		ServerRoutes: Symbol.for("ServerRoutes"),
 		ExpressError: Symbol.for("ErrorMiddleware"),

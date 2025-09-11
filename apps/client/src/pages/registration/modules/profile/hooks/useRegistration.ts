@@ -3,7 +3,7 @@ import {} from "../../../../../../../../libs/models/schemas/user";
 import type { AuthDTO } from "../schemas/registration.dto";
 import { useMutation } from "@tanstack/react-query";
 import { PROFILE } from "../../../../../common/consts/QUERY_KEYS";
-import { taipan } from "../../../../../common/taipan/taipan";
+import axios from "axios";
 
 const postData = async (data: AuthDTO) => {
 	const { user, profile } = data;
@@ -13,10 +13,9 @@ const postData = async (data: AuthDTO) => {
 	fd.set("data", JSON.stringify({ user, profile: profileWithoutAvatar }));
 
 	console.log(fd, fd.get("data"), fd.get("avatar"));
-	return taipan(_URL_SERVER + serverPaths.registration, {
-		method: "POST",
-		body: fd,
-	}).then(res => res.data);
+	return axios
+		.post(_URL_SERVER + serverPaths.registration, fd)
+		.then(res => res.data);
 };
 
 export const useRegistrationPost = () =>

@@ -1,17 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { taipan } from "../../../../../common/taipan/taipan";
+import axios from "axios";
 
 interface Country {
 	name: string;
 	code: number;
 }
 
-const getCountries = () =>
-	taipan<Country[]>("/data/countries.json")
-		.then(res => res.data)
-		.catch(() => {
-			throw new Error("Failed to load file countries.json");
-		});
+const getCountries = async () =>
+	axios.get<Country[]>("/data/countries.json").then(({ data }) => data);
 
 export const useCountries = () => {
 	const result = useQuery({

@@ -16,6 +16,8 @@ interface Env {
 	SESSION_SECRET: string;
 	COOKIE_NAME: string;
 	NODE_ENV: Mode;
+	GOOGLE_CLIENT_ID: string;
+	GOOGLE_CLIENT_SECRET: string;
 }
 
 export class ConfigService {
