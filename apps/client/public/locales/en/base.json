@@ -1,6 +1,7 @@
 {
 	"nav": {
 		"home": "home",
-		"registration": "registration"
+		"registration": "registration",
+		"login": "login"
 	}
 }

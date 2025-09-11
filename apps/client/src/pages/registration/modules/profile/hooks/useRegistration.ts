@@ -3,6 +3,7 @@ import {} from "../../../../../../../../libs/models/schemas/user";
 import type { AuthDTO } from "../schemas/registration.dto";
 import { useMutation } from "@tanstack/react-query";
 import { PROFILE } from "../../../../../common/consts/QUERY_KEYS";
+import { taipan } from "../../../../../common/taipan/taipan";
 
 const postData = async (data: AuthDTO) => {
 	const { user, profile } = data;
@@ -12,10 +13,10 @@ const postData = async (data: AuthDTO) => {
 	fd.set("data", JSON.stringify({ user, profile: profileWithoutAvatar }));
 
 	console.log(fd, fd.get("data"), fd.get("avatar"));
-	return fetch(_URL_SERVER + serverPaths.registration, {
+	return taipan(_URL_SERVER + serverPaths.registration, {
 		method: "POST",
 		body: fd,
-	}).then(res => res.json());
+	}).then(res => res.data);
 };
 
 export const useRegistrationPost = () =>

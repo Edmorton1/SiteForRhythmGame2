@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { useLoginPost } from "./stores/useLogin";
+import { LogoutButton } from "./LogoutButton";
 
 export const LoginFormModule = () => {
 	// TODO: ДУБЛИРОВАНИЕ ПОТОМ УБРАТЬ!!!
@@ -45,6 +46,8 @@ export const LoginFormModule = () => {
 				id="password"
 			/>
 			<button type="submit">Готово</button>
+
+			<LogoutButton />
 		</form>
 	);
 };

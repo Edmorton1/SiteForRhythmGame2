@@ -40,6 +40,7 @@ export class AuthController extends BaseController {
 	}
 
 	login = async (req: Request, res: Response<UserProfile>) => {
+		console.log("[REQUEST]: LOGIN");
 		const userDTO = ZodValidateSchema(LoginDTOZodSchema, req.body);
 		const { payload, profile } = await this.authService.login(userDTO);
 
@@ -52,6 +53,7 @@ export class AuthController extends BaseController {
 	};
 
 	logout = (req: Request, res: Response) => {
+		console.log("[REQUEST]: LOGOUT");
 		req.session.destroy(err => {
 			if (err) console.error("ERROR COOKIE DON'T WORK!!!", err);
 			res.clearCookie(this.configService.getEnv("COOKIE_NAME")).sendStatus(204);
@@ -59,8 +61,10 @@ export class AuthController extends BaseController {
 	};
 
 	init = async (req: Request, res: Response<UserProfile>) => {
+		console.log("[REQUEST]: INIT");
 		if (!req.session.payload) {
-			res.sendStatus(200);
+			// res.sendStatus(200);
+			res.json({ avatar: null, country_code: "BE", id: 1, name: "amon" });
 			return;
 		}
 		const id = req.session.payload.id;

@@ -5,33 +5,26 @@ type FetchReturn = Awaited<ReturnType<typeof fetch>>;
 type FetchReturnExtended<T> = Omit<FetchReturn, "json"> & {
 	data: T;
 };
-
-// TODO: ДОБАВИТЬ ПАРС JSON ЕСЛИ НЕ УКАЗАНО
+type Options<T> = FetchParams[1] & {
+	schema?: T extends ZodType ? T : undefined;
+};
 
 export const taipan = async <T = unknown>(
 	url: FetchParams[0],
-	options?: FetchParams[1] & { schema?: T extends ZodType ? T : undefined },
+	options?: Options<T>,
 ): Promise<
 	T extends ZodType ? FetchReturnExtended<z.infer<T>> : FetchReturnExtended<T>
 > => {
-	console.log("ТАЙПАН");
+	// BEFORE REQUEST
 	const res = await fetch(url, options).catch(err => {
 		console.error(err);
 		throw new Error(err);
 	});
-	console.log("RES", res);
-	if (!res.ok) {
-		const errText = await res.text();
-		throw new Error(`[TAIPAN] HTTP ${res.status} ${res.statusText} ${errText}`);
-	}
 
-	console.log(res);
+	await isResOk(res);
+	// AFTER REQUEST
 
-	let data = await res.json();
-
-	if (options?.schema) {
-		data = options.schema.parse(data);
-	}
+	const data = await parseData(res, options?.schema);
 
 	const ext: T extends ZodType
 		? FetchReturnExtended<z.infer<T>>
@@ -43,3 +36,18 @@ export const taipan = async <T = unknown>(
 
 	return ext;
 };
+
+async function isResOk(res: FetchReturn) {
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`[TAIPAN] HTTP ${res.status} ${res.statusText} ${errText}`);
+	}
+}
+
+async function parseData(res: FetchReturn, schema: ZodType | undefined) {
+	const data = await res.json();
+	if (schema) {
+		return schema.parse(data);
+	}
+	return data;
+}

@@ -2,9 +2,7 @@ import { Link } from "react-router-dom";
 import { clientPaths } from "../common/consts/PATHS";
 import { useTranslation } from "react-i18next";
 import { NAMESPACES } from "../common/consts/NAMESPACES";
-import { PROFILE } from "../common/consts/QUERY_KEYS";
-import type { UserProfile } from "../../../../libs/models/schemas/profile";
-import { useQuery } from "@tanstack/react-query";
+import { useInit } from "../common/hooks/useInit";
 
 export const Header = () => {
 	const { t, i18n } = useTranslation(NAMESPACES.base);
@@ -13,13 +11,14 @@ export const Header = () => {
 		i18n.changeLanguage(lang);
 	};
 
-	const { data } = useQuery<UserProfile>({ queryKey: [PROFILE] });
+	const { data } = useInit();
 
 	return (
 		<header style={{ display: "flex", gap: "15px" }}>
 			<nav style={{ display: "flex", gap: "15px" }}>
 				<Link to={clientPaths.home}>{t("nav.home")}</Link>
 				<Link to={clientPaths.registration}>{t("nav.registration")}</Link>
+				<Link to={clientPaths.login}>{t("nav.login")}</Link>
 			</nav>
 			<div>Пользователь: {data ? data.name : "asd"}</div>
 			<select

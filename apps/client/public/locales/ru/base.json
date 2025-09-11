@@ -1,6 +1,7 @@
 {
 	"nav": {
 		"home": "главная",
-		"registration": "регистрация"
+		"registration": "регистрация",
+		"login": "войти"
 	}
 }

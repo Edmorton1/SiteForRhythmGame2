@@ -1,22 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import { serverPaths } from "../../../../../libs/shared/PATHS";
-import { PROFILE } from "../consts/QUERY_KEYS";
 import { taipan } from "../taipan/taipan";
-import { UserProfileZodSchemaClient } from "../../../../../libs/models/schemas/profile";
+import { serverPaths } from "../../../../../libs/shared/PATHS";
+// prettier-ignore
+import { UserProfileZodSchemaClient, type UserProfile } from "../../../../../libs/models/schemas/profile";
+import { PROFILE } from "../consts/QUERY_KEYS";
 
 const getInit = async () => {
-	const response = await taipan(serverPaths.init, {
-		schema: UserProfileZodSchemaClient,
+	const res = await taipan<UserProfile>(_URL_SERVER + serverPaths.init, {
+		// schema: UserProfileZodSchemaClient,
 	});
 
-	return response.data;
+	console.log("[INIT]", res.data);
+	return res.data;
 };
 
-export const useInit = () => {
-	const result = useQuery({
+export const useInit = () =>
+	useQuery({
 		queryKey: [PROFILE],
 		queryFn: getInit,
+		staleTime: Infinity,
 	});
-
-	return result;
-};

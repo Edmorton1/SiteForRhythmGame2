@@ -8,9 +8,9 @@ interface Post {
 
 const getData = async () => {
 	console.log("ПОШЁЛ ЗАПРОС");
-	const response = await fetch(`https://jsonplaceholder.typicode.com/posts/`);
+	const res = await fetch(`https://jsonplaceholder.typicode.com/posts/`);
 
-	return response.json();
+	return res.json();
 };
 
 export const usePosts = () => {

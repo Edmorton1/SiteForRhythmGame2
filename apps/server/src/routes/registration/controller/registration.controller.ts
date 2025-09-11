@@ -35,6 +35,7 @@ export class RegistrationController extends BaseController {
 	}
 
 	registration = async (req: Request, res: Response) => {
+		console.log("[REQUEST]: REGISTRATION");
 		const authDTO = zodValidateFormData({
 			data: req.body,
 			name: "data",
