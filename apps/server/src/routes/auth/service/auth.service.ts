@@ -2,10 +2,10 @@ import { inject, injectable } from 'inversify';
 import { AuthRepository } from '../repository/auth.repository';
 import { TYPES } from '../../../containers/TYPES';
 import bcrypt from 'bcrypt';
-import { LoginDTO } from '../_schemas/auth.schemas';
 import { HttpError } from '../../../common/http/http.error';
 import { UserProfile } from '../../../../../../libs/models/schemas/profile';
-import { Payload } from '../../../common/models/schemas/auth.dto';
+import { Payload } from '../../../_declarations/session';
+import { LoginDTO } from '../../../../../../libs/models/schemas/auth';
 
 @injectable()
 export class AuthService {

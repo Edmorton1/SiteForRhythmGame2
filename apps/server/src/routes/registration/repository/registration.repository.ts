@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto';
 import { Profile } from '../../../../../../libs/models/schemas/profile';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../containers/TYPES';
+import { Provider } from '../../../_declarations/session';
 
 type ProfileAvatar = Omit<RegistrationDTO, 'user'>;
 
@@ -28,10 +29,10 @@ export class RegistrationRepository {
 
 	registrationProvider = async (
 		profileDTO: ProfileAvatar,
-		provider_id: string,
+		provider: Provider,
 	): Promise<Profile> => {
 		return this.registration(profileDTO, trx =>
-			this.insertUser(trx, { provider_id }),
+			this.insertUser(trx, { provider_id: provider.id, email: provider.email }),
 		);
 	};
 
@@ -46,6 +47,7 @@ export class RegistrationRepository {
 		return this.databaseService.db.transaction().execute(async trx => {
 			const Payload = await insertUser(trx);
 
+			console.log('RegistrationRepository PRIVATE REGISTRATION');
 			const profile = await trx
 				.insertInto('profiles')
 				.values({ ...authDTO.profile, id: Payload.id, avatar })
@@ -66,6 +68,7 @@ export class RegistrationRepository {
 		trx: Transaction<DatabaseKysely>,
 		value: UserDTO | { provider_id: string },
 	): Promise<RoleId> => {
+		console.log('RegistrationRepository PRIVATE insertUser');
 		const userRoleId = await trx
 			.insertInto('users')
 			.values(value)

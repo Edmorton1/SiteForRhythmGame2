@@ -2,50 +2,44 @@ import { RegistrationDTO } from '../../../common/models/schemas/registration.dto
 import { RegistrationRepository } from '../repository/registration.repository';
 import { HttpError } from '../../../common/http/http.error';
 import { UserDTO } from '../../../../../../libs/models/schemas/user';
-import { CryptoService } from '../../../common/services/crypto/crypto.service';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../containers/TYPES';
 import { Profile } from '../../../../../../libs/models/schemas/profile';
+import { Provider } from '../../../_declarations/session';
 
 @injectable()
 export class RegistrationService {
 	constructor(
 		@inject(TYPES.modules.registration.repository)
 		private readonly registrationSQL: RegistrationRepository,
-		@inject(TYPES.services.crypto)
-		private readonly cryptoService: CryptoService,
 	) {}
 
 	registration = async (
 		authDTO: RegistrationDTO,
-		provider_id: string | undefined,
+		provider: Provider | undefined,
 	): Promise<Profile> => {
 		const { user, ...profileDTO } = authDTO;
-		const authType = this.getAuthType(provider_id, user);
-		if (authType === 'email') {
-			return await this.registrationWithEmail(authDTO);
-		} else if (authType === 'provider') {
-			// TODO: Delete !
-			return await this.registrationWithProvider(profileDTO, provider_id!);
-		} else {
-			throw new HttpError(
-				400,
-				"There can't be a token, email and password at the same time, choose one authorization method",
-			);
+		const authType = this.getAuthType(provider, user);
+		switch (authType) {
+			case 'email':
+				return await this.registrationWithEmail(authDTO);
+			case 'provider':
+				return await this.registrationWithProvider(profileDTO, provider!);
+			case 'none':
+				throw new HttpError(
+					400,
+					"There can't be a token, email and password at the same time, choose one authorization method",
+				);
 		}
 	};
 
-	// redirect = () => {
-	// 	return this.cryptoService.generateProvider();
-	// };
-
 	private getAuthType = (
-		provider_id: string | undefined,
+		provider: Provider | undefined,
 		user: UserDTO,
 	): 'email' | 'provider' | 'none' => {
-		if (provider_id && user.email === null && user.password === null)
+		if (provider && user.email === null && user.password === null)
 			return 'provider';
-		if (!provider_id && user.email && user.password) return 'email';
+		if (!provider && user.email && user.password) return 'email';
 		return 'none';
 	};
 
@@ -60,14 +54,11 @@ export class RegistrationService {
 
 	private registrationWithProvider = async (
 		authDTO: Omit<RegistrationDTO, 'user'>,
-		provider_id: string,
+		provider: Provider,
 	): Promise<Profile> => {
 		await this.isNameIsFree(authDTO.profile.name);
 
-		return await this.registrationSQL.registrationProvider(
-			authDTO,
-			provider_id,
-		);
+		return await this.registrationSQL.registrationProvider(authDTO, provider);
 	};
 
 	private isEmailIsFree = async (email: string) => {

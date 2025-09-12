@@ -18,7 +18,7 @@ export class GoogleController extends BaseController {
 		super();
 		this.bindRoutes([
 			{
-				handle: this.getLink,
+				handle: this.redirect,
 				method: 'get',
 				path: serverPaths.authGoogle,
 			},
@@ -27,31 +27,21 @@ export class GoogleController extends BaseController {
 				method: 'get',
 				path: serverPaths.authGoogleCallback,
 			},
-			{
-				handle: this.protected,
-				method: 'get',
-				path: '/protected',
-			},
 		]);
 	}
 
-	getLink = passport.authenticate('google', { scope: ['email'] });
+	redirect = passport.authenticate('google', { scope: ['email'] });
 
 	callback = (req: Request, res: Response) => {
 		passport.authenticate('google', { failureRedirect: '/fail' }, () => {
 			if (req.session.payload) {
-				// TODO: ХАРДКОД
-				res.redirect('http://localhost:5000');
+				res.redirect(this.configService.getEnv('URL_CLIENT'));
 			} else if (req.session.provider) {
-				res.redirect('http://localhost:5000/registration?oauth=true');
+				res.redirect(
+					// TODO: ХардКод
+					`${this.configService.getEnv('URL_CLIENT')}/registration?oauth=true`,
+				);
 			}
 		})(req, res);
-	};
-
-	protected = async (req: Request, res: Response) => {
-		//@ts-ignore
-		console.log(req.session.passport);
-		console.log('EQEQWEQW');
-		res.sendStatus(201);
 	};
 }

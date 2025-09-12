@@ -12,8 +12,8 @@ CREATE TABLE users (
 
 ALTER TABLE users
 ADD CONSTRAINT auth_method_check
-CHECK ((provider_id IS NOT NULL AND password IS NULL AND email IS NULL)
-OR (provider_id IS NULL AND password IS NOT NULL AND email IS NOT NULL));
+CHECK ((provider_id IS NOT NULL AND password IS NULL)
+OR (provider_id IS NULL AND password IS NOT NULL));
 
 -- PROFILES BLOCK
 CREATE TABLE profiles (

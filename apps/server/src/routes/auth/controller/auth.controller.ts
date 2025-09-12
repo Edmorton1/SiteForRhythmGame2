@@ -5,10 +5,10 @@ import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
 import { TYPES } from '../../../containers/TYPES';
 import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
-import { LoginDTOZodSchema } from '../_schemas/auth.schemas';
 import { UserProfile } from '../../../../../../libs/models/schemas/profile';
 import { userGuard } from '../../../common/guards/user.guard';
 import { ConfigService } from '../../../common/services/config/config.service';
+import { LoginDTOZodSchema } from '../../../../../../libs/models/schemas/auth';
 
 @injectable()
 export class AuthController extends BaseController {
@@ -44,18 +44,22 @@ export class AuthController extends BaseController {
 		const userDTO = ZodValidateSchema(LoginDTOZodSchema, req.body);
 		const { payload, profile } = await this.authService.login(userDTO);
 
-		// TODO: СДЕЛАТЬ УДАЛЕНИЕ СТАРОЙ СЕССИИ ПРИ ЛОГИНЕ И РЕГИСТРАЦИИ
-		// req.session.destroy(err => console.error(err));
+		req.session.regenerate(err => {
+			if (err) {
+				console.error(err);
+				res.sendStatus(500);
+				return;
+			}
 
-		req.session.payload = payload;
-
-		res.json(profile);
+			req.session.payload = payload;
+			res.json(profile);
+		});
 	};
 
 	logout = (req: Request, res: Response) => {
 		console.log('[REQUEST]: LOGOUT');
 		req.session.destroy(err => {
-			if (err) console.error("ERROR COOKIE DON'T WORK!!!", err);
+			if (err) console.error(err);
 			res.clearCookie(this.configService.getEnv('COOKIE_NAME')).sendStatus(204);
 		});
 	};
@@ -64,7 +68,6 @@ export class AuthController extends BaseController {
 		console.log('[REQUEST]: INIT');
 		if (!req.session.payload) {
 			res.sendStatus(200);
-			// res.json({ avatar: null, country_code: "BE", id: 1, name: "amon" });
 			return;
 		}
 		const id = req.session.payload.id;

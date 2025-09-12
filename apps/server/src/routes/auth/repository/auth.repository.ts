@@ -28,6 +28,9 @@ export class AuthRepository {
 	};
 
 	getProfileById = async (id: number): Promise<UserProfile> => {
+		console.log(
+			'GET PROFILE BY ID | ЕСЛИ УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ ИЗ БД И НЕ ОБНОВИТЬ СЕССИЮ, БУДЕТ ОШИБКА',
+		);
 		return await this.databaseService.db
 			.selectFrom('profiles')
 			.select(['id', 'name', 'avatar', 'country_code'])

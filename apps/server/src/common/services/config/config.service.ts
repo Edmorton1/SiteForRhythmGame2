@@ -4,6 +4,7 @@ interface Env {
 	PORT: string;
 	HOST: string;
 	URL_SERVER: string;
+	URL_CLIENT: string;
 	AUTH_PORT: string;
 	AUTH_HOST: string;
 	DB_NAME: string;

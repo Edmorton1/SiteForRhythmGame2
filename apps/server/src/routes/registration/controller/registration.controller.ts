@@ -25,12 +25,6 @@ export class RegistrationController extends BaseController {
 				path: serverPaths.registration,
 				middlewares: [multer({}).single('avatar')],
 			},
-			// {
-			// 	handle: this.redirect,
-			// 	// TODO: Change on POST
-			// 	method: "get",
-			// 	path: serverPaths.redirect,
-			// },
 		]);
 	}
 
@@ -44,26 +38,25 @@ export class RegistrationController extends BaseController {
 		});
 
 		const provider = req.session.provider;
-		req.session.provider = undefined;
+		delete req.session.provider;
+
 		console.log('SESSION', req.session);
 
 		const profile = await this.registrationService.registration(
 			authDTO,
-			//@ts-ignore
 			provider,
 		);
 
-		req.session.payload = { id: profile.id, role: 'user' };
-
-		res.status(201).json(profile);
+		req.session.regenerate(err => {
+			if (err) {
+				console.error(err);
+				res.sendStatus(500);
+				return;
+			}
+			req.session.payload = { id: profile.id, role: 'user' };
+			res.status(201).json(profile);
+		});
 	};
-
-	// redirect = (req: Request, res: Response) => {
-	// 	// МОК ТИПА ПРОВАЙДЕР ПЕРЕДАЛ РЕАЛЬНЫЙ OPEN_ID
-	// 	const provider_id = this.registrationService.redirect();
-	// 	req.session.provider_id = provider_id;
-	// 	res
-	// 		.status(300)
-	// 		.redirect(this.configService.getEnv("REDIRECT_URL") + "?oauth=true");
-	// };
 }
+
+// 107738847284119820309 - сессия

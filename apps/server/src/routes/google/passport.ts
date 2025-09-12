@@ -4,7 +4,6 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { TYPES } from '../../containers/TYPES';
 import { ConfigService } from '../../common/services/config/config.service';
 import { serverPaths } from '../../../../../libs/shared/PATHS';
-import { DbQueriesService } from '../../common/services/dbQueries/dbQueries.service';
 import { GoogleRepository } from './repository/Google.repository';
 
 @injectable()
@@ -49,11 +48,5 @@ export class Passport {
 				},
 			),
 		);
-
-		// passport.serializeUser((user, done) => {
-		// 	done(null, user);
-		// });
-
-		// passport.deserializeUser(async (user, done) => done(null, user as any));
 	}
 }
