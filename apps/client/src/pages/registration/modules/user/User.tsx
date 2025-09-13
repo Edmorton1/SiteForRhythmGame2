@@ -37,8 +37,7 @@ export const RegistrationUserModule = () => {
 
 				<button>{t('form.submit')}</button>
 			</form>
-			{/* TODO: Authorization with providers */}
-			<a href='/api/auth/google'>Google</a>
+			<a href={`${_URL_SERVER + serverPaths.authGoogle}`}>Google</a>
 			{/* <button onClick={handleProviderClick}>
 				{t("loginUsing", { provider: "Google" })}
 			</button> */}

@@ -6,8 +6,7 @@ export const ProfileZodSchema = z.object({
 	name: z.string().max(32).nonempty(),
 	// У Client и Server будут свои DTO's
 	avatar: z.string().nullable(),
-	// TODO: Поле не должно быть пустым, но оно не обязательно
-	about: z.string().max(512).nonempty().nullable(),
+	about: z.string().max(512),
 	country_code: z.string().length(2),
 	created_at: zISOString,
 });

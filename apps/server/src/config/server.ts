@@ -12,10 +12,14 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../containers/TYPES';
 import { ExpressSession } from './middlewares/express.session';
 import passport from 'passport';
+import { Server } from 'http';
+import { DatabaseService } from '../common/services/postgres/database.service';
+import { RedisService } from '../common/services/redis/redis.service';
 
 @injectable()
 export class ServerExpress {
 	app: Express;
+	server: Server | undefined;
 
 	constructor(
 		@inject(TYPES.app.ServerRoutes)
@@ -28,6 +32,10 @@ export class ServerExpress {
 		private readonly loggerService: LoggerService,
 		@inject(TYPES.app.ExpressSession)
 		private readonly expressSession: ExpressSession,
+		@inject(TYPES.services.database)
+		private readonly database: DatabaseService,
+		@inject(TYPES.services.redis)
+		private readonly redis: RedisService,
 	) {
 		this.app = express();
 	}
@@ -59,14 +67,25 @@ export class ServerExpress {
 		);
 	};
 
-	init = async () => {
+	start = () => {
 		this.configureApp();
 		const port = parseInt(this.configService.getEnv('PORT'));
 		const host = this.configService.getEnv('HOST');
 
-		this.app.listen(port, host);
+		this.server = this.app.listen(port, host);
 		this.loggerService.logger.info(
 			`SERVER STARTED ON PORT = ${port} AND HOST = ${host}`,
 		);
+	};
+
+	close = async () => {
+		if (!this.server) {
+			console.log('SERVER NOT STARTED');
+		} else {
+			await this.database.disconnect();
+			await this.redis.disconnect();
+			this.loggerService.logger.flush();
+			this.server.close();
+		}
 	};
 }

@@ -7,13 +7,14 @@ import { LoggerService } from '../../../../common/services/logger/logger.service
 import { RegistrationDTO } from '../../../../common/models/schemas/registration.dto';
 import { container } from '../../../../containers/container.di';
 import { TYPES } from '../../../../containers/TYPES';
+import { Provider } from '../../../../_declarations/session';
 
 // TODO: make name without collision
 const provider = {
 	id: '232345702304832093543',
 	email: 'test@example.ru',
 	provider: 'google',
-};
+} satisfies Provider;
 const email = '_test';
 
 // SELECT pid, usename, datname, client_addr, state, query
@@ -33,8 +34,6 @@ const profileDTO: RegistrationDTO['profile'] = {
 };
 
 describe('[REGISTRATION] Repository', () => {
-	beforeAll(() => {});
-
 	it('Email method', async () => {
 		const profile = await registrationRepository.registrationEmail({
 			user: { email: '_test', password: '123123' },
@@ -55,7 +54,7 @@ describe('[REGISTRATION] Repository', () => {
 	afterEach(async () => {
 		await databaseService.db
 			.deleteFrom('users')
-			.where(eb => eb('email', '=', email).or('provider_id', '=', provider))
+			.where(eb => eb('email', '=', email).or('provider_id', '=', provider.id))
 			.returningAll()
 			.execute();
 	});

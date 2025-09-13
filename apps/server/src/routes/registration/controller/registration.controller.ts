@@ -4,7 +4,6 @@ import { zodValidateFormData } from '../../../common/pipes/zod.formdata.pipe';
 import { Request, Response } from 'express';
 import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
-import { ConfigService } from '../../../common/services/config/config.service';
 import multer from 'multer';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../containers/TYPES';
@@ -14,8 +13,8 @@ export class RegistrationController extends BaseController {
 	constructor(
 		@inject(TYPES.modules.registration.service)
 		private readonly registrationService: RegistrationService,
-		@inject(TYPES.services.config)
-		private readonly configService: ConfigService,
+		// @inject(TYPES.services.config)
+		// private readonly configService: ConfigService,
 	) {
 		super();
 		this.bindRoutes([
@@ -40,7 +39,7 @@ export class RegistrationController extends BaseController {
 		const provider = req.session.provider;
 		delete req.session.provider;
 
-		console.log('SESSION', req.session);
+		console.log('SESSION', req.session, provider);
 
 		const profile = await this.registrationService.registration(
 			authDTO,
@@ -58,5 +57,3 @@ export class RegistrationController extends BaseController {
 		});
 	};
 }
-
-// 107738847284119820309 - сессия

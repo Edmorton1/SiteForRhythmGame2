@@ -5,6 +5,7 @@ import { ProfileDTOZodSchema } from './schemas/registration.dto';
 import { useRegistrationAuthStore } from '../../common/stores/user.store';
 import { useRegistrationPost } from './hooks/useRegistration';
 
+// TODO: Сделать чтобы если About пустой, тогда он null
 export const RegistrationProfileModule = () => {
 	const { data, isSuccess, error, isError } = useCountries();
 	const { user } = useRegistrationAuthStore();

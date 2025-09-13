@@ -1,19 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import z from 'zod';
-import { useLoginPost } from './stores/useLogin';
 import { LogoutButton } from './LogoutButton';
+import { useLogin } from './hooks/useLogin';
+import { LoginDTOZodSchema } from '../../../../../../libs/models/schemas/auth';
 
 export const LoginFormModule = () => {
-	// TODO: ДУБЛИРОВАНИЕ ПОТОМ УБРАТЬ!!!
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm({
-		resolver: zodResolver(z.object({ email: z.email(), password: z.string() })),
+		resolver: zodResolver(LoginDTOZodSchema),
 	});
-	const { mutate } = useLoginPost();
+	const { mutate } = useLogin();
 
 	console.log('ERRORS', errors);
 
