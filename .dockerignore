@@ -12,3 +12,5 @@ babel.config.js
 
 **/*.spec.ts
 **/*.spec.tsx
+**/__spec__/
+**/__e2e__/

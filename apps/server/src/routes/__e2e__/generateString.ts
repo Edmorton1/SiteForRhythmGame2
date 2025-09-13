@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 
-export const randomString = (length: number = 244) => {
+export const randomString = (length: number) => {
 	const chars = 'qwertyuiopasdfghjklzxcvbnm';
 	const bytes = randomBytes(length);
 
@@ -13,7 +13,7 @@ export const randomString = (length: number = 244) => {
 };
 
 export const randomEmail = () => {
-	return randomString() + '@example.com';
+	return randomString(244) + '@example.com';
 };
 
 // console.log(randomString() + '@example.com');

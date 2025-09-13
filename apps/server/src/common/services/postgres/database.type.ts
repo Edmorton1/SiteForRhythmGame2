@@ -14,7 +14,7 @@ export interface DatabaseKysely {
 		id: number;
 		name: string;
 		avatar: string | null;
-		about: string | null;
+		about: string;
 		country_code: string;
 		created_at: GeneratedAlways<string>;
 	};

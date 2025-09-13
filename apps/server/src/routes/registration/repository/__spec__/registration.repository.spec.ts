@@ -8,6 +8,7 @@ import { RegistrationDTO } from '../../../../common/models/schemas/registration.
 import { container } from '../../../../containers/container.di';
 import { TYPES } from '../../../../containers/TYPES';
 import { Provider } from '../../../../_declarations/session';
+import { randomString } from '../../../__e2e__/generateString';
 
 // TODO: make name without collision
 const provider = {
@@ -30,7 +31,7 @@ const profileDTO: RegistrationDTO['profile'] = {
 	about: '',
 	country_code: 'RU',
 	// TODO: make name without collision
-	name: '_test',
+	name: randomString(32),
 };
 
 describe('[REGISTRATION] Repository', () => {

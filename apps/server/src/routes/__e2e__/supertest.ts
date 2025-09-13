@@ -1,12 +1,8 @@
+import path from 'path';
+const envPath = path.resolve(__dirname, '../../../.env');
 import dotenv from 'dotenv';
-dotenv.config({ path: './.env' });
+dotenv.config({ path: envPath });
 import supertest from 'supertest';
-import { container } from '../../containers/container.di';
-import { ServerExpress } from '../../config/server';
-import { TYPES } from '../../containers/TYPES';
+import { testSetupServer } from './setup';
 
-// TODO: Убрать дублирование .env
-
-const server = container.get<ServerExpress>(TYPES.app.ServerExpress);
-
-const testServer = supertest(server.app);
+export const testServer = supertest(testSetupServer.app);

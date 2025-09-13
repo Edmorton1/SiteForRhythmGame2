@@ -1,34 +1,25 @@
-import dotenv from 'dotenv';
-dotenv.config({ path: './.env' });
-
-import supertest from 'supertest';
 import { container } from '../../../containers/container.di';
-import { ServerExpress } from '../../../config/server';
 import { TYPES } from '../../../containers/TYPES';
-import { randomEmail } from './generateString';
+import { randomEmail } from '../../__e2e__/generateString';
 import { SERVER_PREFIX } from '../../../../../../libs/shared/CONST';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
 import { RegistrationDTO } from '../../../common/models/schemas/registration.dto';
 import { DatabaseService } from '../../../common/services/postgres/database.service';
-import { mockProviderMiddleware } from './mockProvider.middleware';
-
-// TODO: Убрать дублирование .env
+import { testServer } from '../../__e2e__/supertest';
 
 const profile = { name: 'test', about: 'null', country_code: 'RU' };
 describe('[REGISTRATION] E2E SUPERTEST', () => {
-	let server: ServerExpress;
 	const email = randomEmail();
 	const databaseService = container.get<DatabaseService>(
 		TYPES.services.database,
 	);
 
-	beforeAll(() => {
-		server = container.get<ServerExpress>(TYPES.app.ServerExpress);
-		server.start();
+	it('test', async () => {
+		await testServer.get(SERVER_PREFIX + serverPaths.init).expect(204);
 	});
 
 	it('Email method', async () => {
-		await supertest(server.app)
+		await testServer
 			.post(SERVER_PREFIX + serverPaths.registration)
 			.field(
 				'data',
@@ -46,7 +37,7 @@ describe('[REGISTRATION] E2E SUPERTEST', () => {
 
 	// TODO: Починить этот тест
 	it('Not working provider method', async () => {
-		await supertest(server.app)
+		await testServer
 			.post(SERVER_PREFIX + serverPaths.registration)
 			.field(
 				'data',
@@ -64,6 +55,5 @@ describe('[REGISTRATION] E2E SUPERTEST', () => {
 			.where(eb => eb('email', '=', email))
 			.returningAll()
 			.execute();
-		await server.close();
 	});
 });
