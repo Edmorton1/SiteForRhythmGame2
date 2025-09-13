@@ -6,6 +6,7 @@ import { HttpError } from '../../../common/http/http.error';
 import { UserProfile } from '../../../../../../libs/models/schemas/profile';
 import { Payload } from '../../../_declarations/session';
 import { LoginDTO } from '../../../../../../libs/models/schemas/auth';
+import { authErrors } from '../errors/CONST';
 
 @injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
 		const isPasswordCorrect = await bcrypt.compare(userDTO.password, password);
 
 		if (!isPasswordCorrect) {
-			throw new HttpError(401, 'Password is incorrect');
+			throw new HttpError(401, authErrors.INCORRECT_PASSWORD);
 		}
 
 		const profile = await this.authRepository.getProfileById(payload.id);

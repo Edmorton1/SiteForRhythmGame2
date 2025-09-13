@@ -3,6 +3,7 @@ import { TYPES } from '../../../containers/TYPES';
 import { DatabaseService } from '../../../common/services/postgres/database.service';
 import { HttpError } from '../../../common/http/http.error';
 import { UserProfile } from '../../../../../../libs/models/schemas/profile';
+import { authErrors } from '../errors/CONST';
 
 @injectable()
 export class AuthRepository {
@@ -21,7 +22,7 @@ export class AuthRepository {
 		console.log('USER', user);
 
 		if (!user?.password) {
-			throw new HttpError(401, 'No user with such email');
+			throw new HttpError(404, authErrors.NO_EMAIL);
 		}
 
 		return { ...user, password: user.password };

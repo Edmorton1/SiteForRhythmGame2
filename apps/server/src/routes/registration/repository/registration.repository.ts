@@ -46,8 +46,6 @@ export class RegistrationRepository {
 
 		return this.databaseService.db.transaction().execute(async trx => {
 			const Payload = await insertUser(trx);
-
-			console.log('RegistrationRepository PRIVATE REGISTRATION');
 			const profile = await trx
 				.insertInto('profiles')
 				.values({ ...authDTO.profile, id: Payload.id, avatar })
@@ -68,7 +66,6 @@ export class RegistrationRepository {
 		trx: Transaction<DatabaseKysely>,
 		value: UserDTO | { provider_id: string },
 	): Promise<RoleId> => {
-		console.log('RegistrationRepository PRIVATE insertUser');
 		const userRoleId = await trx
 			.insertInto('users')
 			.values(value)

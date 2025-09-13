@@ -8,7 +8,12 @@ import { RegistrationDTO } from '../../../../common/models/schemas/registration.
 import { container } from '../../../../containers/container.di';
 import { TYPES } from '../../../../containers/TYPES';
 
-const provider = 'AasdhashdASHDAhdasdha';
+// TODO: make name without collision
+const provider = {
+	id: '232345702304832093543',
+	email: 'test@example.ru',
+	provider: 'google',
+};
 const email = '_test';
 
 // SELECT pid, usename, datname, client_addr, state, query

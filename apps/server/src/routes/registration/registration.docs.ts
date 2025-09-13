@@ -6,6 +6,8 @@ import { ProfileZodSchema } from '../../../../../libs/models/schemas/profile';
 import { registry } from '../../config/swagger/registry';
 import { SERVER_PREFIX } from '../../../../../libs/shared/CONST';
 import { RegistrationDTOZodSchema } from '../../common/models/schemas/registration.dto';
+import { registrationErrors } from './errors/CONST';
+import { commonErrors } from '../../common/errors/CONST';
 
 extendZodWithOpenApi(z);
 // TODO: Add errors variables
@@ -36,5 +38,19 @@ registry.registerPath({
 				},
 			},
 		},
+		400: {
+			description: `
+	${registrationErrors.AUTH_METHOD}
+	${commonErrors.ZOD_FORMDATA_NOT_JSON('data')}
+	${commonErrors.ZOD_FORMDATA_NO_PROPERTY('data')}
+	${commonErrors.DOCS_VALIDATION_ERROR}`,
+		},
+		409: {
+			description: `
+	${registrationErrors.EMAIL_TAKEN}
+	${registrationErrors.NICKNAME_TAKEN}`,
+		},
+		//@ts-ignore
+		default: commonErrors.default,
 	},
 });

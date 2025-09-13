@@ -6,6 +6,7 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../containers/TYPES';
 import { Profile } from '../../../../../../libs/models/schemas/profile';
 import { Provider } from '../../../_declarations/session';
+import { registrationErrors } from '../errors/CONST';
 
 @injectable()
 export class RegistrationService {
@@ -26,10 +27,7 @@ export class RegistrationService {
 			case 'provider':
 				return await this.registrationWithProvider(profileDTO, provider!);
 			case 'none':
-				throw new HttpError(
-					400,
-					"There can't be a token, email and password at the same time, choose one authorization method",
-				);
+				throw new HttpError(400, registrationErrors.AUTH_METHOD);
 		}
 	};
 
@@ -63,13 +61,13 @@ export class RegistrationService {
 
 	private isEmailIsFree = async (email: string) => {
 		if (await this.registrationSQL.isInDB('users', 'email', email)) {
-			throw new HttpError(409, 'An account with this email already exists.');
+			throw new HttpError(409, registrationErrors.EMAIL_TAKEN);
 		}
 	};
 
 	private isNameIsFree = async (name: string) => {
 		if (await this.registrationSQL.isInDB('profiles', 'name', name)) {
-			throw new HttpError(409, 'This nickname is already taken');
+			throw new HttpError(409, registrationErrors.NICKNAME_TAKEN);
 		}
 	};
 }

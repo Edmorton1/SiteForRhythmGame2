@@ -19,10 +19,12 @@ export class ExpressError {
 	) => {
 		this.loggerService.logger.error({ message: err.message, stack: err.stack });
 		if (err instanceof HttpError) {
+			console.log('HTTP ERROR');
 			res.status(err.statusCode).json({
 				status: err.statusCode,
 				message: err.message ?? STATUS_CODES[err.statusCode],
 			});
+			return;
 		}
 		res.status(500).json({ message: err.message, stack: err.stack });
 	};
