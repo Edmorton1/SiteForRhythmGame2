@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
-import { Repository } from "../sql/repository";
-import { TYPES } from "../../../containers/TYPES";
+import { Repository } from "../repository/repository";
+import { MODULE_TYPES } from "../../containers/TYPES.di";
 
 @injectable()
 export class Service {
 	constructor(
-		@inject(TYPES.modules.)
+		@inject(MODULE_TYPES.modules.)
 		private readonly repository: Repository,
 	) {}
 }

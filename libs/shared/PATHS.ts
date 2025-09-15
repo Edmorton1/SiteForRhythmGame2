@@ -6,4 +6,5 @@ export const serverPaths = {
 	logout: '/logout',
 	authGoogle: '/auth/google',
 	authGoogleCallback: '/auth/google/callback',
+	tracks: '/tracks',
 } as const;

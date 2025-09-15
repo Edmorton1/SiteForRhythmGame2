@@ -1,4 +1,3 @@
-import { container } from '../../../../containers/container.di';
 import { COMMON_TYPES } from '../../../../containers/TYPES.di';
 import { randomEmail } from './generateString';
 import { SERVER_PREFIX } from '../../../../../../../libs/shared/CONST';
@@ -7,6 +6,7 @@ import { RegistrationDTO } from '../../../../common/models/schemas/registration.
 import { DatabaseService } from '../../../../common/services/postgres/database.service';
 import { testServer } from './supertest';
 import { LoginDTO } from '../../../../../../../libs/models/schemas/auth';
+import { authContainer } from '../../containers/container.di';
 
 const profile = { name: 'test', about: 'null', country_code: 'RU' };
 describe('[E2E] SERVER TEST', () => {
@@ -14,7 +14,7 @@ describe('[E2E] SERVER TEST', () => {
 		email: randomEmail(),
 		password: '123123',
 	};
-	const databaseService = container.get<DatabaseService>(
+	const databaseService = authContainer.get<DatabaseService>(
 		COMMON_TYPES.services.database,
 	);
 

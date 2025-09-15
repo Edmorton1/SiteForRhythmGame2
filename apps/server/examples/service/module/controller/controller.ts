@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
 import { Service } from "../service/service";
 import { inject, injectable } from "inversify";
-import { BaseController } from "../../../config/server/base.controller";
-import { serverPaths } from "../../../../../../libs/shared/PATHS";
-import { TYPES } from "../../../containers/TYPES";
+import { BaseController } from "../../../../config/base.controller";
+import { MODULE_TYPES } from "../../containers/TYPES.di";
+import { serverPaths } from "../../../../../../../libs/shared/PATHS";
+
 
 @injectable()
 export class Controller extends BaseController {
 	constructor(
-		@inject(TYPES.modules.)
+		@inject(MODULE_TYPES.modules.)
 		private readonly service: Service,
 	) {
 		super();

@@ -1,19 +1,23 @@
 import { Router } from 'express';
 import { BaseController } from './base.controller';
-import { AUTH_TYPES } from '../services/auth/containers/TYPES.di';
-import { authContainer } from '../services/auth/containers/container.di';
+import { inject, injectable } from 'inversify';
+import { MODULE, Module } from '../containers/modules.di';
+import { rootContainer } from '../containers/container.di';
 
+@injectable()
 export class ServerRoutes {
 	router: Router;
 
-	constructor() {
+	constructor(
+		@inject(MODULE)
+		private readonly modules: Module,
+	) {
+		console.log('MODULES', modules['tracks'].controller);
 		this.router = Router();
 
-		const controllers: BaseController[] = Object.values(
-			// TODO: ВРЕМЕННЫЙ ПЕРЕХОД, ПОТОМ УБРАТЬ
-			AUTH_TYPES.modules,
-			// TODO: ВРЕМЕННЫЙ ПЕРЕХОД, ПОТОМ УБРАТЬ
-		).map(e => authContainer.get(e.controller));
+		const controllers: BaseController[] = Object.values(this.modules).map(e =>
+			rootContainer.get(e.controller),
+		);
 
 		controllers.forEach(controller => {
 			this.router.use(controller.router);
