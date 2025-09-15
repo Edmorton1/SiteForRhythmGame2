@@ -17,29 +17,34 @@ OR (provider_id IS NULL AND password IS NOT NULL));
 
 -- PROFILES BLOCK
 CREATE TABLE profiles (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
   name VARCHAR(32) UNIQUE NOT NULL,
   avatar TEXT,
   about VARCHAR(512) NOT NULL DEFAULT '',
   country_code CHAR(2) NOT NULL CHECK(LENGTH(country_code) = 2),
-  created_at TIMESTAMP DEFAULT NOW(),
-  FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
--- CREATE TYPE difficulties AS ENUM ('easy', 'normal', 'hard');
--- CREATE TABLE tracks (
---   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
---   name_en VARCHAR(32) NOT NULL,
---   name VARCHAR(32) UNIQUE NOT NULL,
---   file TEXT NOT NULL,
---   likes INT NOT NULL DEFAULT 0,
---   downloads INT NOT NULL DEFAULT 0,
---   difficulty difficulties NOT NULL,
---   bpm INTEGER NOT NULL,
---   image TEXT,
---   about VARCHAR(512),
---   language CHAR(2)
--- );
+-- TRACKS BLOCK
+CREATE TYPE difficulties AS ENUM ('easy', 'normal', 'hard');
+CREATE TABLE tracks (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name_en VARCHAR(32) NOT NULL,
+  name VARCHAR(32) NOT NULL,
+	author INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+	about VARCHAR(512) NOT NULL DEFAULT '',
+	cover_path TEXT,
+  file_path TEXT NOT NULL,
+  difficulty difficulties NOT NULL,
+  bpm INTEGER NOT NULL,
+  lang CHAR(2) NOT NULL,
+	likes_count INT NOT NULL DEFAULT 0,
+	downloads_count INTEGER NOT NULL DEFAULT 0,
+	plays_count INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  -- updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	is_deleted BOOLEAN NOT NULL DEFAULT FALSE
+);
 
 -- CREATE TABLE tracks_genres_names (
 --   name VARCHAR(64) PRIMARY KEY

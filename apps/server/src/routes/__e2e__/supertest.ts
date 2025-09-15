@@ -5,4 +5,4 @@ dotenv.config({ path: envPath });
 import supertest from 'supertest';
 import { testSetupServer } from './setup';
 
-export const testServer = supertest(testSetupServer.app);
+export const testServer = supertest.agent(testSetupServer.app);
