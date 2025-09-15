@@ -4,7 +4,7 @@
 	"type": "commonjs",
 	"scripts": {
 		"watch": "tsc --noEmit --watch",
-		"dev": "nodemon ./src/index.ts",
+		"dev": "nodemon ./src/services/auth/index.ts",
 		"start": "node dist/apps/server/src/main",
 		"build": "esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node",
 		"format": "prettier --write \"src/**/*.ts\"",

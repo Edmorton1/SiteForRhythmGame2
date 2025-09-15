@@ -1,8 +1,8 @@
 import { ContainerModule } from 'inversify';
 import { AUTH_TYPES } from '../TYPES.di';
-import { RegistrationController } from '../../../../routes/registration/controller/registration.controller';
-import { RegistrationService } from '../../../../routes/registration/service/registration.service';
-import { RegistrationRepository } from '../../../../routes/registration/repository/registration.repository';
+import { RegistrationController } from '../../modules/registration/controller/registration.controller';
+import { RegistrationService } from '../../modules/registration/service/registration.service';
+import { RegistrationRepository } from '../../modules/registration/repository/registration.repository';
 
 export const registrationBindings = new ContainerModule(({ bind }) => {
 	bind<RegistrationController>(AUTH_TYPES.modules.registration.controller)

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { COMMON_TYPES } from '../containers/TYPES.di';
-import { container } from '../containers/container.di';
 import { BaseController } from './base.controller';
+import { AUTH_TYPES } from '../services/auth/containers/TYPES.di';
+import { authContainer } from '../services/auth/containers/container.di';
 
 export class ServerRoutes {
 	router: Router;
@@ -10,8 +10,10 @@ export class ServerRoutes {
 		this.router = Router();
 
 		const controllers: BaseController[] = Object.values(
-			COMMON_TYPES.modules,
-		).map(e => container.get(e.controller));
+			// TODO: ВРЕМЕННЫЙ ПЕРЕХОД, ПОТОМ УБРАТЬ
+			AUTH_TYPES.modules,
+			// TODO: ВРЕМЕННЫЙ ПЕРЕХОД, ПОТОМ УБРАТЬ
+		).map(e => authContainer.get(e.controller));
 
 		controllers.forEach(controller => {
 			this.router.use(controller.router);

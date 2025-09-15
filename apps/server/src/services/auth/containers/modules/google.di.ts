@@ -1,8 +1,8 @@
 import { ContainerModule } from 'inversify';
 import { AUTH_TYPES } from '../TYPES.di';
-import { GoogleController } from '../../../../routes/google/controller/Google.controller';
-import { GoogleRepository } from '../../../../routes/google/repository/Google.repository';
-import { Passport } from '../../../../routes/google/passport';
+import { Passport } from '../../modules/google/passport';
+import { GoogleController } from '../../modules/google/controller/Google.controller';
+import { GoogleRepository } from '../../modules/google/repository/Google.repository';
 
 export const googleBindings = new ContainerModule(({ bind }) => {
 	bind<GoogleController>(AUTH_TYPES.modules.google.controller).to(
