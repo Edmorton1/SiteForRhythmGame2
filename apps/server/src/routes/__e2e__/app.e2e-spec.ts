@@ -1,5 +1,5 @@
 import { container } from '../../containers/container.di';
-import { TYPES } from '../../containers/TYPES';
+import { COMMON_TYPES } from '../../containers/TYPES.di';
 import { randomEmail } from './generateString';
 import { SERVER_PREFIX } from '../../../../../libs/shared/CONST';
 import { serverPaths } from '../../../../../libs/shared/PATHS';
@@ -15,7 +15,7 @@ describe('[E2E] SERVER TEST', () => {
 		password: '123123',
 	};
 	const databaseService = container.get<DatabaseService>(
-		TYPES.services.database,
+		COMMON_TYPES.services.database,
 	);
 
 	it('[AUTH] Init (empty)', async () => {

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { TYPES } from '../../containers/TYPES';
+import { COMMON_TYPES } from '../../containers/TYPES.di';
 import { ConfigService } from '../../common/services/config/config.service';
 import { serverPaths } from '../../../../../libs/shared/PATHS';
 import { GoogleRepository } from './repository/Google.repository';
@@ -9,9 +9,9 @@ import { GoogleRepository } from './repository/Google.repository';
 @injectable()
 export class Passport {
 	constructor(
-		@inject(TYPES.services.config)
+		@inject(COMMON_TYPES.services.config)
 		private readonly configService: ConfigService,
-		@inject(TYPES.modules.google.repository)
+		@inject(COMMON_TYPES.modules.google.repository)
 		private readonly googleRepository: GoogleRepository,
 	) {
 		console.log(

@@ -9,7 +9,7 @@ import { LoggerService } from '../common/services/logger/logger.service';
 import swaggerUi from 'swagger-ui-express';
 import { openapiDocs } from './swagger/openapi.config';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../containers/TYPES';
+import { COMMON_TYPES } from '../containers/TYPES.di';
 import { ExpressSession } from './middlewares/express.session';
 import passport from 'passport';
 import { Server } from 'http';
@@ -22,19 +22,19 @@ export class ServerExpress {
 	server: Server | undefined;
 
 	constructor(
-		@inject(TYPES.app.ServerRoutes)
+		@inject(COMMON_TYPES.app.ServerRoutes)
 		private readonly serverRoutes: ServerRoutes,
-		@inject(TYPES.services.config)
+		@inject(COMMON_TYPES.services.config)
 		private readonly configService: ConfigService,
-		@inject(TYPES.app.ExpressError)
+		@inject(COMMON_TYPES.app.ExpressError)
 		private readonly expressError: ExpressError,
-		@inject(TYPES.services.logger)
+		@inject(COMMON_TYPES.services.logger)
 		private readonly loggerService: LoggerService,
-		@inject(TYPES.app.ExpressSession)
+		@inject(COMMON_TYPES.app.ExpressSession)
 		private readonly expressSession: ExpressSession,
-		@inject(TYPES.services.database)
+		@inject(COMMON_TYPES.services.database)
 		private readonly database: DatabaseService,
-		@inject(TYPES.services.redis)
+		@inject(COMMON_TYPES.services.redis)
 		private readonly redis: RedisService,
 	) {
 		this.app = express();

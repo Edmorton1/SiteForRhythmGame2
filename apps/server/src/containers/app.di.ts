@@ -1,21 +1,21 @@
 import { ContainerModule } from 'inversify';
-import { TYPES } from './TYPES';
+import { COMMON_TYPES } from './TYPES.di';
 import { ServerRoutes } from '../config/server.routes';
 import { ExpressError } from '../config/middlewares/express.error';
 import { ServerExpress } from '../config/server';
 import { ExpressSession } from '../config/middlewares/express.session';
 
 export const appBindings = new ContainerModule(({ bind }) => {
-	bind<ServerRoutes>(TYPES.app.ServerRoutes)
+	bind<ServerRoutes>(COMMON_TYPES.app.ServerRoutes)
 		.to(ServerRoutes)
 		.inSingletonScope();
-	bind<ExpressError>(TYPES.app.ExpressError)
+	bind<ExpressError>(COMMON_TYPES.app.ExpressError)
 		.to(ExpressError)
 		.inSingletonScope();
-	bind<ExpressSession>(TYPES.app.ExpressSession)
+	bind<ExpressSession>(COMMON_TYPES.app.ExpressSession)
 		.to(ExpressSession)
 		.inSingletonScope();
-	bind<ServerExpress>(TYPES.app.ServerExpress)
+	bind<ServerExpress>(COMMON_TYPES.app.ServerExpress)
 		.to(ServerExpress)
 		.inSingletonScope();
 });

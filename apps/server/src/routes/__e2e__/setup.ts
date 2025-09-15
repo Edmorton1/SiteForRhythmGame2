@@ -4,10 +4,10 @@ import dotenv from 'dotenv';
 dotenv.config({ path: envPath });
 import { container } from '../../containers/container.di';
 import { ServerExpress } from '../../config/server';
-import { TYPES } from '../../containers/TYPES';
+import { COMMON_TYPES } from '../../containers/TYPES.di';
 
 export const testSetupServer = container.get<ServerExpress>(
-	TYPES.app.ServerExpress,
+	COMMON_TYPES.app.ServerExpress,
 );
 
 beforeAll(() => {

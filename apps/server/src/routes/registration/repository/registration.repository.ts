@@ -7,7 +7,7 @@ import { User, UserDTO } from '../../../../../../libs/models/schemas/user';
 import { randomUUID } from 'crypto';
 import { Profile } from '../../../../../../libs/models/schemas/profile';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
 import { Provider } from '../../../_declarations/session';
 
 type ProfileAvatar = Omit<RegistrationDTO, 'user'>;
@@ -17,7 +17,7 @@ type RoleId = Pick<User, 'id' | 'role'>;
 @injectable()
 export class RegistrationRepository {
 	constructor(
-		@inject(TYPES.services.database)
+		@inject(COMMON_TYPES.services.database)
 		private readonly databaseService: DatabaseService,
 	) {}
 

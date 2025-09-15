@@ -3,7 +3,7 @@ import { AuthService } from '../service/auth.service';
 import { inject, injectable } from 'inversify';
 import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
-import { TYPES } from '../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
 import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
 import { UserProfile } from '../../../../../../libs/models/schemas/profile';
 import { userGuard } from '../../../common/guards/user.guard';
@@ -13,9 +13,9 @@ import { LoginDTOZodSchema } from '../../../../../../libs/models/schemas/auth';
 @injectable()
 export class AuthController extends BaseController {
 	constructor(
-		@inject(TYPES.modules.auth.service)
+		@inject(COMMON_TYPES.modules.auth.service)
 		private readonly authService: AuthService,
-		@inject(TYPES.services.config)
+		@inject(COMMON_TYPES.services.config)
 		private readonly configService: ConfigService,
 	) {
 		super();

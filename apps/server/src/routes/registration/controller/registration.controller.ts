@@ -6,12 +6,12 @@ import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
 import multer from 'multer';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
 
 @injectable()
 export class RegistrationController extends BaseController {
 	constructor(
-		@inject(TYPES.modules.registration.service)
+		@inject(COMMON_TYPES.modules.registration.service)
 		private readonly registrationService: RegistrationService,
 		// @inject(TYPES.services.config)
 		// private readonly configService: ConfigService,

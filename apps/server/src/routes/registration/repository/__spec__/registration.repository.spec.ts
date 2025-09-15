@@ -6,7 +6,7 @@ import { DatabaseService } from '../../../../common/services/postgres/database.s
 import { LoggerService } from '../../../../common/services/logger/logger.service';
 import { RegistrationDTO } from '../../../../common/models/schemas/registration.dto';
 import { container } from '../../../../containers/container.di';
-import { TYPES } from '../../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../../containers/TYPES.di';
 import { Provider } from '../../../../_declarations/session';
 import { randomString } from '../../../__e2e__/generateString';
 
@@ -21,10 +21,14 @@ const email = '_test';
 // SELECT pid, usename, datname, client_addr, state, query
 // FROM pg_stat_activity;
 
-const databaseService = container.get<DatabaseService>(TYPES.services.database);
-const loggerService = container.get<LoggerService>(TYPES.services.logger);
+const databaseService = container.get<DatabaseService>(
+	COMMON_TYPES.services.database,
+);
+const loggerService = container.get<LoggerService>(
+	COMMON_TYPES.services.logger,
+);
 const registrationRepository = container.get<RegistrationRepository>(
-	TYPES.modules.registration.repository,
+	COMMON_TYPES.modules.registration.repository,
 );
 
 const profileDTO: RegistrationDTO['profile'] = {

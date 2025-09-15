@@ -1,22 +1,12 @@
-export const TYPES = {
-	services: {
-		config: Symbol.for('ConfigService'),
-		crypto: Symbol.for('CryptoService'),
-		logger: Symbol.for('LoggerService'),
-		database: Symbol.for('DatabaseService'),
-		redis: Symbol.for('RedisService'),
-		dbQueries: Symbol.for('DbQueries'),
-	},
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
+
+export const AUTH_TYPES = {
+	services: COMMON_TYPES.services,
+
+	app: COMMON_TYPES.app,
 
 	oauth: {
 		PassportGoogle: Symbol.for('PassportGoogleOauth'),
-	},
-
-	app: {
-		ServerRoutes: Symbol.for('ServerRoutes'),
-		ExpressError: Symbol.for('ErrorMiddleware'),
-		ExpressSession: Symbol.for('ExpressSession'),
-		ServerExpress: Symbol.for('ServerExpress'),
 	},
 
 	modules: {

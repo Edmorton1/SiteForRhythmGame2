@@ -4,16 +4,16 @@ import { DatabaseKysely } from './database.type';
 import { LoggerService } from '../logger/logger.service';
 import { ConfigService } from '../config/config.service';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
 
 @injectable()
 export class DatabaseService {
 	db: Kysely<DatabaseKysely>;
 
 	constructor(
-		@inject(TYPES.services.logger)
+		@inject(COMMON_TYPES.services.logger)
 		private readonly loggerService: LoggerService,
-		@inject(TYPES.services.config)
+		@inject(COMMON_TYPES.services.config)
 		private readonly configService: ConfigService,
 	) {
 		const logger = this.loggerService.logger;

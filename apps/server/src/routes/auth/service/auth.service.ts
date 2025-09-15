@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { AuthRepository } from '../repository/auth.repository';
-import { TYPES } from '../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
 import bcrypt from 'bcrypt';
 import { HttpError } from '../../../common/http/http.error';
 import { UserProfile } from '../../../../../../libs/models/schemas/profile';
@@ -11,7 +11,7 @@ import { authErrors } from '../errors/CONST';
 @injectable()
 export class AuthService {
 	constructor(
-		@inject(TYPES.modules.auth.repository)
+		@inject(COMMON_TYPES.modules.auth.repository)
 		private readonly authRepository: AuthRepository,
 	) {}
 

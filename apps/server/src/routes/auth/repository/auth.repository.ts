@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
 import { DatabaseService } from '../../../common/services/postgres/database.service';
 import { HttpError } from '../../../common/http/http.error';
 import { UserProfile } from '../../../../../../libs/models/schemas/profile';
@@ -8,7 +8,7 @@ import { authErrors } from '../errors/CONST';
 @injectable()
 export class AuthRepository {
 	constructor(
-		@inject(TYPES.services.database)
+		@inject(COMMON_TYPES.services.database)
 		private readonly databaseService: DatabaseService,
 	) {}
 

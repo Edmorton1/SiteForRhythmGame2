@@ -3,12 +3,12 @@ import { LoggerService } from '../../common/services/logger/logger.service';
 import { HttpError } from '../../common/http/http.error';
 import { STATUS_CODES } from 'http';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../../containers/TYPES';
+import { COMMON_TYPES } from '../../containers/TYPES.di';
 
 @injectable()
 export class ExpressError {
 	constructor(
-		@inject(TYPES.services.logger)
+		@inject(COMMON_TYPES.services.logger)
 		private readonly loggerService: LoggerService,
 	) {}
 	expressError = (

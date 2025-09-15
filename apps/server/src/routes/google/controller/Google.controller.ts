@@ -3,16 +3,16 @@ import { inject, injectable } from 'inversify';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
 import { BaseController } from '../../../config/base.controller';
 import passport from 'passport';
-import { TYPES } from '../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
 import { Passport } from '../passport';
 import { ConfigService } from '../../../common/services/config/config.service';
 
 @injectable()
 export class GoogleController extends BaseController {
 	constructor(
-		@inject(TYPES.services.config)
+		@inject(COMMON_TYPES.services.config)
 		private readonly configService: ConfigService,
-		@inject(TYPES.oauth.PassportGoogle)
+		@inject(COMMON_TYPES.oauth.PassportGoogle)
 		private readonly pass: Passport,
 	) {
 		super();

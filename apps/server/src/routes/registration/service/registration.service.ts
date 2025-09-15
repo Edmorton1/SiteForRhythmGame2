@@ -3,7 +3,7 @@ import { RegistrationRepository } from '../repository/registration.repository';
 import { HttpError } from '../../../common/http/http.error';
 import { UserDTO } from '../../../../../../libs/models/schemas/user';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
 import { Profile } from '../../../../../../libs/models/schemas/profile';
 import { Provider } from '../../../_declarations/session';
 import { registrationErrors } from '../errors/CONST';
@@ -11,7 +11,7 @@ import { registrationErrors } from '../errors/CONST';
 @injectable()
 export class RegistrationService {
 	constructor(
-		@inject(TYPES.modules.registration.repository)
+		@inject(COMMON_TYPES.modules.registration.repository)
 		private readonly registrationSQL: RegistrationRepository,
 	) {}
 

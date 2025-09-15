@@ -1,14 +1,14 @@
 import pino, { Logger } from 'pino';
 import { ConfigService } from '../config/config.service';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../../../containers/TYPES';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
 
 @injectable()
 export class LoggerService {
 	logger: Logger;
 
 	constructor(
-		@inject(TYPES.services.config)
+		@inject(COMMON_TYPES.services.config)
 		private readonly configService: ConfigService,
 	) {
 		this.logger = pino(

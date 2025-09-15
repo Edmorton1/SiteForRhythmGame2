@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../../containers/TYPES';
+import { COMMON_TYPES } from '../../containers/TYPES.di';
 import { ConfigService } from '../../common/services/config/config.service';
 import session from 'express-session';
 import { RedisService } from '../../common/services/redis/redis.service';
@@ -7,9 +7,9 @@ import { RedisService } from '../../common/services/redis/redis.service';
 @injectable()
 export class ExpressSession {
 	constructor(
-		@inject(TYPES.services.config)
+		@inject(COMMON_TYPES.services.config)
 		private readonly configService: ConfigService,
-		@inject(TYPES.services.redis)
+		@inject(COMMON_TYPES.services.redis)
 		private readonly redisService: RedisService,
 	) {}
 	expressSession = session({
