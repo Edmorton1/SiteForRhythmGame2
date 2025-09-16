@@ -70,6 +70,7 @@ export class ServerExpress {
 	start = () => {
 		this.configureApp();
 		const port = parseInt(this.configService.getEnv('PORT'));
+		// const port = (Math.random() * 10) % 10 > 5 ? 3000 : 3001;
 		const host = this.configService.getEnv('HOST');
 
 		this.server = this.app.listen(port, host);

@@ -1,9 +1,9 @@
-import { Container } from 'inversify';
-import { MODULE, Module } from '../../../containers/modules.di';
 import { TRACKS_TYPES } from './TYPES.di';
 import { tracksBindings } from './modules/tracks.di';
-import { rootContainer } from '../../../containers/container.di';
+import { createContainer } from '../../../containers/createContianer';
 
-export const tracksContainer = new Container({ parent: rootContainer });
-tracksContainer.bind<Module>(MODULE).toConstantValue(TRACKS_TYPES.modules);
+// Задачи на завтра: Минимизировать рутину при создании микросервиса, нормально их разъединить, чтоб на разных портах хотя-бы работали
+// Сделать Api-Gateway вместе с Kafka
+
+export const tracksContainer = createContainer(TRACKS_TYPES.modules);
 tracksContainer.load(tracksBindings);

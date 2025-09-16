@@ -5,7 +5,7 @@ import { TRACKS_TYPES } from '../../containers/TYPES.di';
 @injectable()
 export class TracksService {
 	constructor(
-		@inject(TRACKS_TYPES.modules.tracks.service)
+		@inject(TRACKS_TYPES.modules.tracks.repository)
 		private readonly repository: TracksRepository,
 	) {}
 }

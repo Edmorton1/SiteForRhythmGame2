@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import { BaseController } from './base.controller';
-import { inject, injectable } from 'inversify';
-import { MODULE, Module } from '../containers/modules.di';
-import { rootContainer } from '../containers/container.di';
+import { Container, inject, injectable } from 'inversify';
+import { CONTAINER, MODULE, Module } from '../containers/modules.di';
 
 @injectable()
 export class ServerRoutes {
@@ -11,12 +10,14 @@ export class ServerRoutes {
 	constructor(
 		@inject(MODULE)
 		private readonly modules: Module,
+		@inject(CONTAINER)
+		private readonly container: Container,
 	) {
-		console.log('MODULES', modules['tracks'].controller);
+		console.log('MODULES', modules);
 		this.router = Router();
 
 		const controllers: BaseController[] = Object.values(this.modules).map(e =>
-			rootContainer.get(e.controller),
+			this.container.get(e.controller),
 		);
 
 		controllers.forEach(controller => {

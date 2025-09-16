@@ -1,12 +1,5 @@
-// export class Modules {
-// 	constructor(
-// 		public controller: symbol,
-// 		public service: symbol,
-// 		public repository: symbol,
-// 	) {}
-// }
-
-export const MODULE = 'modules=';
+export const MODULE = Symbol.for('Modules');
+export const CONTAINER = Symbol.for('Container');
 
 export type Module = Record<
 	string,
