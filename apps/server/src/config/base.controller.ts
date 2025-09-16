@@ -3,57 +3,40 @@ import type { Consumer, Producer } from 'kafkajs';
 import { KafkaProducer } from '../common/services/kafka/kafka.producer';
 import { KafkaConsumer } from '../common/services/kafka/kafka.consumer';
 import { randomUUID } from 'crypto';
+import { injectable } from 'inversify';
 
-interface IControllerRoute {
+interface ControllerRoute {
 	path: string;
 	handle: (req: Request, res: Response) => Promise<void> | void;
 	method: keyof Pick<Router, 'get' | 'post' | 'delete' | 'patch' | 'put'>;
 	middlewares?: ((req: Request, res: Response, next: NextFunction) => any)[];
 }
 
+interface Ids {
+	requestTopicId: string;
+	responseTopicId: string;
+	groupId: string;
+}
+
 export class BaseController {
 	readonly router: Router;
-	private readonly producer!: Producer;
-	private readonly consumer!: Consumer;
+	private producer!: Producer;
+	private consumer!: Consumer;
 	private readonly map = new Map<string, (value: unknown) => void>();
+	// СДЕЛАТЬ АЙДИ ТОПИКОВ И КОНСЮМЕРОВ КАК СИМВОЛЫ
+	private topics!: Ids;
 
 	constructor() {
 		this.router = Router();
-
-		this.producer = new KafkaProducer(
-			['host.docker.internal:9092'],
-			'service',
-		).producer;
-
-		(async () => {
-			await this.producer.connect();
-		})();
-
-		this.consumer = new KafkaConsumer(
-			['host.docker.internal:9092'],
-			'service',
-			'response-group',
-		).consumer;
-
-		(async () => {
-			await this.consumer.connect();
-			await this.consumer.subscribe({
-				topic: 'response-topic',
-				fromBeginning: true,
-			});
-			this.consumer.run({
-				eachMessage: async ({ topic, partition, message }) => {
-					const value = JSON.parse(message.value!.toString());
-					console.log('Ответ получен:', value);
-					const resolve = this.map.get(value.id);
-					this.map.delete(value.id);
-					resolve!(value.message);
-				},
-			});
-		})();
 	}
 
-	protected bindRoutes(routes: IControllerRoute[]): void {
+	protected init = (options: Ids) => {
+		this.topics = options;
+		this.createProducer();
+		this.createConsumer();
+	};
+
+	protected bindRoutes(routes: ControllerRoute[]): void {
 		for (const route of routes) {
 			if (!route.middlewares?.length) route.middlewares = [];
 
@@ -85,6 +68,42 @@ export class BaseController {
 				{ value: JSON.stringify({ message: data, id: 'TODO: REMOVE' }) },
 			],
 		});
+	};
+
+	private createProducer = () => {
+		this.producer = new KafkaProducer(
+			['host.docker.internal:9092'],
+			'service',
+		).producer;
+
+		(async () => {
+			await this.producer.connect();
+		})();
+	};
+
+	private createConsumer = () => {
+		this.consumer = new KafkaConsumer(
+			['host.docker.internal:9092'],
+			'service',
+			'response-group',
+		).consumer;
+
+		(async () => {
+			await this.consumer.connect();
+			await this.consumer.subscribe({
+				topic: 'response-topic',
+				fromBeginning: true,
+			});
+			this.consumer.run({
+				eachMessage: async ({ topic, partition, message }) => {
+					const value = JSON.parse(message.value!.toString());
+					console.log('Ответ получен:', value);
+					const resolve = this.map.get(value.id);
+					this.map.delete(value.id);
+					resolve!(value.message);
+				},
+			});
+		})();
 	};
 }
 

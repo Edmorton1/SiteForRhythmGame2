@@ -7,6 +7,7 @@ import { serverPaths } from '../../../../../../libs/shared/PATHS';
 export class TracksController extends BaseController {
 	constructor() {
 		super();
+		this.init({ groupId: 'a', requestTopicId: 'b', responseTopicId: 'c' });
 		this.bindRoutes([
 			{
 				handle: this.handle,

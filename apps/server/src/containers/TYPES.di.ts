@@ -6,6 +6,7 @@ export const COMMON_TYPES = {
 		database: Symbol.for('DatabaseService'),
 		redis: Symbol.for('RedisService'),
 		dbQueries: Symbol.for('DbQueries'),
+		kafka: Symbol.for('KafkaService'),
 	},
 
 	app: {
