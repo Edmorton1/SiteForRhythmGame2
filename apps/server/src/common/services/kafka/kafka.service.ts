@@ -1,12 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { COMMON_TYPES } from '../../../containers/TYPES.di';
 import { ConfigService } from '../config/config.service';
-import { Kafka, Producer } from 'kafkajs';
+import { Kafka } from 'kafkajs';
 
 @injectable()
 export class KafkaService {
 	private readonly kafka: Kafka;
-	producer: Producer;
 	// consumer: Consumer;
 
 	constructor(
@@ -16,9 +15,11 @@ export class KafkaService {
 		const brokers = this.configService.getEnv('KAFKA_BROKERS').split(',');
 		const clientId = this.configService.getEnv('KAFKA_CLIENT_ID');
 		this.kafka = new Kafka({ clientId, brokers });
-
-		this.producer = this.kafka.producer();
 	}
+
+	createProducer = () => {
+		return this.kafka.producer();
+	};
 
 	createConsumer = (groupId: string) => {
 		return this.kafka.consumer({

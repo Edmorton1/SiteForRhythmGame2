@@ -13,7 +13,7 @@ import { KafkaProducer } from '../../../common/services/kafka/kafka.producer';
 	await producer.connect();
 
 	await consumer.connect();
-	await consumer.subscribe({ topic: 'request-topic', fromBeginning: true });
+	await consumer.subscribe({ topic: 'request-topic', fromBeginning: false });
 
 	await consumer.run({
 		eachMessage: async ({ topic, partition, message }) => {

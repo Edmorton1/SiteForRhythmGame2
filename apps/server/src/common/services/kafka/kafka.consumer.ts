@@ -8,8 +8,8 @@ export class KafkaConsumer {
 		this.kafka = new Kafka({ clientId, brokers });
 		this.consumer = this.kafka.consumer({
 			groupId,
-			sessionTimeout: 8000,
-			heartbeatInterval: 3000,
+			sessionTimeout: 30000,
+			heartbeatInterval: 10000,
 		});
 	}
 }

@@ -5,9 +5,15 @@ import { serverPaths } from '../../../../../../libs/shared/PATHS';
 
 @injectable()
 export class TracksController extends BaseController {
+	// TODO: Временное решение, потом убрать
 	constructor() {
 		super();
-		this.init({ groupId: 'a', requestTopicId: 'b', responseTopicId: 'c' });
+		this.init({
+			// ДОЛЖЕН БЫТЬ У ВСЕХ РАЗНЫЙ
+			groupId: 'test-group-12313221',
+			requestTopicId: 'request-topic',
+			responseTopicId: 'response-topic',
+		});
 		this.bindRoutes([
 			{
 				handle: this.handle,
@@ -24,3 +30,8 @@ export class TracksController extends BaseController {
 		res.json({ 'from reply': response });
 	};
 }
+
+// TODO: Задачи на завтра
+// Допилить контроллер и разбить на 2 класса
+// Сделать базовый сервис для приёмников
+// Сделать чтобы сервер не запускался пока не загрузится кафка

@@ -4,6 +4,20 @@ import { KafkaProducer } from '../common/services/kafka/kafka.producer';
 import { KafkaConsumer } from '../common/services/kafka/kafka.consumer';
 import { randomUUID } from 'crypto';
 import { injectable } from 'inversify';
+import { COMMON_TYPES } from '../containers/TYPES.di';
+import { KafkaService } from '../common/services/kafka/kafka.service';
+import { rootContainer } from '../containers/container.di';
+
+// https://chatgpt.com/c/68c96218-03cc-832e-928d-340e9ce0fe44
+// bootstrap.ts
+// const tracks = container.get(TracksController);
+// await tracks.init({
+//   groupId: 'tracks-service-group',
+//   requestTopicId: 'request-topic',
+//   responseTopicId: 'response-topic',
+// });
+// app.use(tracks.router);
+// await app.listen(...);
 
 interface ControllerRoute {
 	path: string;
@@ -18,22 +32,28 @@ interface Ids {
 	groupId: string;
 }
 
+@injectable()
 export class BaseController {
 	readonly router: Router;
 	private producer!: Producer;
 	private consumer!: Consumer;
 	private readonly map = new Map<string, (value: unknown) => void>();
+	// TODO: ХАРДКОД УБРАТЬ
+	private readonly kafkaService: KafkaService = rootContainer.get(
+		COMMON_TYPES.services.kafka,
+	);
 	// СДЕЛАТЬ АЙДИ ТОПИКОВ И КОНСЮМЕРОВ КАК СИМВОЛЫ
 	private topics!: Ids;
 
 	constructor() {
+		// private readonly kafkaService: KafkaService, // @inject(COMMON_TYPES.services.kafka)
 		this.router = Router();
 	}
 
-	protected init = (options: Ids) => {
+	protected init = async (options: Ids) => {
 		this.topics = options;
-		this.createProducer();
-		this.createConsumer();
+		await this.createProducer();
+		await this.createConsumer();
 	};
 
 	protected bindRoutes(routes: ControllerRoute[]): void {
@@ -54,7 +74,7 @@ export class BaseController {
 		});
 
 		await this.producer.send({
-			topic: 'request-topic',
+			topic: this.topics.requestTopicId,
 			messages: [{ value: JSON.stringify({ message: data, id }) }],
 		});
 
@@ -63,47 +83,38 @@ export class BaseController {
 
 	protected sendAndForget = (data: unknown): void => {
 		this.producer.send({
-			topic: 'request-topic',
+			topic: this.topics.requestTopicId,
 			messages: [
 				{ value: JSON.stringify({ message: data, id: 'TODO: REMOVE' }) },
 			],
 		});
 	};
 
-	private createProducer = () => {
-		this.producer = new KafkaProducer(
-			['host.docker.internal:9092'],
-			'service',
-		).producer;
+	private createProducer = async () => {
+		this.producer = this.kafkaService.createProducer();
 
-		(async () => {
-			await this.producer.connect();
-		})();
+		await this.producer.connect();
 	};
 
-	private createConsumer = () => {
-		this.consumer = new KafkaConsumer(
-			['host.docker.internal:9092'],
-			'service',
-			'response-group',
-		).consumer;
+	private createConsumer = async () => {
+		console.log('CREATE CONSUMER');
+		this.consumer = this.kafkaService.createConsumer(this.topics.groupId);
 
-		(async () => {
-			await this.consumer.connect();
-			await this.consumer.subscribe({
-				topic: 'response-topic',
-				fromBeginning: true,
-			});
-			this.consumer.run({
-				eachMessage: async ({ topic, partition, message }) => {
-					const value = JSON.parse(message.value!.toString());
-					console.log('Ответ получен:', value);
-					const resolve = this.map.get(value.id);
-					this.map.delete(value.id);
-					resolve!(value.message);
-				},
-			});
-		})();
+		await this.consumer.connect();
+		await this.consumer.subscribe({
+			topic: this.topics.responseTopicId,
+			fromBeginning: false,
+		});
+		this.consumer.run({
+			eachMessage: async ({ topic, partition, message }) => {
+				console.log('ЧЁ ПАРСИМ', message.value!.toString());
+				const value = JSON.parse(message.value!.toString());
+				console.log('Ответ получен:', value);
+				const resolve = this.map.get(value.id);
+				this.map.delete(value.id);
+				resolve!(value.message);
+			},
+		});
 	};
 }
 
