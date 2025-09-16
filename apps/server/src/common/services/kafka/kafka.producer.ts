@@ -8,16 +8,4 @@ export class KafkaProducer {
 		this.kafka = new Kafka({ clientId, brokers });
 		this.producer = this.kafka.producer();
 	}
-
-	// async connect() {
-	// 	await this.producer.connect();
-	// }
-
-	// async send() {
-	// 	await this.producer.send();
-	// }
-
-	// async disconnect() {
-	// 	await this.producer.disconnect();
-	// }
 }

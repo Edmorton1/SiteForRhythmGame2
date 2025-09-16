@@ -12,23 +12,4 @@ export class KafkaConsumer {
 			heartbeatInterval: 3000,
 		});
 	}
-
-	// async connect(topic: string, fromBeginning = true) {
-	// 	await this.consumer.connect();
-	// 	await this.consumer.subscribe({ topic, fromBeginning });
-	// }
-
-	// async run(
-	// 	eachMessage: (payload: {
-	// 		topic: string;
-	// 		partition: number;
-	// 		message: { offset: string; value: Buffer | null };
-	// 	}) => Promise<void>,
-	// ) {
-	// 	await this.consumer.run({ eachMessage });
-	// }
-
-	// async disconnect() {
-	// 	await this.consumer.disconnect();
-	// }
 }
