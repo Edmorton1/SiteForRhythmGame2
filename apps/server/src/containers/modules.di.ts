@@ -3,5 +3,5 @@ export const CONTAINER = Symbol.for('Container');
 
 export type Module = Record<
 	string,
-	{ controller: symbol; service?: symbol; repository: symbol }
+	{ controller: symbol; service?: symbol; repository?: symbol }
 >;

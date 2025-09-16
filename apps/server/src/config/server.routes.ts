@@ -13,7 +13,7 @@ export class ServerRoutes {
 		@inject(CONTAINER)
 		private readonly container: Container,
 	) {
-		console.log('MODULES', modules);
+		// console.log('MODULES', modules);
 		this.router = Router();
 
 		const controllers: BaseController[] = Object.values(this.modules).map(e =>

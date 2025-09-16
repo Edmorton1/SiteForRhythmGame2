@@ -1,23 +1,23 @@
 import { Kafka, type Producer } from 'kafkajs';
 
 export class KafkaProducer {
-	private readonly kafka: Kafka;
-	private readonly producer: Producer;
+	kafka: Kafka;
+	producer: Producer;
 
 	constructor(brokers: string[], clientId: string) {
 		this.kafka = new Kafka({ clientId, brokers });
 		this.producer = this.kafka.producer();
 	}
 
-	async connect() {
-		await this.producer.connect();
-	}
+	// async connect() {
+	// 	await this.producer.connect();
+	// }
 
-	async send(topic: string, messages: { value: string }[]) {
-		await this.producer.send({ topic, messages });
-	}
+	// async send() {
+	// 	await this.producer.send();
+	// }
 
-	async disconnect() {
-		await this.producer.disconnect();
-	}
+	// async disconnect() {
+	// 	await this.producer.disconnect();
+	// }
 }

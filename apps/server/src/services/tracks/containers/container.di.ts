@@ -1,6 +1,6 @@
 import { TRACKS_TYPES } from './TYPES.di';
 import { tracksBindings } from './modules/tracks.di';
-import { createContainer } from '../../../containers/createContianer';
+import { createContainer } from '../../../containers/createContainer';
 
 // Задачи на завтра: Минимизировать рутину при создании микросервиса, нормально их разъединить, чтоб на разных портах хотя-бы работали
 // Сделать Api-Gateway вместе с Kafka

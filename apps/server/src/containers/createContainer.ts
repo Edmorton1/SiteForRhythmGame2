@@ -8,3 +8,12 @@ export const createContainer = (modules: Module) => {
 	container.bind<Container>(CONTAINER).toConstantValue(container);
 	return container;
 };
+
+// ПОТОМ ПОЧИНИТЬ
+type Controller = Record<string, symbol>;
+export const createGatewayContainer = (controllers: Controller) => {
+	const container = new Container({ parent: rootContainer });
+	container.bind<Controller>(MODULE).toConstantValue(controllers);
+	container.bind<Container>(CONTAINER).toConstantValue(container);
+	return container;
+};
