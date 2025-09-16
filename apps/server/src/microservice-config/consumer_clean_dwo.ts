@@ -17,12 +17,19 @@ import { KafkaProducer } from '../common/services/kafka/kafka.producer';
 
 	await consumer.run({
 		eachMessage: async ({ topic, partition, message }) => {
-			const value = message.value?.toString();
+			const value = JSON.parse(message.value!.toString());
 			console.log('Получено сообщение:', value);
 
 			await producer.send({
 				topic: 'response-topic',
-				messages: [{ value: `Ответ на: ${value}` }],
+				messages: [
+					{
+						value: JSON.stringify({
+							message: `Ответ на: ${value.message}`,
+							id: value.id,
+						}),
+					},
+				],
 			});
 		},
 	});
