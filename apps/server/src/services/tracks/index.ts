@@ -10,7 +10,6 @@ import { tracksContainer } from './containers/container.di';
 	const server = tracksContainer.get<ServerExpress>(
 		TRACKS_TYPES.app.ServerExpress,
 	);
-	// const server = new ServerExpress()
 
 	server.start();
 })();

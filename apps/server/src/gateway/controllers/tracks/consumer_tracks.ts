@@ -1,13 +1,15 @@
 import { KafkaConsumer } from '../../../common/services/kafka/kafka.consumer';
 import { KafkaProducer } from '../../../common/services/kafka/kafka.producer';
+import dotenv from 'dotenv';
+dotenv.config();
 
 (async () => {
 	const consumer = new KafkaConsumer(
-		['host.docker.internal:9092'],
+		[process.env['KAFKA_BROKERS']!],
 		'service',
 		'test-group',
 	).consumer;
-	const producer = new KafkaProducer(['host.docker.internal:9092'], 'service')
+	const producer = new KafkaProducer([process.env['KAFKA_BROKERS']!], 'service')
 		.producer;
 
 	await producer.connect();

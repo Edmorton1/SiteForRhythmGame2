@@ -5,7 +5,6 @@ export const TRACKS_TYPES = {
 
 	modules: {
 		tracks: {
-			controller: Symbol.for('TracksController'),
 			service: Symbol.for('TracksService'),
 			repository: Symbol.for('TracksRepository'),
 		},
