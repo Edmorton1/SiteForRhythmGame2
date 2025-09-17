@@ -7,6 +7,14 @@ import { DatabaseService } from '../common/services/postgres/database.service';
 import { RedisService } from '../common/services/redis/redis.service';
 import { DbQueriesService } from '../common/services/dbQueries/dbQueries.service';
 import { KafkaService } from '../common/services/kafka/kafka.service';
+import { KafkaController } from '../config/kafka.controller';
+
+// TODO: ДУБЛИРОВАНИЕ УБРАТЬ
+interface Ids {
+	requestTopicId: string;
+	responseTopicId: string;
+	groupId: string;
+}
 
 export const serviceBindings = new ContainerModule(({ bind }) => {
 	bind<ConfigService>(COMMON_TYPES.services.config)
@@ -30,6 +38,17 @@ export const serviceBindings = new ContainerModule(({ bind }) => {
 	bind<KafkaService>(COMMON_TYPES.services.kafka)
 		.to(KafkaService)
 		.inSingletonScope();
+
+	bind<(options: Ids) => KafkaController>(
+		COMMON_TYPES.factories.kafka,
+	).toFactory(context => {
+		return (options: Ids) => {
+			const kafkaService = context.get<KafkaService>(
+				COMMON_TYPES.services.kafka,
+			);
+			return new KafkaController(kafkaService, options);
+		};
+	});
 	// bind<>(TYPES.services).to().inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();

@@ -1,19 +1,31 @@
 import { Request, Response } from 'express';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
+import { COMMON_TYPES } from '../../../containers/TYPES.di';
+import { KafkaController } from '../../../config/kafka.controller';
+
+// TODO: ДУБЛИРОВАНИЕ УБРАТЬ
+interface Ids {
+	requestTopicId: string;
+	responseTopicId: string;
+	groupId: string;
+}
 
 @injectable()
 export class TracksController extends BaseController {
-	// TODO: Временное решение, потом убрать
-	constructor() {
+	kafkaController: KafkaController;
+	constructor(
+		@inject(COMMON_TYPES.factories.kafka)
+		private readonly kafkaFactory: (options: Ids) => KafkaController,
+	) {
 		super();
-		this.init({
-			// ДОЛЖЕН БЫТЬ У ВСЕХ РАЗНЫЙ
-			groupId: 'test-group-12313221',
+		this.kafkaController = this.kafkaFactory({
+			groupId: 'tracks-group',
 			requestTopicId: 'request-topic',
 			responseTopicId: 'response-topic',
 		});
+
 		this.bindRoutes([
 			{
 				handle: this.handle,
@@ -24,7 +36,9 @@ export class TracksController extends BaseController {
 	}
 
 	handle = async (req: Request, res: Response) => {
-		const response = await this.sendAndWait('Hello from API-Gateway!');
+		const response = await this.kafkaController.sendAndWait(
+			'Hello from API-Gateway!',
+		);
 
 		console.log(response);
 		res.json({ 'from reply': response });
