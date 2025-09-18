@@ -1,9 +1,10 @@
-import { TRACKS_TYPES } from './TYPES.di';
+import { serviceBindings } from '../../../containers/services.di';
 import { tracksBindings } from './modules/tracks.di';
-import { createContainer } from '../../../containers/createContainer';
+import { Container } from 'inversify';
 
 // Задачи на завтра: Минимизировать рутину при создании микросервиса, нормально их разъединить, чтоб на разных портах хотя-бы работали
 // Сделать Api-Gateway вместе с Kafka
 
-export const tracksContainer = createContainer(TRACKS_TYPES.modules);
+export const tracksContainer = new Container();
+tracksContainer.load(serviceBindings);
 tracksContainer.load(tracksBindings);

@@ -9,4 +9,8 @@ export const TRACKS_TYPES = {
 			repository: Symbol.for('TracksRepository'),
 		},
 	},
+
+	// controllers: {
+	// 	tracks: Symbol.for('TracksService'),
+	// },
 };

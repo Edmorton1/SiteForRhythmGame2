@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
-import type { Consumer, Producer } from 'kafkajs';
+import type { Producer } from 'kafkajs';
 import { KafkaService } from '../common/services/kafka/kafka.service';
 import { COMMON_TYPES } from '../containers/TYPES.di';
 import { randomUUID } from 'crypto';
 
-interface Ids {
+export interface Ids {
 	requestTopicId: string;
 	responseTopicId: string;
 	groupId: string;
@@ -37,7 +37,10 @@ export class KafkaController {
 
 		await this.producer.send({
 			topic: this.options.requestTopicId,
-			messages: [{ value: JSON.stringify({ message: data, id }) }],
+			messages: [
+				// TODO: ХАРДКОД
+				{ value: JSON.stringify({ message: data, id, func: 'getValue' }) },
+			],
 		});
 
 		return await response;
