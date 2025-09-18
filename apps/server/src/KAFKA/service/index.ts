@@ -1,53 +1,12 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import { rootContainer } from '../../containers/container.di';
-import { COMMON_TYPES } from '../../containers/TYPES.di';
-import { KafkaService } from '../../common/services/kafka/kafka.service';
-import { FUNKS, TOPICS } from '../common/CONST';
-import { Producer } from 'kafkajs';
+import { microserviceContainer } from './containers/container.di';
+import { ServerMicroservice } from './server.microservice';
+import { MICRO_TYPES } from './TYPES.di';
 
-export interface KafkaResponse {
-	id: string;
-	func: string;
-	message: any;
-}
-
-const producerSend = (producer: Producer, data: KafkaResponse) => {
-	producer.send({
-		topic: TOPICS.response,
-		messages: [
-			{
-				value: JSON.stringify(data),
-			},
-		],
-	});
-};
-
-(async () => {
-	const kafkaService = rootContainer.get<KafkaService>(
-		COMMON_TYPES.services.kafka,
+(() => {
+	const server = microserviceContainer.get<ServerMicroservice>(
+		MICRO_TYPES.microApp.server,
 	);
-	const consumer = kafkaService.createConsumer('tracks-group');
-	await consumer.connect();
-	await consumer.subscribe({ topic: TOPICS.request, fromBeginning: false });
-
-	const producer = kafkaService.createProducer();
-	producer.connect();
-
-	await consumer.run({
-		eachMessage: async ({ message }) => {
-			const value = JSON.parse(message.value!.toString()) as KafkaResponse;
-			console.log(value);
-
-			switch (value.func) {
-				case FUNKS.get123:
-					producerSend(producer, {
-						...value,
-						message: `Отправка ответа: ${value.message}`,
-					});
-					break;
-				// case "get"
-			}
-		},
-	});
+	server.start();
 })();

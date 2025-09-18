@@ -5,10 +5,11 @@ import { EventEmitter } from 'stream';
 import { rootContainer } from '../../containers/container.di';
 import { KafkaService } from '../../common/services/kafka/kafka.service';
 import { COMMON_TYPES } from '../../containers/TYPES.di';
-import { FUNKS, TOPICS } from '../common/CONST';
-import { KafkaResponse } from '../service';
+import { TOPICS } from '../common/CONST';
 import { randomUUID } from 'crypto';
 import { Producer } from 'kafkajs';
+import { KafkaResponse } from '../service/server.microservice';
+import { FUNCS } from '../service/TYPES.di';
 
 const emitter = new EventEmitter();
 
@@ -57,10 +58,17 @@ const createConsumer = async () => {
 
 	app.get('/test', async (req, res) => {
 		const id = randomUUID();
-		const message = { message: 'MESSAGE ATTENTION', id, func: FUNKS.get123 };
+		const value = {
+			message: 'MESSAGE ATTENTIONAS',
+			id,
+			func: FUNCS.tracks,
+		} satisfies KafkaResponse;
 
-		producerSend(message);
+		console.log('ПЕРЕД ОТПРАВКОЙ ЗАПРОСА');
+
+		producerSend(value);
 		const response = await waitForEmit(id);
+		console.log('REQUEST ПОЛУЧЕН ОТВЕТ', response);
 		res.json(response);
 	});
 
@@ -71,3 +79,5 @@ const createConsumer = async () => {
 
 // Осталась одна проблема. Если будет несколько инстансов API-GATEWAY, тогда
 // один из них может забрать ненужный ему запрос и данные пропадут
+
+// Надо сделать что-то типа контроллера в микросервисах, чтобы он мог принимать и обрабатывать сигналы вызывая функции сервиса

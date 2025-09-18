@@ -4,9 +4,9 @@ import { KafkaService } from '../../common/services/kafka/kafka.service';
 import { rootContainer } from '../../containers/container.di';
 import { COMMON_TYPES } from '../../containers/TYPES.di';
 import { TOPICS } from '../common/CONST';
-import { KafkaResponse } from '../service';
 import { randomUUID } from 'crypto';
 import { EventEmitter } from 'stream';
+import { KafkaResponse } from '../service/server.microservice';
 
 // Проблема этого метода в том, что если сделать вызов до того как один из двух процессов запустится будут баги
 // В мап поставить callback

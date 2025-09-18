@@ -1,7 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { COMMON_TYPES } from '../../../containers/TYPES.di';
 import { ConfigService } from '../config/config.service';
-import { Kafka } from 'kafkajs';
+import { Kafka, Producer } from 'kafkajs';
+import { TOPICS } from '../../../KAFKA/common/CONST';
 
 @injectable()
 export class KafkaService {
@@ -27,4 +28,15 @@ export class KafkaService {
 			heartbeatInterval: 3000,
 		});
 	};
+
+	// producerSend = (producer: Producer, data: any) => {
+	// 	producer.send({
+	// 		topic: TOPICS.response,
+	// 		messages: [
+	// 			{
+	// 				value: JSON.stringify(data),
+	// 			},
+	// 		],
+	// 	});
+	// };
 }
