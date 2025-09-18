@@ -19,6 +19,8 @@ interface Env {
 	NODE_ENV: Mode;
 	GOOGLE_CLIENT_ID: string;
 	GOOGLE_CLIENT_SECRET: string;
+	KAFKA_BROKERS: string;
+	KAFKA_CLIENT_ID: string;
 }
 
 export class ConfigService {

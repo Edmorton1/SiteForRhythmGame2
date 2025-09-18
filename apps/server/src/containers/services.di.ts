@@ -6,6 +6,7 @@ import { LoggerService } from '../common/services/logger/logger.service';
 import { DatabaseService } from '../common/services/postgres/database.service';
 import { RedisService } from '../common/services/redis/redis.service';
 import { DbQueriesService } from '../common/services/dbQueries/dbQueries.service';
+import { KafkaService } from '../common/services/kafka/kafka.service';
 
 export const serviceBindings = new ContainerModule(({ bind }) => {
 	bind<ConfigService>(COMMON_TYPES.services.config)
@@ -26,7 +27,9 @@ export const serviceBindings = new ContainerModule(({ bind }) => {
 	bind<RedisService>(COMMON_TYPES.services.redis)
 		.to(RedisService)
 		.inSingletonScope();
-	// bind<>(TYPES.services).to().inSingletonScope();
+	bind<KafkaService>(COMMON_TYPES.services.kafka)
+		.to(KafkaService)
+		.inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();
