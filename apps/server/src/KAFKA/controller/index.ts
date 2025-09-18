@@ -6,11 +6,24 @@ import { COMMON_TYPES } from '../../containers/TYPES.di';
 import { TOPICS } from '../common/CONST';
 import { KafkaResponse } from '../service';
 import { randomUUID } from 'crypto';
+import { EventEmitter } from 'stream';
 
 // Проблема этого метода в том, что если сделать вызов до того как один из двух процессов запустится будут баги
 // В мап поставить callback
 
 // нужно чтобы контроллер возвращал колбек вместо
+const emitter = new EventEmitter();
+
+emitter.on('callback', msg => {
+	console.log('Сообщение получено', msg);
+	return msg;
+});
+
+const waitEmit = async () => {
+	return new Promise(res => {
+		return emitter.once('callback', res);
+	});
+};
 
 (async () => {
 	const kafkaService = rootContainer.get<KafkaService>(
@@ -23,7 +36,8 @@ import { randomUUID } from 'crypto';
 	await consumer.run({
 		eachMessage: async ({ message }) => {
 			const value = JSON.parse(message.value!.toString()) as KafkaResponse;
-			console.log(value);
+			// console.log(value);
+			emitter.emit('callback', value);
 			if (value.func === 'getValue') {
 				console.log('RES JSON', value.message);
 			}
@@ -47,5 +61,7 @@ import { randomUUID } from 'crypto';
 			},
 		],
 	});
-	// пускай я хочу в ответ на сообщение вывести лог RES JSON
+
+	const response = await waitEmit();
+	console.log('Никого не ждём', response);
 })();
