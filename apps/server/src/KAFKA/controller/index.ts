@@ -6,7 +6,7 @@ import { COMMON_TYPES } from '../../containers/TYPES.di';
 import { TOPICS } from '../common/CONST';
 import { randomUUID } from 'crypto';
 import { EventEmitter } from 'stream';
-import { KafkaResponse } from '../service/server.microservice';
+import { KafkaResponse } from '../service/service-config/server.microservice';
 
 // Проблема этого метода в том, что если сделать вызов до того как один из двух процессов запустится будут баги
 // В мап поставить callback

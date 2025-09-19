@@ -1,21 +1,15 @@
 import { inject, injectable } from 'inversify';
-import { MICRO_TYPES } from './TYPES.di';
-import { ServiceComposite } from './service.composite';
-import { KafkaService } from '../../common/services/kafka/kafka.service';
-import { TOPICS } from '../common/CONST';
-import { IFUNCS } from './server.instance';
-
-export interface KafkaResponse {
-	id: string;
-	func: IFUNCS;
-	message: any;
-}
+import { MICRO_TYPES } from './containers/TYPES.di';
+import { ServiceCollector } from './service.collector';
+import { KafkaService } from '../../../common/services/kafka/kafka.service';
+import { TOPICS } from '../../common/CONST';
+import { KafkaResponse } from './types';
 
 @injectable()
 export class ServerMicroservice {
 	constructor(
-		@inject(MICRO_TYPES.microApp.composite)
-		private readonly composite: ServiceComposite,
+		@inject(MICRO_TYPES.app.composite)
+		private readonly composite: ServiceCollector,
 		@inject(MICRO_TYPES.services.kafka)
 		private readonly kafkaService: KafkaService,
 	) {}
@@ -39,6 +33,7 @@ export class ServerMicroservice {
 					messages: [
 						{
 							value: JSON.stringify({
+								// TODO: Убрать возврат func в возврате
 								func: value.func,
 								id: value.id,
 								message: result,

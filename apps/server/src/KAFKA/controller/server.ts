@@ -8,8 +8,8 @@ import { COMMON_TYPES } from '../../containers/TYPES.di';
 import { TOPICS } from '../common/CONST';
 import { randomUUID } from 'crypto';
 import { Producer } from 'kafkajs';
-import { KafkaResponse } from '../service/server.microservice';
-import { FUNCS } from '../service/TYPES.di';
+import { TRACKS_FUNCTIONS } from '../service/example/containers/TYPES.di';
+import { KafkaResponse } from '../service/service-config/types';
 
 const emitter = new EventEmitter();
 
@@ -61,7 +61,7 @@ const createConsumer = async () => {
 		const value = {
 			message: 'MESSAGE ATTENTIONAS',
 			id,
-			func: FUNCS.tracks,
+			func: TRACKS_FUNCTIONS.tracks,
 		} satisfies KafkaResponse;
 
 		console.log('ПЕРЕД ОТПРАВКОЙ ЗАПРОСА');
