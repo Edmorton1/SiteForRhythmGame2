@@ -9,12 +9,13 @@ import { LoggerService } from '../../common/services/logger/logger.service';
 import swaggerUi from 'swagger-ui-express';
 import { openapiDocs } from './swagger/openapi.config';
 import { inject, injectable } from 'inversify';
-import { COMMON_TYPES } from '../container/TYPES.di';
+import { WEB_TYPES } from '../container/TYPES.di';
 import { ExpressSession } from './middlewares/express.session';
 import passport from 'passport';
 import { Server } from 'http';
 import { DatabaseService } from '../../common/services/postgres/database.service';
 import { RedisService } from '../../common/services/redis/redis.service';
+import { KafkaService } from '../../common/services/kafka/kafka.service';
 
 @injectable()
 export class ServerExpress {
@@ -22,20 +23,22 @@ export class ServerExpress {
 	server: Server | undefined;
 
 	constructor(
-		@inject(COMMON_TYPES.app.ServerRoutes)
+		@inject(WEB_TYPES.app.ServerRoutes)
 		private readonly serverRoutes: ServerRoutes,
-		@inject(COMMON_TYPES.services.config)
+		@inject(WEB_TYPES.services.config)
 		private readonly configService: ConfigService,
-		@inject(COMMON_TYPES.app.ExpressError)
+		@inject(WEB_TYPES.app.ExpressError)
 		private readonly expressError: ExpressError,
-		@inject(COMMON_TYPES.services.logger)
+		@inject(WEB_TYPES.services.logger)
 		private readonly loggerService: LoggerService,
-		@inject(COMMON_TYPES.app.ExpressSession)
+		@inject(WEB_TYPES.app.ExpressSession)
 		private readonly expressSession: ExpressSession,
-		@inject(COMMON_TYPES.services.database)
+		@inject(WEB_TYPES.services.database)
 		private readonly database: DatabaseService,
-		@inject(COMMON_TYPES.services.redis)
+		@inject(WEB_TYPES.services.redis)
 		private readonly redis: RedisService,
+		@inject(WEB_TYPES.services.kafka)
+		private readonly kafkaService: KafkaService,
 	) {
 		this.app = express();
 	}
@@ -66,6 +69,10 @@ export class ServerExpress {
 			swaggerUi.setup(openapiDocs),
 		);
 	};
+
+	private startConsumer = () => {};
+
+	
 
 	start = () => {
 		this.configureApp();

@@ -1,7 +1,7 @@
-import { COMMON_TYPES } from '../../../web-server/container/TYPES.di';
+import { WEB_TYPES } from '../../../web-server/container/TYPES.di';
 
 export const AUTH_TYPES = {
-	...COMMON_TYPES,
+	...WEB_TYPES,
 	// services: COMMON_TYPES.services,
 
 	// app: COMMON_TYPES.app,

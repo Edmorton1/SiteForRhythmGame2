@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { LoggerService } from '../logger/logger.service';
-import { COMMON_TYPES } from '../../../web-server/container/TYPES.di';
+import { WEB_TYPES } from '../../../web-server/container/TYPES.di';
 import { ConfigService } from '../config/config.service';
 import { RedisStore } from './redis.store';
 import Redis from 'ioredis';
@@ -11,9 +11,9 @@ export class RedisService {
 	readonly store: RedisStore;
 
 	constructor(
-		@inject(COMMON_TYPES.services.logger)
+		@inject(WEB_TYPES.services.logger)
 		private readonly loggerService: LoggerService,
-		@inject(COMMON_TYPES.services.config)
+		@inject(WEB_TYPES.services.config)
 		private readonly configService: ConfigService,
 	) {
 		this.client = new Redis({

@@ -1,7 +1,7 @@
 import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
 
 export const MICRO_TYPES = {
-	...SERVICES_TYPES,
+	services: { ...SERVICES_TYPES },
 
 	app: {
 		server: Symbol.for('ServerMicroservice'),

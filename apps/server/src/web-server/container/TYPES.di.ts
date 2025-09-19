@@ -1,6 +1,6 @@
 import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 
-export const COMMON_TYPES = {
+export const WEB_TYPES = {
 	services: { ...SERVICES_TYPES },
 
 	app: {
@@ -10,5 +10,5 @@ export const COMMON_TYPES = {
 		ServerExpress: Symbol.for('ServerExpress'),
 	},
 
-	controllers: {},
+	controllers: Symbol.for('HttpControllers'),
 };

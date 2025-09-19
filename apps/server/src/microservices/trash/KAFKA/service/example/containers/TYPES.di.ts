@@ -1,4 +1,4 @@
-import { MICRO_TYPES } from '../../../../microservices/config/containers/TYPES.di';
+import { MICRO_TYPES } from '../../../../../config/containers/TYPES.di';
 
 export const TRACKS_FUNCTIONS = {
 	tracks: 'tracks',

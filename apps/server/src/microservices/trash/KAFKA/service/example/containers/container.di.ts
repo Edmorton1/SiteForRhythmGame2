@@ -1,8 +1,8 @@
 import { Container } from 'inversify';
-import { rootMicroContainer } from '../../../../microservices/config/containers/container.di';
 import { TRACKS_MICRO_TYPES } from './TYPES.di';
 import { TrackController } from '../modules/tracks/controllers/track.controller';
 import { TrackRepository } from '../modules/tracks/repository/tracks.repository';
+import { rootMicroContainer } from '../../../../../config/containers/container.di';
 
 export const trackMicroContainer = new Container({
 	parent: rootMicroContainer,

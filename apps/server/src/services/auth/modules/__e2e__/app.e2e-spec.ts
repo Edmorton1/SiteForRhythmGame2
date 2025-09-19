@@ -1,4 +1,4 @@
-import { COMMON_TYPES } from '../../../../web-server/container/TYPES.di';
+import { WEB_TYPES } from '../../../../web-server/container/TYPES.di';
 import { randomEmail } from './generateString';
 import { SERVER_PREFIX } from '../../../../../../../libs/shared/CONST';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
@@ -15,7 +15,7 @@ describe('[E2E] SERVER TEST', () => {
 		password: '123123',
 	};
 	const databaseService = authContainer.get<DatabaseService>(
-		COMMON_TYPES.services.database,
+		WEB_TYPES.services.database,
 	);
 
 	it('[AUTH] Init (empty)', async () => {

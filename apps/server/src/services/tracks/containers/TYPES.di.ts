@@ -1,7 +1,7 @@
-import { COMMON_TYPES } from '../../../web-server/container/TYPES.di';
+import { WEB_TYPES } from '../../../web-server/container/TYPES.di';
 
 export const TRACKS_TYPES = {
-	...COMMON_TYPES,
+	...WEB_TYPES,
 
 	modules: {
 		tracks: {

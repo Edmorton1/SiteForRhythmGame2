@@ -4,7 +4,7 @@
 	"type": "commonjs",
 	"scripts": {
 		"watch": "tsc --noEmit --watch",
-		"dev": "nodemon ./src/services/auth/index.ts",
+		"dev": "nodemon ./src/web-server/index.ts",
 		"dev:tracks": "nodemon ./src/services/tracks/index.ts",
 		"start": "node dist/apps/server/src/main",
 		"build": "esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node",
@@ -13,10 +13,7 @@
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"test:cov": "jest --coverage",
-		"test:e2e": "jest --config ./jest.e2e.ts",
-		"kafka:server": "ts-node src/KAFKA/controller/server.ts",
-		"kafka:c": "ts-node src/KAFKA/controller/index.ts",
-		"kafka:s": "ts-node src/KAFKA/service/index.ts"
+		"test:e2e": "jest --config ./jest.e2e.ts"
 	},
 	"devDependencies": {
 		"@asteasolutions/zod-to-openapi": "^8.1.0",
