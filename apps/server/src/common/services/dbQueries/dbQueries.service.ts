@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { COMMON_TYPES } from '../../../containers/TYPES.di';
+import { COMMON_TYPES } from '../../../web-server/container/TYPES.di';
 import { DatabaseService } from '../postgres/database.service';
 
 @injectable()

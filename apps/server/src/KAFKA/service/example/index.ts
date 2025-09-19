@@ -1,4 +1,4 @@
-import { createMicroServer } from '../service-config/createServer';
+import { createMicroServer } from '../../../microservices/config/createServer';
 import { trackMicroContainer } from './containers/container.di';
 import { TRACKS_MICRO_TYPES } from './containers/TYPES.di';
 

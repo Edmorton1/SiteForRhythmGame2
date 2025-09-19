@@ -4,7 +4,7 @@ import { DatabaseKysely } from './database.type';
 import { LoggerService } from '../logger/logger.service';
 import { ConfigService } from '../config/config.service';
 import { inject, injectable } from 'inversify';
-import { COMMON_TYPES } from '../../../containers/TYPES.di';
+import { COMMON_TYPES } from '../../../web-server/container/TYPES.di';
 
 @injectable()
 export class DatabaseService {

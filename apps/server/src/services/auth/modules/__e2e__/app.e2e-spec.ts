@@ -1,4 +1,4 @@
-import { COMMON_TYPES } from '../../../../containers/TYPES.di';
+import { COMMON_TYPES } from '../../../../web-server/container/TYPES.di';
 import { randomEmail } from './generateString';
 import { SERVER_PREFIX } from '../../../../../../../libs/shared/CONST';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';

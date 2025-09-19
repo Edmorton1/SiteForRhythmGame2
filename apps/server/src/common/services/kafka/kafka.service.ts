@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
-import { COMMON_TYPES } from '../../../containers/TYPES.di';
+import { COMMON_TYPES } from '../../../web-server/container/TYPES.di';
 import { ConfigService } from '../config/config.service';
 import { Kafka, Producer } from 'kafkajs';
-import { TOPICS } from '../../../KAFKA/common/CONST';
+import { TOPICS } from '../../topics/TOPICS';
 
 @injectable()
 export class KafkaService {

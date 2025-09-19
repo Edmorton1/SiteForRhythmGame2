@@ -5,7 +5,7 @@ import { AUTH_TYPES } from '../../../containers/TYPES.di';
 import { RegistrationDTO } from '../../../../../common/models/schemas/registration.dto';
 import { Provider } from '../../../../../_declarations/session';
 import { Profile } from '../../../../../../../../libs/models/schemas/profile';
-import { HttpError } from '../../../../../common/http/http.error';
+import { HttpError } from '../../../../../web-server/common/http/http.error';
 import { UserDTO } from '../../../../../../../../libs/models/schemas/user';
 
 @injectable()

@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import dotenv from 'dotenv';
 dotenv.config();
 import { authContainer } from './containers/container.di';
-import { ServerExpress } from '../../config/server';
+import { ServerExpress } from '../../web-server/config/server';
 import { AUTH_TYPES } from './containers/TYPES.di';
 
 (() => {

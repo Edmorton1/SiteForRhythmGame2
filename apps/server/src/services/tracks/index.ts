@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import dotenv from 'dotenv';
 dotenv.config();
-import { ServerExpress } from '../../config/server';
+import { ServerExpress } from '../../web-server/config/server';
 import { TRACKS_TYPES } from './containers/TYPES.di';
 import { tracksContainer } from './containers/container.di';
 

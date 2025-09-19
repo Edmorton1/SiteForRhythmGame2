@@ -1,13 +1,13 @@
 import '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
-import { registry } from '../../../../config/swagger/registry';
+import { registry } from '../../../../web-server/config/swagger/registry';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { SERVER_PREFIX } from '../../../../../../../libs/shared/CONST';
 import { UserProfileZodSchemaClient } from '../../../../../../../libs/models/schemas/profile';
 import { LoginDTOZodSchema } from '../../../../../../../libs/models/schemas/auth';
 import { authErrors } from './errors/CONST';
-import { commonErrors } from '../../../../common/errors/CONST';
+import { commonErrors } from '../../../../web-server/common/errors/CONST';
 
 extendZodWithOpenApi(z);
 

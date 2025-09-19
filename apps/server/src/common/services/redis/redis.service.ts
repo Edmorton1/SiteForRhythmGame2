@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { LoggerService } from '../logger/logger.service';
-import { COMMON_TYPES } from '../../../containers/TYPES.di';
+import { COMMON_TYPES } from '../../../web-server/container/TYPES.di';
 import { ConfigService } from '../config/config.service';
 import { RedisStore } from './redis.store';
 import Redis from 'ioredis';

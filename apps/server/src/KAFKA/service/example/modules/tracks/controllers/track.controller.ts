@@ -1,5 +1,5 @@
 import { inject } from 'inversify';
-import { BaseController } from '../../../../service-config/base.controller';
+import { BaseController } from '../../../../../../microservices/config/base.controller';
 import { TrackRepository } from '../repository/tracks.repository';
 // prettier-ignore
 import { TRACKS_FUNCTIONS, TRACKS_MICRO_TYPES } from '../../../containers/TYPES.di';

@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { AuthService } from '../service/auth.service';
 import { inject, injectable } from 'inversify';
 import { AUTH_TYPES } from '../../../containers/TYPES.di';
-import { BaseController } from '../../../../../config/base.controller';
 import { ConfigService } from '../../../../../common/services/config/config.service';
 import { serverPaths } from '../../../../../../../../libs/shared/PATHS';
 import { UserProfile } from '../../../../../../../../libs/models/schemas/profile';
-import { ZodValidateSchema } from '../../../../../common/pipes/zod.pipe';
-import { userGuard } from '../../../../../common/guards/user.guard';
+import { ZodValidateSchema } from '../../../../../web-server/common/pipes/zod.pipe';
+import { userGuard } from '../../../../../web-server/common/guards/user.guard';
 import { LoginDTOZodSchema } from '../../../../../../../../libs/models/schemas/auth';
+import { BaseController } from '../../../../../web-server/config/base.controller';
 
 @injectable()
 export class AuthController extends BaseController {

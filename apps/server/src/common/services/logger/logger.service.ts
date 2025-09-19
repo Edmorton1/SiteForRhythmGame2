@@ -1,7 +1,7 @@
 import pino, { Logger } from 'pino';
 import { ConfigService } from '../config/config.service';
 import { inject, injectable } from 'inversify';
-import { COMMON_TYPES } from '../../../containers/TYPES.di';
+import { COMMON_TYPES } from '../../../web-server/container/TYPES.di';
 
 @injectable()
 export class LoggerService {

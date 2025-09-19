@@ -1,12 +1,12 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import { KafkaService } from '../../common/services/kafka/kafka.service';
-import { rootContainer } from '../../containers/container.di';
-import { COMMON_TYPES } from '../../containers/TYPES.di';
-import { TOPICS } from '../common/CONST';
+import { rootContainer } from '../../web-server/container/container.di';
+import { COMMON_TYPES } from '../../web-server/container/TYPES.di';
+import { TOPICS } from '../../common/topics/TOPICS';
 import { randomUUID } from 'crypto';
 import { EventEmitter } from 'stream';
-import { KafkaResponse } from '../service/service-config/server.microservice';
+import { KafkaResponse } from '../../microservices/config/types';
 
 // Проблема этого метода в том, что если сделать вызов до того как один из двух процессов запустится будут баги
 // В мап поставить callback

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { AuthRepository } from '../repository/auth.repository';
 import bcrypt from 'bcrypt';
-import { HttpError } from '../../../../../common/http/http.error';
+import { HttpError } from '../../../../../web-server/common/http/http.error';
 import { UserProfile } from '../../../../../../../../libs/models/schemas/profile';
 import { Payload } from '../../../../../_declarations/session';
 import { LoginDTO } from '../../../../../../../../libs/models/schemas/auth';

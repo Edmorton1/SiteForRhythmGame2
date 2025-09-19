@@ -2,14 +2,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import { EventEmitter } from 'stream';
-import { rootContainer } from '../../containers/container.di';
+import { rootContainer } from '../../web-server/container/container.di';
 import { KafkaService } from '../../common/services/kafka/kafka.service';
-import { COMMON_TYPES } from '../../containers/TYPES.di';
-import { TOPICS } from '../common/CONST';
+import { COMMON_TYPES } from '../../web-server/container/TYPES.di';
+import { TOPICS } from '../../common/topics/TOPICS';
 import { randomUUID } from 'crypto';
 import { Producer } from 'kafkajs';
 import { TRACKS_FUNCTIONS } from '../service/example/containers/TYPES.di';
-import { KafkaResponse } from '../service/service-config/types';
+import { KafkaResponse } from '../../microservices/config/types';
 
 const emitter = new EventEmitter();
 

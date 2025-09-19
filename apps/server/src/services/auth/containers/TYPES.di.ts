@@ -1,9 +1,10 @@
-import { COMMON_TYPES } from '../../../containers/TYPES.di';
+import { COMMON_TYPES } from '../../../web-server/container/TYPES.di';
 
 export const AUTH_TYPES = {
-	services: COMMON_TYPES.services,
+	...COMMON_TYPES,
+	// services: COMMON_TYPES.services,
 
-	app: COMMON_TYPES.app,
+	// app: COMMON_TYPES.app,
 
 	oauth: {
 		PassportGoogle: Symbol.for('PassportGoogleOauth'),

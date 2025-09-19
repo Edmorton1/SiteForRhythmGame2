@@ -1,5 +1,5 @@
 import '@asteasolutions/zod-to-openapi';
-import { registry } from '../../../../config/swagger/registry';
+import { registry } from '../../../../web-server/config/swagger/registry';
 import { SERVER_PREFIX } from '../../../../../../../libs/shared/CONST';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 

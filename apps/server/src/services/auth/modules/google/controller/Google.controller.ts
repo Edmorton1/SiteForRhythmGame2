@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import passport from 'passport';
-import { BaseController } from '../../../../../config/base.controller';
 import { AUTH_TYPES } from '../../../containers/TYPES.di';
 import { ConfigService } from '../../../../../common/services/config/config.service';
 import { Passport } from '../passport';
 import { serverPaths } from '../../../../../../../../libs/shared/PATHS';
+import { BaseController } from '../../../../../web-server/config/base.controller';
 
 @injectable()
 export class GoogleController extends BaseController {

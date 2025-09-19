@@ -1,12 +1,12 @@
 import { RegistrationDTOZodSchema } from '../../../../../common/models/schemas/registration.dto';
-import { zodValidateFormData } from '../../../../../common/pipes/zod.formdata.pipe';
+import { zodValidateFormData } from '../../../../../web-server/common/pipes/zod.formdata.pipe';
 import { Request, Response } from 'express';
-import { BaseController } from '../../../../../config/base.controller';
 import { serverPaths } from '../../../../../../../../libs/shared/PATHS';
 import multer from 'multer';
 import { inject, injectable } from 'inversify';
 import { RegistrationService } from '../service/registration.service';
 import { AUTH_TYPES } from '../../../containers/TYPES.di';
+import { BaseController } from '../../../../../web-server/config/base.controller';
 
 @injectable()
 export class RegistrationController extends BaseController {

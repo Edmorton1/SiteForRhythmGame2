@@ -1,5 +1,5 @@
 import { Container } from 'inversify';
-import { rootMicroContainer } from '../../service-config/containers/container.di';
+import { rootMicroContainer } from '../../../../microservices/config/containers/container.di';
 import { TRACKS_MICRO_TYPES } from './TYPES.di';
 import { TrackController } from '../modules/tracks/controllers/track.controller';
 import { TrackRepository } from '../modules/tracks/repository/tracks.repository';

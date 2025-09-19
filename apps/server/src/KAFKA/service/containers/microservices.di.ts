@@ -1,5 +1,5 @@
 import { ContainerModule } from 'inversify';
-import { MICRO_TYPES } from '../service-config/containers/TYPES.di';
+import { MICRO_TYPES } from '../../../microservices/config/containers/TYPES.di';
 import { AuthService } from '../example/modules/auth/controller/auth.controller';
 
 export const microserviceBindings = new ContainerModule(({ bind }) => {
