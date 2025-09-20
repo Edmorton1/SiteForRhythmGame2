@@ -1,5 +1,5 @@
 import { injectable, multiInject } from 'inversify';
-import { BaseController } from './base.controller';
+import { BaseService } from './base.service';
 import { MICRO_TYPES } from './containers/TYPES.di';
 import { AnyFunction } from './types';
 
@@ -9,7 +9,7 @@ export class ServiceCollector {
 
 	constructor(
 		@multiInject(MICRO_TYPES.controllers)
-		private readonly services: BaseController[],
+		private readonly services: BaseService[],
 	) {
 		console.log(`КОНСТРУКТОР ServiceComposite`);
 		this.services.forEach(s => {
@@ -25,6 +25,7 @@ export class ServiceCollector {
 		const func = this.allFuncs[name];
 
 		if (!func) throw new Error(`НЕ ПЕРЕДАНА ФУНКЦИЯ ${name}, ${data}`);
+
 		return await func(data);
 	};
 }

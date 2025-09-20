@@ -14,3 +14,5 @@ docker run -d \
   bitnami/kafka:latest
 
 docker exec -it kafka kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test
+
+Чтобы удалить, надо удалить data в docker

@@ -10,5 +10,9 @@ export const WEB_TYPES = {
 		ServerExpress: Symbol.for('ServerExpress'),
 	},
 
+	oauth: {
+		PassportGoogle: Symbol.for('PassportGoogle'),
+	},
+
 	controllers: Symbol.for('HttpControllers'),
 };

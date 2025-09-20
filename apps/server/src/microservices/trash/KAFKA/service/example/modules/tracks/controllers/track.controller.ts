@@ -2,9 +2,9 @@ import { inject } from 'inversify';
 import { TrackRepository } from '../repository/tracks.repository';
 // prettier-ignore
 import { TRACKS_FUNCTIONS, TRACKS_MICRO_TYPES } from '../../../containers/TYPES.di';
-import { BaseController } from '../../../../../../../config/base.controller';
+import { BaseService } from '../../../../../../../config/base.service';
 
-export class TrackController extends BaseController {
+export class TrackController extends BaseService {
 	constructor(
 		@inject(TRACKS_MICRO_TYPES.repository.track)
 		private readonly trackRepository: TrackRepository,
