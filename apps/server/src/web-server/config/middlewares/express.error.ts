@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { STATUS_CODES } from 'http';
 import { inject, injectable } from 'inversify';
-import { WEB_TYPES } from '../../container/TYPES.di';
 import { LoggerService } from '../../../common/services/logger/logger.service';
-import { HttpError } from '../../common/http/http.error';
+import { HttpError } from '../../../common/http/http.error';
+import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class ExpressError {
 	constructor(
-		@inject(WEB_TYPES.services.logger)
+		@inject(SERVICES_TYPES.logger)
 		private readonly loggerService: LoggerService,
 	) {}
 	expressError = (

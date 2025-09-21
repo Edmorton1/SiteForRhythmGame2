@@ -1,14 +1,14 @@
 import { inject, injectable } from 'inversify';
-import { WEB_TYPES } from '../../../web-server/container/TYPES.di';
 import { ConfigService } from '../config/config.service';
 import { Kafka } from 'kafkajs';
+import { SERVICES_TYPES } from '../../containers/SERVICES_TYPES.di';
 
 @injectable()
 export class KafkaService {
 	private readonly kafka: Kafka;
 
 	constructor(
-		@inject(WEB_TYPES.services.config)
+		@inject(SERVICES_TYPES.config)
 		private readonly configService: ConfigService,
 	) {
 		const brokers = this.configService.getEnv('KAFKA_BROKERS').split(',');

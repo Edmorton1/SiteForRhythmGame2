@@ -4,7 +4,7 @@ import { registrationErrors } from '../../../../../../web-server/modules/registr
 import { RegistrationDTO } from '../../../../../../common/models/schemas/registration.dto';
 import { Provider } from '../../../../../../web-server/_declarations/session';
 import { Profile } from '../../../../../../../../../libs/models/schemas/profile';
-import { HttpError } from '../../../../../../web-server/common/http/http.error';
+import { HttpError } from '../../../../../../common/http/http.error';
 import { UserDTO } from '../../../../../../../../../libs/models/schemas/user';
 import { BaseService } from '../../../../../config/base.service';
 import { AUTH_FUNCTIONS, AUTH_MICRO_TYPES } from '../../../container/TYPES.di';

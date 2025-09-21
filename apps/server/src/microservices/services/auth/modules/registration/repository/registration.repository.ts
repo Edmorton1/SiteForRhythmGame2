@@ -5,11 +5,11 @@ import { inject, injectable } from 'inversify';
 //prettier-ignore
 import { User, UserDTO } from '../../../../../../../../../libs/models/schemas/user';
 import { RegistrationDTO } from '../../../../../../common/models/schemas/registration.dto';
-import { MICRO_TYPES } from '../../../../../config/containers/TYPES.di';
 import { DatabaseService } from '../../../../../../common/services/postgres/database.service';
 import { Profile } from '../../../../../../../../../libs/models/schemas/profile';
 import { DatabaseKysely } from '../../../../../../common/services/postgres/database.type';
 import { Provider } from '../../../../../../web-server/_declarations/session';
+import { SERVICES_TYPES } from '../../../../../../common/containers/SERVICES_TYPES.di';
 
 type ProfileAvatar = Omit<RegistrationDTO, 'user'>;
 
@@ -18,7 +18,7 @@ type RoleId = Pick<User, 'id' | 'role'>;
 @injectable()
 export class RegistrationRepository {
 	constructor(
-		@inject(MICRO_TYPES.services.database)
+		@inject(SERVICES_TYPES.database)
 		private readonly databaseService: DatabaseService,
 	) {}
 

@@ -7,7 +7,7 @@ import { LoginDTO } from '../../../../../../../../../libs/models/schemas/auth';
 import { Payload } from '../../../../../../web-server/_declarations/session';
 import { UserProfile } from '../../../../../../../../../libs/models/schemas/profile';
 // TODO: HttpError - сделать чтобы прокидывалась ошибка
-import { HttpError } from '../../../../../../web-server/common/http/http.error';
+import { HttpError } from '../../../../../../common/http/http.error';
 import { authErrors } from '../../../../../../web-server/modules/auth/errors/CONST';
 
 export type LoginServiceReturn = ReturnType<AuthService['login']>;

@@ -2,12 +2,12 @@ import { inject, injectable } from 'inversify';
 import { DatabaseService } from '../../../../../common/services/postgres/database.service';
 import { BaseService } from '../../../../config/base.service';
 import { AUTH_FUNCTIONS } from '../../container/TYPES.di';
-import { MICRO_TYPES } from '../../../../config/containers/TYPES.di';
+import { SERVICES_TYPES } from '../../../../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class GoogleService extends BaseService {
 	constructor(
-		@inject(MICRO_TYPES.services.database)
+		@inject(SERVICES_TYPES.database)
 		private readonly databaseService: DatabaseService,
 	) {
 		super();

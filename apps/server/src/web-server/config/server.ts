@@ -16,6 +16,7 @@ import { Server } from 'http';
 import { DatabaseService } from '../../common/services/postgres/database.service';
 import { RedisService } from '../../common/services/redis/redis.service';
 import { KafkaService } from '../../common/services/kafka/kafka.service';
+import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class ServerExpress {
@@ -25,20 +26,18 @@ export class ServerExpress {
 	constructor(
 		@inject(WEB_TYPES.app.ServerRoutes)
 		private readonly serverRoutes: ServerRoutes,
-		@inject(WEB_TYPES.services.config)
+		@inject(SERVICES_TYPES.config)
 		private readonly configService: ConfigService,
 		@inject(WEB_TYPES.app.ExpressError)
 		private readonly expressError: ExpressError,
-		@inject(WEB_TYPES.services.logger)
+		@inject(SERVICES_TYPES.logger)
 		private readonly loggerService: LoggerService,
 		@inject(WEB_TYPES.app.ExpressSession)
 		private readonly expressSession: ExpressSession,
-		@inject(WEB_TYPES.services.database)
+		@inject(SERVICES_TYPES.database)
 		private readonly database: DatabaseService,
-		@inject(WEB_TYPES.services.redis)
+		@inject(SERVICES_TYPES.redis)
 		private readonly redis: RedisService,
-		@inject(WEB_TYPES.services.kafka)
-		private readonly kafkaService: KafkaService,
 	) {
 		this.app = express();
 	}
@@ -71,8 +70,6 @@ export class ServerExpress {
 	};
 
 	private startConsumer = () => {};
-
-	
 
 	start = () => {
 		this.configureApp();

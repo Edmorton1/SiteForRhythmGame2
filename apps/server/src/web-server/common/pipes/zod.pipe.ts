@@ -1,5 +1,5 @@
 import z, { ZodType } from 'zod';
-import { HttpError } from '../http/http.error';
+import { HttpError } from '../../../common/http/http.error';
 
 export const ZodValidateSchema = <T extends ZodType>(
 	schema: T,

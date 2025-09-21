@@ -1,6 +1,6 @@
 import z from 'zod';
 import { zodValidateFormData } from './zod.formdata.pipe';
-import { HttpError } from '../http/http.error';
+import { HttpError } from '../../../common/http/http.error';
 import { zExpressMulterFile } from '../../../common/models/enums/enums';
 import { Readable } from 'stream';
 

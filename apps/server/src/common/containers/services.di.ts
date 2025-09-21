@@ -1,37 +1,28 @@
 import { ContainerModule } from 'inversify';
-import { WEB_TYPES } from '../../web-server/container/TYPES.di';
 import { ConfigService } from '../services/config/config.service';
-import { CryptoService } from '../services/crypto/crypto.service';
 import { LoggerService } from '../services/logger/logger.service';
 import { DatabaseService } from '../services/postgres/database.service';
 import { RedisService } from '../services/redis/redis.service';
-import { DbQueriesService } from '../services/dbQueries/dbQueries.service';
 import { KafkaService } from '../services/kafka/kafka.service';
 import { KafkaController } from '../services/kafka/kafka.controller';
+import { SERVICES_TYPES } from './SERVICES_TYPES.di';
 
 export const serviceBindings = new ContainerModule(({ bind }) => {
-	bind<ConfigService>(WEB_TYPES.services.config)
+	bind<ConfigService>(SERVICES_TYPES.config)
 		.to(ConfigService)
 		.inSingletonScope();
-	bind<CryptoService>(WEB_TYPES.services.crypto)
-		.to(CryptoService)
-		.inSingletonScope();
-	bind<LoggerService>(WEB_TYPES.services.logger)
+	bind<LoggerService>(SERVICES_TYPES.logger)
 		.to(LoggerService)
 		.inSingletonScope();
-	bind<DatabaseService>(WEB_TYPES.services.database)
+	bind<DatabaseService>(SERVICES_TYPES.database)
 		.to(DatabaseService)
 		.inSingletonScope();
-	bind<DbQueriesService>(WEB_TYPES.services.dbQueries)
-		.to(DbQueriesService)
-		.inSingletonScope();
-	bind<RedisService>(WEB_TYPES.services.redis)
-		.to(RedisService)
-		.inSingletonScope();
-	bind<KafkaService>(WEB_TYPES.services.kafka)
-		.to(KafkaService)
-		.inSingletonScope();
-	bind<KafkaController>(WEB_TYPES.services.kafkaController)
+
+	bind<RedisService>(SERVICES_TYPES.redis).to(RedisService).inSingletonScope();
+
+	bind<KafkaService>(SERVICES_TYPES.kafka).to(KafkaService).inSingletonScope();
+
+	bind<KafkaController>(SERVICES_TYPES.kafkaController)
 		.to(KafkaController)
 		.inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();

@@ -4,13 +4,14 @@ import { ServiceCollector } from './service.collector';
 import { KafkaService } from '../../common/services/kafka/kafka.service';
 import { TOPICS } from '../../common/topics/TOPICS';
 import { KafkaResponse } from './types';
+import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class ServerMicroservice {
 	constructor(
 		@inject(MICRO_TYPES.app.composite)
 		private readonly composite: ServiceCollector,
-		@inject(MICRO_TYPES.services.kafka)
+		@inject(SERVICES_TYPES.kafka)
 		private readonly kafkaService: KafkaService,
 	) {}
 

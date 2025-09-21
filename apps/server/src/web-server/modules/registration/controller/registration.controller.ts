@@ -2,18 +2,18 @@ import { Request, Response } from 'express';
 import multer from 'multer';
 import { inject, injectable } from 'inversify';
 import { BaseController } from '../../../config/base.controller';
-import { WEB_TYPES } from '../../../container/TYPES.di';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { zodValidateFormData } from '../../../common/pipes/zod.formdata.pipe';
 import { RegistrationDTOZodSchema } from '../../../../common/models/schemas/registration.dto';
 import { KafkaController } from '../../../../common/services/kafka/kafka.controller';
 import { Profile } from '../../../../../../../libs/models/schemas/profile';
 import { AUTH_FUNCTIONS } from '../../../../microservices/services/auth/container/TYPES.di';
+import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class RegistrationController extends BaseController {
 	constructor(
-		@inject(WEB_TYPES.services.kafkaController)
+		@inject(SERVICES_TYPES.kafkaController)
 		private readonly kafkaController: KafkaController,
 	) {
 		super();

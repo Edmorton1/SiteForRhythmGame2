@@ -1,14 +1,14 @@
 import { inject, injectable } from 'inversify';
-import { MICRO_TYPES } from '../../../../../config/containers/TYPES.di';
 import { DatabaseService } from '../../../../../../common/services/postgres/database.service';
-import { HttpError } from '../../../../../../web-server/common/http/http.error';
+import { HttpError } from '../../../../../../common/http/http.error';
 import { authErrors } from '../../../../../../web-server/modules/auth/errors/CONST';
 import { UserProfile } from '../../../../../../../../../libs/models/schemas/profile';
+import { SERVICES_TYPES } from '../../../../../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class AuthRepository {
 	constructor(
-		@inject(MICRO_TYPES.services.database)
+		@inject(SERVICES_TYPES.database)
 		private readonly databaseService: DatabaseService,
 	) {}
 

@@ -2,13 +2,8 @@ import 'reflect-metadata';
 import dotenv from 'dotenv';
 dotenv.config();
 import { RegistrationRepository } from '../registration.repository';
-import { Provider } from '../../../../_declarations/session';
-import { authContainer } from '../../../../services/auth/containers/container.di';
-import { DatabaseService } from '../../../../common/services/postgres/database.service';
-import { AUTH_TYPES } from '../../../../services/auth/containers/TYPES.di';
-import { LoggerService } from '../../../../common/services/logger/logger.service';
-import { RegistrationDTO } from '../../../../common/models/schemas/registration.dto';
-import { randomString } from '../../../__e2e__/generateString';
+import { authMicroContainer } from '../../../../container/container.di';
+import { randomString } from '../../../../../../../web-server/modules/auth/__e2e__/generateString';
 
 // TODO: make name without collision
 const provider = {
@@ -21,13 +16,13 @@ const email = '_test';
 // SELECT pid, usename, datname, client_addr, state, query
 // FROM pg_stat_activity;
 
-const databaseService = authContainer.get<DatabaseService>(
+const databaseService = authMicroContainer.get<DatabaseService>(
 	AUTH_TYPES.services.database,
 );
-const loggerService = authContainer.get<LoggerService>(
+const loggerService = authMicroContainer.get<LoggerService>(
 	AUTH_TYPES.services.logger,
 );
-const registrationRepository = authContainer.get<RegistrationRepository>(
+const registrationRepository = authMicroContainer.get<RegistrationRepository>(
 	AUTH_TYPES.modules.registration.repository,
 );
 

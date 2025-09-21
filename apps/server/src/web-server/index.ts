@@ -4,10 +4,11 @@ import { ServerExpress } from './config/server';
 import { webContainer } from './container/container.di';
 import { WEB_TYPES } from './container/TYPES.di';
 import { KafkaController } from '../common/services/kafka/kafka.controller';
+import { SERVICES_TYPES } from '../common/containers/SERVICES_TYPES.di';
 
 (async () => {
 	const kafkaController = webContainer.get<KafkaController>(
-		WEB_TYPES.services.kafkaController,
+		SERVICES_TYPES.kafkaController,
 	);
 
 	await kafkaController.startProducer();

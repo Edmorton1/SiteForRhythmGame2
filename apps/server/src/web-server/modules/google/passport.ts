@@ -1,18 +1,18 @@
 import { inject, injectable } from 'inversify';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { WEB_TYPES } from '../../container/TYPES.di';
 import { ConfigService } from '../../../common/services/config/config.service';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
 import { KafkaController } from '../../../common/services/kafka/kafka.controller';
 import { AUTH_FUNCTIONS } from '../../../microservices/services/auth/container/TYPES.di';
+import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class Passport {
 	constructor(
-		@inject(WEB_TYPES.services.config)
+		@inject(SERVICES_TYPES.config)
 		private readonly configService: ConfigService,
-		@inject(WEB_TYPES.services.kafkaController)
+		@inject(SERVICES_TYPES.kafkaController)
 		private readonly kafkaController: KafkaController,
 	) {
 		console.log(

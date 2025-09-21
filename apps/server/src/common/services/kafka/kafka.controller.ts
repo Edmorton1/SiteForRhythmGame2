@@ -1,11 +1,11 @@
 import { inject } from 'inversify';
-import { WEB_TYPES } from '../../../web-server/container/TYPES.di';
 import { KafkaService } from './kafka.service';
 import { TOPICS } from '../../topics/TOPICS';
 import { KafkaResponse } from '../../../microservices/config/types';
 import EventEmitter from 'events';
 import { Producer } from 'kafkajs';
 import { randomUUID } from 'crypto';
+import { SERVICES_TYPES } from '../../containers/SERVICES_TYPES.di';
 
 const emitter = new EventEmitter();
 
@@ -13,7 +13,7 @@ export class KafkaController {
 	private producer?: Producer;
 
 	constructor(
-		@inject(WEB_TYPES.services.kafka)
+		@inject(SERVICES_TYPES.kafka)
 		private readonly kafkaService: KafkaService,
 	) {}
 

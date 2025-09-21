@@ -6,11 +6,12 @@ import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { BaseController } from '../../../config/base.controller';
 import { Passport } from '../passport';
 import { WEB_TYPES } from '../../../container/TYPES.di';
+import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class GoogleController extends BaseController {
 	constructor(
-		@inject(WEB_TYPES.services.config)
+		@inject(SERVICES_TYPES.config)
 		private readonly configService: ConfigService,
 		@inject(WEB_TYPES.oauth.PassportGoogle)
 		private readonly pass: Passport,

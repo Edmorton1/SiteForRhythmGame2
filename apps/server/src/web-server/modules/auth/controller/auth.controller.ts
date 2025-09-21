@@ -3,24 +3,22 @@ import { inject, injectable } from 'inversify';
 import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { userGuard } from '../../../common/guards/user.guard';
-import {
-	Profile,
-	UserProfile,
-} from '../../../../../../../libs/models/schemas/profile';
+// prettier-ignore
+import { Profile, UserProfile } from '../../../../../../../libs/models/schemas/profile';
 import { LoginDTOZodSchema } from '../../../../../../../libs/models/schemas/auth';
 import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
 import { ConfigService } from '../../../../common/services/config/config.service';
-import { WEB_TYPES } from '../../../container/TYPES.di';
 import { KafkaController } from '../../../../common/services/kafka/kafka.controller';
 import { LoginServiceReturn } from '../../../../microservices/services/auth/modules/auth/service/auth.service';
 import { AUTH_FUNCTIONS } from '../../../../microservices/services/auth/container/TYPES.di';
+import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class AuthController extends BaseController {
 	constructor(
-		@inject(WEB_TYPES.services.kafkaController)
+		@inject(SERVICES_TYPES.kafkaController)
 		private readonly kafkaController: KafkaController,
-		@inject(WEB_TYPES.services.config)
+		@inject(SERVICES_TYPES.config)
 		private readonly configService: ConfigService,
 	) {
 		super();
