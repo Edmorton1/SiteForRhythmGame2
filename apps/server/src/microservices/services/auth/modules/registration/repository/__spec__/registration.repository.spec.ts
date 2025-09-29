@@ -4,6 +4,12 @@ dotenv.config();
 import { RegistrationRepository } from '../registration.repository';
 import { authMicroContainer } from '../../../../container/container.di';
 import { randomString } from '../../../../../../../web-server/modules/auth/__e2e__/generateString';
+import { SERVICES_TYPES } from '../../../../../../../common/containers/SERVICES_TYPES.di';
+import { DatabaseService } from '../../../../../../../common/services/postgres/database.service';
+import { LoggerService } from '../../../../../../../common/services/logger/logger.service';
+import { Provider } from '../../../../../../../web-server/_declarations/session';
+import { AUTH_MICRO_TYPES } from '../../../../container/TYPES.di';
+import { RegistrationDTO } from '../../../../../../../common/models/schemas/registration.dto';
 
 // TODO: make name without collision
 const provider = {
@@ -17,13 +23,13 @@ const email = '_test';
 // FROM pg_stat_activity;
 
 const databaseService = authMicroContainer.get<DatabaseService>(
-	AUTH_TYPES.services.database,
+	SERVICES_TYPES.database,
 );
 const loggerService = authMicroContainer.get<LoggerService>(
-	AUTH_TYPES.services.logger,
+	SERVICES_TYPES.logger,
 );
 const registrationRepository = authMicroContainer.get<RegistrationRepository>(
-	AUTH_TYPES.modules.registration.repository,
+	AUTH_MICRO_TYPES.repositories.registration,
 );
 
 const profileDTO: RegistrationDTO['profile'] = {

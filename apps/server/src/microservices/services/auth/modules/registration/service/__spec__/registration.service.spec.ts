@@ -31,16 +31,20 @@ describe('[REGISTRATION] Controller testing', () => {
 
 	it.each(cases)('$name', async ({ input, redirect, expected }) => {
 		await expect(
-			mockRegistrationService.registration(input, redirect),
+			// mockRegistrationService.registration(input, redirect),
+			mockRegistrationService.registration({
+				authDTO: input,
+				provider: redirect,
+			}),
 		).resolves.toEqual(expected);
 	});
 
 	it('Email and Provider', async () => {
 		await expect(
-			mockRegistrationService.registration(
-				{ user: userDTO, profile: mockProfileDTO },
+			mockRegistrationService.registration({
+				authDTO: { user: userDTO, profile: mockProfileDTO },
 				provider,
-			),
+			}),
 		).rejects.toBeInstanceOf(HttpError);
 	});
 });

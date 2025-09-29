@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { clientPaths } from '../common/consts/PATHS';
 import { useTranslation } from 'react-i18next';
 import { NAMESPACES } from '../common/consts/NAMESPACES';
+import { Link } from 'react-router-dom';
+import { clientPaths } from '../common/consts/PATHS';
 import { useInit } from '../common/hooks/useInit';
 
 export const Header = () => {
@@ -14,7 +14,7 @@ export const Header = () => {
 	const { data } = useInit();
 
 	return (
-		<header style={{ display: 'flex', gap: '15px' }}>
+		<>
 			<nav style={{ display: 'flex', gap: '15px' }}>
 				<Link to={clientPaths.home}>{t('nav.home')}</Link>
 				<Link to={clientPaths.registration}>{t('nav.registration')}</Link>
@@ -27,6 +27,26 @@ export const Header = () => {
 				<option value='en'>English</option>
 				<option value='ru'>Русский</option>
 			</select>
-		</header>
+		</>
 	);
 };
+
+// export const Header = () => {
+// 	return (
+// 		<header className={style['header']}>
+// 			<nav>
+// 				<img alt='asd' />
+// 				<a href='#'>главная</a>
+// 				<a href='#'>треки</a>
+// 				<a href='#'>помощь</a>
+// 				<a href='#'>search icon</a>
+// 			</nav>
+
+// 			<nav>
+// 				<a href='#'>Поддержать игру</a>
+// 				<img alt='flag' />
+// 				<img alt='avatar' />
+// 			</nav>
+// 		</header>
+// 	);
+// };

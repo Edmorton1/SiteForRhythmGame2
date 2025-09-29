@@ -1,3 +1,6 @@
+-- Если поле не поменяется и оно не конфиденциально, то можно использовать его как первичный ключ, вместо создания ID
+-- Можно использовать UUID, чтобы фронт мог генерировать ID без базы, ещё если Foreign Key, можно сразу создавать две записи вместо ожидания Primary Key
+
 CREATE TYPE roles AS ENUM ('user', 'admin');
 -- USER BLOCK
 CREATE TABLE users (
@@ -10,6 +13,7 @@ CREATE TABLE users (
   banned BOOLEAN NOT NULL DEFAULT FALSE
 );
 
+-- В будущем может добавить SLUG поле
 ALTER TABLE users
 ADD CONSTRAINT auth_method_check
 CHECK ((provider_id IS NOT NULL AND password IS NULL)
@@ -45,6 +49,8 @@ CREATE TABLE tracks (
   -- updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
 	is_deleted BOOLEAN NOT NULL DEFAULT FALSE
 );
+
+-- СДЕЛАТЬ ЧТОБЫ У ТРЕКОВ МОЖНО БЫЛО СТАВИТЬ ИЗБРАННОЕ
 
 -- CREATE TABLE tracks_genres_names (
 --   name VARCHAR(64) PRIMARY KEY

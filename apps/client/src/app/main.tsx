@@ -5,6 +5,7 @@ import './i18n';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { queryClient } from './queryClient';
+import '../scss/styles.scss';
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
