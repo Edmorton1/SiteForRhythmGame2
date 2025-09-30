@@ -1,0 +1,5 @@
+1. Add color in src/app/theme.ts
+If in default mui not have identificator, add him from /global.d.ts
+
+2. Add color in useLoadColors.ts
+3. use color in css like a var(--...)

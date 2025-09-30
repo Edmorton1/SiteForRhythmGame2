@@ -4,6 +4,7 @@ import { ServerRoutes } from '../config/server.routes';
 import { ServerExpress } from '../config/server';
 import { ExpressError } from '../config/middlewares/express.error';
 import { ExpressSession } from '../config/middlewares/express.session';
+import { KafkaWebServer } from '../config/kafka.webserver';
 
 export const appBindings = new ContainerModule(({ bind }) => {
 	bind<ServerRoutes>(WEB_TYPES.app.ServerRoutes)
@@ -17,5 +18,8 @@ export const appBindings = new ContainerModule(({ bind }) => {
 		.inSingletonScope();
 	bind<ServerExpress>(WEB_TYPES.app.ServerExpress)
 		.to(ServerExpress)
+		.inSingletonScope();
+	bind<KafkaWebServer>(WEB_TYPES.app.KafkaWebServer)
+		.to(KafkaWebServer)
 		.inSingletonScope();
 });

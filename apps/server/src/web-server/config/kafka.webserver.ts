@@ -1,18 +1,18 @@
 import { inject } from 'inversify';
-import { KafkaService } from './kafka.service';
-import { TOPICS } from '../../topics/TOPICS';
-import { KafkaResponse } from '../../../microservices/config/types';
+import { KafkaService } from '../../common/services/kafka/kafka.service';
+import { TOPICS } from '../../common/topics/TOPICS';
+import { KafkaResponse } from '../../microservices/config/types';
 import EventEmitter from 'events';
 import { Producer } from 'kafkajs';
 import { randomUUID } from 'crypto';
-import { SERVICES_TYPES } from '../../containers/SERVICES_TYPES.di';
-import { HttpError } from '../../http/http.error';
+import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
+import { HttpError } from '../../common/http/http.error';
 
 // TODO: Сделать этот файл только для клиента
 
 const emitter = new EventEmitter();
 
-export class KafkaController {
+export class KafkaWebServer {
 	private producer?: Producer;
 
 	constructor(

@@ -4,7 +4,6 @@ import { LoggerService } from '../services/logger/logger.service';
 import { DatabaseService } from '../services/postgres/database.service';
 import { RedisService } from '../services/redis/redis.service';
 import { KafkaService } from '../services/kafka/kafka.service';
-import { KafkaController } from '../services/kafka/kafka.controller';
 import { SERVICES_TYPES } from './SERVICES_TYPES.di';
 
 export const serviceBindings = new ContainerModule(({ bind }) => {
@@ -22,9 +21,6 @@ export const serviceBindings = new ContainerModule(({ bind }) => {
 
 	bind<KafkaService>(SERVICES_TYPES.kafka).to(KafkaService).inSingletonScope();
 
-	bind<KafkaController>(SERVICES_TYPES.kafkaController)
-		.to(KafkaController)
-		.inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();
 	// bind<>(TYPES.services).to().inSingletonScope();

@@ -1,0 +1,35 @@
+@mixin nav($gap) {
+	display: flex;
+	align-items: center;
+	gap: $gap;
+}
+
+.header {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	background-color: var(--primary-transparent);
+	height: var(--header-margin);
+	margin: 0 auto;
+
+	* {
+		color: white;
+	}
+
+	&__content {
+		width: var(--screen-width);
+		margin: 10px auto;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		&__left {
+			@include nav(25px);
+		}
+
+		&__right {
+			@include nav(15px);
+		}
+	}
+}

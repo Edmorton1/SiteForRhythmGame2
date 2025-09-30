@@ -8,16 +8,17 @@ import { Profile, UserProfile } from '../../../../../../../libs/models/schemas/p
 import { LoginDTOZodSchema } from '../../../../../../../libs/models/schemas/auth';
 import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
 import { ConfigService } from '../../../../common/services/config/config.service';
-import { KafkaController } from '../../../../common/services/kafka/kafka.controller';
+import { KafkaWebServer } from '../../../config/kafka.webserver';
 import { LoginServiceReturn } from '../../../../microservices/services/auth/modules/auth/service/auth.service';
 import { AUTH_FUNCTIONS } from '../../../../microservices/services/auth/container/TYPES.di';
 import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
+import { WEB_TYPES } from '../../../container/TYPES.di';
 
 @injectable()
 export class AuthController extends BaseController {
 	constructor(
-		@inject(SERVICES_TYPES.kafkaController)
-		private readonly kafkaController: KafkaController,
+		@inject(WEB_TYPES.app.KafkaWebServer)
+		private readonly kafkaWebServer: KafkaWebServer,
 		@inject(SERVICES_TYPES.config)
 		private readonly configService: ConfigService,
 	) {
@@ -46,7 +47,7 @@ export class AuthController extends BaseController {
 		console.log('[REQUEST]: LOGIN');
 		const userDTO = ZodValidateSchema(LoginDTOZodSchema, req.body);
 		const { payload, profile } =
-			await this.kafkaController.sendAndWait<LoginServiceReturn>({
+			await this.kafkaWebServer.sendAndWait<LoginServiceReturn>({
 				func: AUTH_FUNCTIONS.login,
 				message: userDTO,
 
@@ -82,7 +83,7 @@ export class AuthController extends BaseController {
 		}
 		const id = req.session.payload.id;
 		// const profile = await this.authService.getProfileById(id);c
-		const profile = await this.kafkaController.sendAndWait<Profile>({
+		const profile = await this.kafkaWebServer.sendAndWait<Profile>({
 			func: AUTH_FUNCTIONS.getProfileById,
 			message: id,
 			// TODO: Временно потом убрать

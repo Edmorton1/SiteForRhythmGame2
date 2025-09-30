@@ -4,6 +4,7 @@ export const WEB_TYPES = {
 		ExpressError: Symbol.for('ErrorMiddleware'),
 		ExpressSession: Symbol.for('ExpressSession'),
 		ServerExpress: Symbol.for('ServerExpress'),
+		KafkaWebServer: Symbol.for('KafkaWebServer'),
 	},
 
 	oauth: {

@@ -9,7 +9,7 @@ import { Producer } from 'kafkajs';
 import { LoggerService } from '../../common/services/logger/logger.service';
 
 @injectable()
-export class ServerMicroservice {
+export class KafkaMicroservice {
 	constructor(
 		@inject(MICRO_TYPES.app.composite)
 		private readonly composite: ServiceCollector,

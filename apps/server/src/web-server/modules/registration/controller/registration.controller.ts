@@ -5,16 +5,16 @@ import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { zodValidateFormData } from '../../../common/pipes/zod.formdata.pipe';
 import { RegistrationDTOZodSchema } from '../../../../common/models/schemas/registration.dto';
-import { KafkaController } from '../../../../common/services/kafka/kafka.controller';
+import { KafkaWebServer } from '../../../config/kafka.webserver';
 import { Profile } from '../../../../../../../libs/models/schemas/profile';
 import { AUTH_FUNCTIONS } from '../../../../microservices/services/auth/container/TYPES.di';
-import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
+import { WEB_TYPES } from '../../../container/TYPES.di';
 
 @injectable()
 export class RegistrationController extends BaseController {
 	constructor(
-		@inject(SERVICES_TYPES.kafkaController)
-		private readonly kafkaController: KafkaController,
+		@inject(WEB_TYPES.app.KafkaWebServer)
+		private readonly kafkaWebServer: KafkaWebServer,
 	) {
 		super();
 		this.bindRoutes([
@@ -41,7 +41,7 @@ export class RegistrationController extends BaseController {
 
 		console.log('SESSION', req.session, provider);
 
-		const profile = await this.kafkaController.sendAndWait<Profile>({
+		const profile = await this.kafkaWebServer.sendAndWait<Profile>({
 			func: AUTH_FUNCTIONS.registration,
 			message: { authDTO, provider },
 			// TODO: Временно потом убрать

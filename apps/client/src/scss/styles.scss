@@ -1,5 +1,13 @@
+@forward './variables/variables';
+@forward '../assets/fonts/stylesheet.css';
 @forward './normalization/reset';
 
 body {
+	font-family: 'Geologica';
 	margin: auto auto;
+	background-image: url('../assets/images/background.png');
+
+	margin: 0 auto;
+	width: var(--screen-width);
+	font-size: 22px;
 }

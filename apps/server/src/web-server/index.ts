@@ -3,17 +3,16 @@ dotenv.config();
 import { ServerExpress } from './config/server';
 import { webContainer } from './container/container.di';
 import { WEB_TYPES } from './container/TYPES.di';
-import { KafkaController } from '../common/services/kafka/kafka.controller';
-import { SERVICES_TYPES } from '../common/containers/SERVICES_TYPES.di';
+import { KafkaWebServer } from './config/kafka.webserver';
 
 (async () => {
-	const kafkaController = webContainer.get<KafkaController>(
-		SERVICES_TYPES.kafkaController,
+	const kafkaWebServer = webContainer.get<KafkaWebServer>(
+		WEB_TYPES.app.KafkaWebServer,
 	);
 
-	await kafkaController.startProducer();
+	await kafkaWebServer.startProducer();
 
-	await kafkaController.startConsumer();
+	await kafkaWebServer.startConsumer();
 
 	const server = webContainer.get<ServerExpress>(WEB_TYPES.app.ServerExpress);
 	server.start();

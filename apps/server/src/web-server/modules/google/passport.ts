@@ -3,17 +3,18 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { ConfigService } from '../../../common/services/config/config.service';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
-import { KafkaController } from '../../../common/services/kafka/kafka.controller';
+import { KafkaWebServer } from '../../config/kafka.webserver';
 import { AUTH_FUNCTIONS } from '../../../microservices/services/auth/container/TYPES.di';
 import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
+import { WEB_TYPES } from '../../container/TYPES.di';
 
 @injectable()
 export class Passport {
 	constructor(
 		@inject(SERVICES_TYPES.config)
 		private readonly configService: ConfigService,
-		@inject(SERVICES_TYPES.kafkaController)
-		private readonly kafkaController: KafkaController,
+		@inject(WEB_TYPES.app.KafkaWebServer)
+		private readonly kafkaWebServer: KafkaWebServer,
 	) {
 		console.log(
 			'СОЗДАЛСЯ ЭКЗЕМПЛЯР PASSPORT',
@@ -30,7 +31,7 @@ export class Passport {
 					passReqToCallback: true,
 				},
 				async (req, accessToken, refreshToken, profile, done) => {
-					const id = await this.kafkaController.sendAndWait<number>({
+					const id = await this.kafkaWebServer.sendAndWait<number>({
 						func: AUTH_FUNCTIONS.getUserId,
 						message: profile.id,
 						// TODO: Временно потом убрать
