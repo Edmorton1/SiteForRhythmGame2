@@ -49,6 +49,9 @@ export class AuthController extends BaseController {
 			await this.kafkaController.sendAndWait<LoginServiceReturn>({
 				func: AUTH_FUNCTIONS.login,
 				message: userDTO,
+
+				// TODO: Временно потом убрать
+				status: 'conform',
 			});
 
 		req.session.regenerate(err => {
@@ -82,6 +85,8 @@ export class AuthController extends BaseController {
 		const profile = await this.kafkaController.sendAndWait<Profile>({
 			func: AUTH_FUNCTIONS.getProfileById,
 			message: id,
+			// TODO: Временно потом убрать
+			status: 'conform',
 		});
 		res.json(profile);
 	};

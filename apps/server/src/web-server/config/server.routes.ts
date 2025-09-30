@@ -17,7 +17,7 @@ export class ServerRoutes {
 		// 	this.container.get(e.controller),
 		// );
 
-		controllers.forEach(controller => {
+		this.controllers.forEach(controller => {
 			this.router.use(controller.router);
 		});
 	}

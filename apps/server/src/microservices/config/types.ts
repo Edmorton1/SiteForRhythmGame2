@@ -8,5 +8,7 @@ export interface KafkaFunc {
 export interface KafkaResponse {
 	id: string;
 	func: string;
+	// TODO: Потом сделать unknown
 	message: any;
+	status: 'conform' | 'error';
 }

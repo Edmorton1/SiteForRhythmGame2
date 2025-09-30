@@ -5,6 +5,8 @@ import { KafkaService } from '../../common/services/kafka/kafka.service';
 import { TOPICS } from '../../common/topics/TOPICS';
 import { KafkaResponse } from './types';
 import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
+import { Producer } from 'kafkajs';
+import { LoggerService } from '../../common/services/logger/logger.service';
 
 @injectable()
 export class ServerMicroservice {
@@ -13,7 +15,24 @@ export class ServerMicroservice {
 		private readonly composite: ServiceCollector,
 		@inject(SERVICES_TYPES.kafka)
 		private readonly kafkaService: KafkaService,
+		@inject(SERVICES_TYPES.logger)
+		private readonly logger: LoggerService,
 	) {}
+
+	private producer?: Producer;
+
+	private send = (data: KafkaResponse) => {
+		if (!this.producer) throw new Error('ОШИБКА: Не указан продюсер');
+		this.producer.send({
+			topic: TOPICS.response,
+			messages: [
+				{
+					// TODO: Убрать возврат func в возврате
+					value: JSON.stringify({ ...data } satisfies KafkaResponse),
+				},
+			],
+		});
+	};
 
 	start = async () => {
 		console.log(`СТАРТ ServerMicroservice`);
@@ -23,25 +42,31 @@ export class ServerMicroservice {
 
 		const producer = this.kafkaService.createProducer();
 		await producer.connect();
+		this.producer = producer;
 
 		await consumer.run({
 			eachMessage: async ({ message }) => {
 				const value = JSON.parse(message.value!.toString()) as KafkaResponse;
 				console.log(value);
-				const result = await this.composite.use(value.func, value.message);
-				producer.send({
-					topic: TOPICS.response,
-					messages: [
-						{
-							value: JSON.stringify({
-								// TODO: Убрать возврат func в возврате
-								func: value.func,
-								id: value.id,
-								message: result,
-							} satisfies KafkaResponse),
-						},
-					],
-				});
+				this.composite
+					.use(value.func, value.message)
+					.then(result => {
+						this.send({
+							func: value.func,
+							id: value.id,
+							message: result,
+							status: 'conform',
+						});
+					})
+					.catch(err => {
+						this.logger.logger.error({ ERROR_IN_RESPONSE: err });
+						this.send({
+							func: value.func,
+							id: value.id,
+							message: err,
+							status: 'error',
+						});
+					});
 			},
 		});
 	};

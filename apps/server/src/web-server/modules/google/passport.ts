@@ -33,6 +33,8 @@ export class Passport {
 					const id = await this.kafkaController.sendAndWait<number>({
 						func: AUTH_FUNCTIONS.getUserId,
 						message: profile.id,
+						// TODO: Временно потом убрать
+						status: 'conform',
 					});
 					if (id) {
 						req.session.payload = { id, role: 'user' };

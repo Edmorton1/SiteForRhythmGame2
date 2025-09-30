@@ -6,6 +6,9 @@ import EventEmitter from 'events';
 import { Producer } from 'kafkajs';
 import { randomUUID } from 'crypto';
 import { SERVICES_TYPES } from '../../containers/SERVICES_TYPES.di';
+import { HttpError } from '../../http/http.error';
+
+// TODO: Сделать этот файл только для клиента
 
 const emitter = new EventEmitter();
 
@@ -29,8 +32,15 @@ export class KafkaController {
 		const id = randomUUID();
 		this.sendMessage({ ...data, id });
 
-		return new Promise(res =>
-			emitter.once(id, (result: KafkaResponse) => res(result.message)),
+		return new Promise((res, rej) =>
+			emitter.once(id, (result: KafkaResponse) => {
+				if (result.status === 'error') {
+					rej(new HttpError(result.message.statusCode, result.message.message));
+					return;
+				}
+				console.log('ПОЛОЖИТЕЛЬНЫЙ ОТВЕТ', result.message);
+				res(result.message);
+			}),
 		);
 	};
 
@@ -48,7 +58,7 @@ export class KafkaController {
 		await consumer.run({
 			eachMessage: async ({ message }) => {
 				const value = JSON.parse(message.value!.toString()) as KafkaResponse;
-				console.log(value);
+				console.log('ОТВЕТ МИКРОСЕРВИСА', value);
 				emitter.emit(value.id, value);
 			},
 		});

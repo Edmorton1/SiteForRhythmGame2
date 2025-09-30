@@ -44,6 +44,8 @@ export class RegistrationController extends BaseController {
 		const profile = await this.kafkaController.sendAndWait<Profile>({
 			func: AUTH_FUNCTIONS.registration,
 			message: { authDTO, provider },
+			// TODO: Временно потом убрать
+			status: 'conform',
 		});
 
 		req.session.regenerate(err => {

@@ -15,7 +15,6 @@ import passport from 'passport';
 import { Server } from 'http';
 import { DatabaseService } from '../../common/services/postgres/database.service';
 import { RedisService } from '../../common/services/redis/redis.service';
-import { KafkaService } from '../../common/services/kafka/kafka.service';
 import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
@@ -68,8 +67,6 @@ export class ServerExpress {
 			swaggerUi.setup(openapiDocs),
 		);
 	};
-
-	private startConsumer = () => {};
 
 	start = () => {
 		this.configureApp();
