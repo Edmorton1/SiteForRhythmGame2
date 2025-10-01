@@ -2,11 +2,17 @@ import { inject, injectable } from 'inversify';
 import { MICRO_TYPES } from './containers/TYPES.di';
 import { ServiceCollector } from './service.collector';
 import { KafkaService } from '../../common/services/kafka/kafka.service';
-import { TOPICS } from '../../common/topics/TOPICS';
 import { KafkaResponse } from './types';
 import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 import { Producer } from 'kafkajs';
 import { LoggerService } from '../../common/services/logger/logger.service';
+import type { TopicsRequest, TopicsResponse } from '../../common/topics/TOPICS';
+
+export type KafkaMicroserviceOptions = {
+	topic_req: TopicsRequest;
+	topic_res: TopicsResponse;
+	groupId: string;
+};
 
 @injectable()
 export class KafkaMicroservice {
@@ -21,10 +27,10 @@ export class KafkaMicroservice {
 
 	private producer?: Producer;
 
-	private send = (data: KafkaResponse) => {
+	private send = (data: KafkaResponse, topic: TopicsResponse) => {
 		if (!this.producer) throw new Error('ОШИБКА: Не указан продюсер');
 		this.producer.send({
-			topic: TOPICS.response,
+			topic,
 			messages: [
 				{
 					// TODO: Убрать возврат func в возврате
@@ -34,11 +40,14 @@ export class KafkaMicroservice {
 		});
 	};
 
-	start = async () => {
+	start = async (options: KafkaMicroserviceOptions) => {
 		console.log(`СТАРТ ServerMicroservice`);
-		const consumer = this.kafkaService.createConsumer('tracks-group');
+		const consumer = this.kafkaService.createConsumer(options.groupId);
 		await consumer.connect();
-		await consumer.subscribe({ topic: TOPICS.request, fromBeginning: false });
+		await consumer.subscribe({
+			topic: options.topic_req,
+			fromBeginning: false,
+		});
 
 		const producer = this.kafkaService.createProducer();
 		await producer.connect();
@@ -51,21 +60,27 @@ export class KafkaMicroservice {
 				this.composite
 					.use(value.func, value.message)
 					.then(result => {
-						this.send({
-							func: value.func,
-							id: value.id,
-							message: result,
-							status: 'conform',
-						});
+						this.send(
+							{
+								func: value.func,
+								id: value.id,
+								message: result,
+								status: 'conform',
+							},
+							options.topic_res,
+						);
 					})
 					.catch(err => {
 						this.logger.logger.error({ ERROR_IN_RESPONSE: err });
-						this.send({
-							func: value.func,
-							id: value.id,
-							message: err,
-							status: 'error',
-						});
+						this.send(
+							{
+								func: value.func,
+								id: value.id,
+								message: err,
+								status: 'error',
+							},
+							options.topic_res,
+						);
 					});
 			},
 		});

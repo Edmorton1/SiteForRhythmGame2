@@ -5,6 +5,7 @@ import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { KafkaWebServer } from '../../../config/kafka.webserver';
 import { WEB_TYPES } from '../../../container/TYPES.di';
 import { TRACKS_FUNCTIONS } from '../../../../microservices/services/tracks/container/TYPES.di';
+import { TOPICS } from '../../../../common/topics/TOPICS';
 
 @injectable()
 export class TracksController extends BaseController {
@@ -23,11 +24,14 @@ export class TracksController extends BaseController {
 	}
 
 	getAllTracks = async (req: Request, res: Response) => {
-		const tracks = await this.kafkaWebServer.sendAndWait({
-			func: TRACKS_FUNCTIONS.getAllTracks,
-			message: undefined,
-			status: 'conform',
-		});
+		const tracks = await this.kafkaWebServer.sendAndWait(
+			{
+				func: TRACKS_FUNCTIONS.getAllTracks,
+				message: undefined,
+				status: 'conform',
+			},
+			TOPICS.requests.tracks,
+		);
 
 		res.json(tracks);
 	};

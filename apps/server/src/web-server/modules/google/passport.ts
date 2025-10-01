@@ -7,6 +7,7 @@ import { KafkaWebServer } from '../../config/kafka.webserver';
 import { AUTH_FUNCTIONS } from '../../../microservices/services/auth/container/TYPES.di';
 import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
 import { WEB_TYPES } from '../../container/TYPES.di';
+import { TOPICS } from '../../../common/topics/TOPICS';
 
 @injectable()
 export class Passport {
@@ -31,12 +32,15 @@ export class Passport {
 					passReqToCallback: true,
 				},
 				async (req, accessToken, refreshToken, profile, done) => {
-					const id = await this.kafkaWebServer.sendAndWait<number>({
-						func: AUTH_FUNCTIONS.getUserId,
-						message: profile.id,
-						// TODO: Временно потом убрать
-						status: 'conform',
-					});
+					const id = await this.kafkaWebServer.sendAndWait<number>(
+						{
+							func: AUTH_FUNCTIONS.getUserId,
+							message: profile.id,
+							// TODO: Временно потом убрать
+							status: 'conform',
+						},
+						TOPICS.requests.auth,
+					);
 					if (id) {
 						req.session.payload = { id, role: 'user' };
 					} else {

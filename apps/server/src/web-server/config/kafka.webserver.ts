@@ -1,14 +1,12 @@
 import { inject } from 'inversify';
 import { KafkaService } from '../../common/services/kafka/kafka.service';
-import { TOPICS } from '../../common/topics/TOPICS';
+import { TOPICS, type TopicsRequest } from '../../common/topics/TOPICS';
 import { KafkaResponse } from '../../microservices/config/types';
 import EventEmitter from 'events';
 import { Producer } from 'kafkajs';
 import { randomUUID } from 'crypto';
 import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 import { HttpError } from '../../common/http/http.error';
-
-// TODO: Сделать этот файл только для клиента
 
 const emitter = new EventEmitter();
 
@@ -20,17 +18,20 @@ export class KafkaWebServer {
 		private readonly kafkaService: KafkaService,
 	) {}
 
-	private sendMessage = (data: KafkaResponse): void => {
+	private sendMessage = (data: KafkaResponse, topic: TopicsRequest): void => {
 		if (!this.producer) throw new Error('ПРОДЮСЕР НЕ ЗАГРУЖЕН');
 		this.producer.send({
-			topic: TOPICS.request,
+			topic,
 			messages: [{ value: JSON.stringify(data) }],
 		});
 	};
 
-	sendAndWait = <T>(data: Omit<KafkaResponse, 'id'>): Promise<T> => {
+	sendAndWait = <T>(
+		data: Omit<KafkaResponse, 'id'>,
+		topic: TopicsRequest,
+	): Promise<T> => {
 		const id = randomUUID();
-		this.sendMessage({ ...data, id });
+		this.sendMessage({ ...data, id }, topic);
 
 		return new Promise((res, rej) =>
 			emitter.once(id, (result: KafkaResponse) => {
@@ -51,9 +52,12 @@ export class KafkaWebServer {
 
 	// TODO: Пофиксить: Он подхватывает старые сообщения и пытается вызывать их в функции, которой нет
 	startConsumer = async () => {
-		const consumer = this.kafkaService.createConsumer('wu-tang');
+		const consumer = this.kafkaService.createConsumer('web-server-groupId');
 		await consumer.connect();
-		await consumer.subscribe({ topic: TOPICS.response, fromBeginning: false });
+		await consumer.subscribe({
+			topics: [TOPICS.response.auth, TOPICS.response.tracks],
+			fromBeginning: false,
+		});
 
 		await consumer.run({
 			eachMessage: async ({ message }) => {

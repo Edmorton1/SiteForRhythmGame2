@@ -13,6 +13,7 @@ import { LoginServiceReturn } from '../../../../microservices/services/auth/modu
 import { AUTH_FUNCTIONS } from '../../../../microservices/services/auth/container/TYPES.di';
 import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
 import { WEB_TYPES } from '../../../container/TYPES.di';
+import { TOPICS } from '../../../../common/topics/TOPICS';
 
 @injectable()
 export class AuthController extends BaseController {
@@ -47,13 +48,16 @@ export class AuthController extends BaseController {
 		console.log('[REQUEST]: LOGIN');
 		const userDTO = ZodValidateSchema(LoginDTOZodSchema, req.body);
 		const { payload, profile } =
-			await this.kafkaWebServer.sendAndWait<LoginServiceReturn>({
-				func: AUTH_FUNCTIONS.login,
-				message: userDTO,
+			await this.kafkaWebServer.sendAndWait<LoginServiceReturn>(
+				{
+					func: AUTH_FUNCTIONS.login,
+					message: userDTO,
 
-				// TODO: Временно потом убрать
-				status: 'conform',
-			});
+					// TODO: Временно потом убрать
+					status: 'conform',
+				},
+				TOPICS.requests.auth,
+			);
 
 		req.session.regenerate(err => {
 			if (err) {
@@ -83,12 +87,15 @@ export class AuthController extends BaseController {
 		}
 		const id = req.session.payload.id;
 		// const profile = await this.authService.getProfileById(id);c
-		const profile = await this.kafkaWebServer.sendAndWait<Profile>({
-			func: AUTH_FUNCTIONS.getProfileById,
-			message: id,
-			// TODO: Временно потом убрать
-			status: 'conform',
-		});
+		const profile = await this.kafkaWebServer.sendAndWait<Profile>(
+			{
+				func: AUTH_FUNCTIONS.getProfileById,
+				message: id,
+				// TODO: Временно потом убрать
+				status: 'conform',
+			},
+			TOPICS.requests.auth,
+		);
 		res.json(profile);
 	};
 }

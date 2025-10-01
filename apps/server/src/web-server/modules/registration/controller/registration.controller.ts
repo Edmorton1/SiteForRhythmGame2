@@ -9,6 +9,7 @@ import { KafkaWebServer } from '../../../config/kafka.webserver';
 import { Profile } from '../../../../../../../libs/models/schemas/profile';
 import { AUTH_FUNCTIONS } from '../../../../microservices/services/auth/container/TYPES.di';
 import { WEB_TYPES } from '../../../container/TYPES.di';
+import { TOPICS } from '../../../../common/topics/TOPICS';
 
 @injectable()
 export class RegistrationController extends BaseController {
@@ -41,12 +42,15 @@ export class RegistrationController extends BaseController {
 
 		console.log('SESSION', req.session, provider);
 
-		const profile = await this.kafkaWebServer.sendAndWait<Profile>({
-			func: AUTH_FUNCTIONS.registration,
-			message: { authDTO, provider },
-			// TODO: Временно потом убрать
-			status: 'conform',
-		});
+		const profile = await this.kafkaWebServer.sendAndWait<Profile>(
+			{
+				func: AUTH_FUNCTIONS.registration,
+				message: { authDTO, provider },
+				// TODO: Временно потом убрать
+				status: 'conform',
+			},
+			TOPICS.requests.auth,
+		);
 
 		req.session.regenerate(err => {
 			if (err) {
