@@ -5,7 +5,8 @@
 	"scripts": {
 		"watch": "tsc --noEmit --watch",
 		"dev": "nodemon ./src/web-server/index.ts",
-		"dev:tracks": "nodemon ./src/services/tracks/index.ts",
+		"dev:auth": "nodemon ./src/microservices/services/auth/index.ts",
+		"dev:tracks": "nodemon ./src/microservices/services/tracks/index.ts",
 		"start": "node dist/apps/server/src/main",
 		"build": "esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node",
 		"format": "prettier --write \"src/**/*.ts\"",
