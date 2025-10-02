@@ -7,9 +7,9 @@ import { zodValidateFormData } from '../../../common/pipes/zod.formdata.pipe';
 import { RegistrationDTOZodSchema } from '../../../../common/models/schemas/registration.dto';
 import { KafkaWebServer } from '../../../config/kafka.webserver';
 import { Profile } from '../../../../../../../libs/models/schemas/profile';
-import { AUTH_FUNCTIONS } from '../../../../microservices/services/auth/container/TYPES.di';
 import { WEB_TYPES } from '../../../container/TYPES.di';
 import { TOPICS } from '../../../../common/topics/TOPICS';
+import { AUTH_FUNCTIONS } from '../../../../common/modules/auth/auth.functions';
 
 @injectable()
 export class RegistrationController extends BaseController {

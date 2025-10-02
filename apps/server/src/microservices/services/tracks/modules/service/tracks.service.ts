@@ -1,7 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { TracksRepository } from '../repository/tracks.repository';
 import { BaseService } from '../../../../config/base.service';
-import { TRACKS_FUNCTIONS, TRACKS_MICRO_TYPES } from '../../container/TYPES.di';
+import { TRACKS_MICRO_TYPES } from '../../container/TYPES.di';
+import { TRACKS_FUNCTIONS } from '../../../../../common/modules/tracks/tracks.functions';
 
 @injectable()
 export class TracksService extends BaseService {

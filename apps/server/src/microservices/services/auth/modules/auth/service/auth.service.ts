@@ -2,15 +2,13 @@ import { inject, injectable } from 'inversify';
 import { AuthRepository } from '../repository/auth.repository';
 import bcrypt from 'bcrypt';
 import { BaseService } from '../../../../../config/base.service';
-import { AUTH_FUNCTIONS, AUTH_MICRO_TYPES } from '../../../container/TYPES.di';
 import { LoginDTO } from '../../../../../../../../../libs/models/schemas/auth';
-import { Payload } from '../../../../../../web-server/_declarations/session';
-import { UserProfile } from '../../../../../../../../../libs/models/schemas/profile';
 // TODO: HttpError - сделать чтобы прокидывалась ошибка
 import { HttpError } from '../../../../../../common/http/http.error';
-import { authErrors } from '../../../../../../web-server/modules/auth/errors/CONST';
-
-export type LoginServiceReturn = ReturnType<AuthService['login']>;
+import { authErrors } from '../../../../../../common/modules/auth/errors/auth';
+import { LoginServiceReturn } from '../../../../../../common/modules/auth/auth.micro.types';
+import { AUTH_MICRO_TYPES } from '../../../container/TYPES.di';
+import { AUTH_FUNCTIONS } from '../../../../../../common/modules/auth/auth.functions';
 
 console.log('AUTH SERVICE');
 
@@ -33,9 +31,7 @@ export class AuthService extends BaseService {
 		]);
 	}
 
-	login = async (
-		userDTO: LoginDTO,
-	): Promise<{ payload: Payload; profile: UserProfile }> => {
+	login = async (userDTO: LoginDTO): Promise<LoginServiceReturn> => {
 		const { password, ...payload } = await this.authRepository.getPassword(
 			userDTO.email,
 		);

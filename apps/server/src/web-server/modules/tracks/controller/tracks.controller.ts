@@ -4,8 +4,8 @@ import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { KafkaWebServer } from '../../../config/kafka.webserver';
 import { WEB_TYPES } from '../../../container/TYPES.di';
-import { TRACKS_FUNCTIONS } from '../../../../microservices/services/tracks/container/TYPES.di';
 import { TOPICS } from '../../../../common/topics/TOPICS';
+import { TRACKS_FUNCTIONS } from '../../../../common/modules/tracks/tracks.functions';
 
 @injectable()
 export class TracksController extends BaseController {

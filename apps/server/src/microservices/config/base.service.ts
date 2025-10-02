@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { AnyFunction, KafkaFunc } from './types';
+import { AnyFunction, KafkaFunc } from '../../common/services/kafka/kafka.types';
 
 @injectable()
 export class BaseService {

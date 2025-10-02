@@ -6,7 +6,7 @@ import { serverPaths } from '../../../../../../libs/shared/PATHS';
 import { SERVER_PREFIX } from '../../../../../../libs/shared/CONST';
 import { UserProfileZodSchemaClient } from '../../../../../../libs/models/schemas/profile';
 import { LoginDTOZodSchema } from '../../../../../../libs/models/schemas/auth';
-import { authErrors } from './errors/CONST';
+import { authErrors } from '../../../common/modules/auth/errors/auth';
 import { commonErrors } from '../../common/errors/CONST';
 
 extendZodWithOpenApi(z);

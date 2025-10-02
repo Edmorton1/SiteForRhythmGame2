@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { DatabaseService } from '../../../../../../common/services/postgres/database.service';
 import { HttpError } from '../../../../../../common/http/http.error';
-import { authErrors } from '../../../../../../web-server/modules/auth/errors/CONST';
+import { authErrors } from '../../../../../../common/modules/auth/errors/auth';
 import { UserProfile } from '../../../../../../../../../libs/models/schemas/profile';
 import { SERVICES_TYPES } from '../../../../../../common/containers/SERVICES_TYPES.di';
 

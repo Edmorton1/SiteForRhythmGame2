@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { DatabaseService } from '../../../../../common/services/postgres/database.service';
 import { BaseService } from '../../../../config/base.service';
-import { AUTH_FUNCTIONS } from '../../container/TYPES.di';
 import { SERVICES_TYPES } from '../../../../../common/containers/SERVICES_TYPES.di';
+import { AUTH_FUNCTIONS } from '../../../../../common/modules/auth/auth.functions';
 
 @injectable()
 export class GoogleService extends BaseService {

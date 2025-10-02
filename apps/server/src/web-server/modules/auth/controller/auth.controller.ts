@@ -9,11 +9,11 @@ import { LoginDTOZodSchema } from '../../../../../../../libs/models/schemas/auth
 import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
 import { ConfigService } from '../../../../common/services/config/config.service';
 import { KafkaWebServer } from '../../../config/kafka.webserver';
-import { LoginServiceReturn } from '../../../../microservices/services/auth/modules/auth/service/auth.service';
-import { AUTH_FUNCTIONS } from '../../../../microservices/services/auth/container/TYPES.di';
 import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
 import { WEB_TYPES } from '../../../container/TYPES.di';
 import { TOPICS } from '../../../../common/topics/TOPICS';
+import { LoginServiceReturn } from '../../../../common/modules/auth/auth.micro.types';
+import { AUTH_FUNCTIONS } from '../../../../common/modules/auth/auth.functions';
 
 @injectable()
 export class AuthController extends BaseController {

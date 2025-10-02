@@ -2,6 +2,9 @@
 	"name": "server",
 	"version": "1.0.0",
 	"type": "commonjs",
+	"bin": {
+		"cli": "./cli/cli.js"
+	},
 	"scripts": {
 		"watch": "tsc --noEmit --watch",
 		"dev": "nodemon ./src/web-server/index.ts",
@@ -29,6 +32,7 @@
 		"@types/pg": "^8.15.5",
 		"@types/supertest": "^6.0.2",
 		"@types/swagger-ui-express": "^4.1.8",
+		"commander": "^14.0.1",
 		"esbuild": "^0.25.9",
 		"nodemon": "^3.1.10",
 		"pino": "^9.9.0",

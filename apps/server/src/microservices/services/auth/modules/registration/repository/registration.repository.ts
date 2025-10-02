@@ -8,7 +8,7 @@ import { RegistrationDTO } from '../../../../../../common/models/schemas/registr
 import { DatabaseService } from '../../../../../../common/services/postgres/database.service';
 import { Profile } from '../../../../../../../../../libs/models/schemas/profile';
 import { DatabaseKysely } from '../../../../../../common/services/postgres/database.type';
-import { Provider } from '../../../../../../web-server/_declarations/session';
+import { Provider } from '../../../../../../common/_declarations/session';
 import { SERVICES_TYPES } from '../../../../../../common/containers/SERVICES_TYPES.di';
 
 type ProfileAvatar = Omit<RegistrationDTO, 'user'>;

@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 //prettier-ignore
 import { mockProfileDTO, mockRegistrationService, mockResult } from "./services.mock";
-import { Provider } from '../../../../../../../web-server/_declarations/session';
+import { Provider } from '../../../../../../../common/_declarations/session';
 import { HttpError } from '../../../../../../../common/http/http.error';
 
 // TODO: ПРОВЕРИТЬ ЕЩЁ РАЗ ЭТОТ ТЕСТ

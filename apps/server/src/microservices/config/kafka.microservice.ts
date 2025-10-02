@@ -2,11 +2,11 @@ import { inject, injectable } from 'inversify';
 import { MICRO_TYPES } from './containers/TYPES.di';
 import { ServiceCollector } from './service.collector';
 import { KafkaService } from '../../common/services/kafka/kafka.service';
-import { KafkaResponse } from './types';
 import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 import { Producer } from 'kafkajs';
 import { LoggerService } from '../../common/services/logger/logger.service';
 import type { TopicsRequest, TopicsResponse } from '../../common/topics/TOPICS';
+import { KafkaResponse } from '../../common/services/kafka/kafka.types';
 
 export type KafkaMicroserviceOptions = {
 	topic_req: TopicsRequest;

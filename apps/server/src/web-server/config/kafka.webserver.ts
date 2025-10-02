@@ -1,12 +1,12 @@
 import { inject } from 'inversify';
 import { KafkaService } from '../../common/services/kafka/kafka.service';
 import { TOPICS, type TopicsRequest } from '../../common/topics/TOPICS';
-import { KafkaResponse } from '../../microservices/config/types';
 import EventEmitter from 'events';
 import { Producer } from 'kafkajs';
 import { randomUUID } from 'crypto';
 import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 import { HttpError } from '../../common/http/http.error';
+import { KafkaResponse } from '../../common/services/kafka/kafka.types';
 
 const emitter = new EventEmitter();
 

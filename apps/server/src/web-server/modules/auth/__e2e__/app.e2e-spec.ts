@@ -1,5 +1,5 @@
 import { WEB_TYPES } from '../../../../web-server/container/TYPES.di';
-import { randomEmail } from './generateString';
+import { randomEmail } from '../../../../common/test_rename/generateString';
 import { SERVER_PREFIX } from '../../../../../../../libs/shared/CONST';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { RegistrationDTO } from '../../../../common/models/schemas/registration.dto';

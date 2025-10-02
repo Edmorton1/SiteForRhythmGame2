@@ -1,13 +1,14 @@
 import { RegistrationRepository } from '../repository/registration.repository';
 import { inject, injectable } from 'inversify';
-import { registrationErrors } from '../../../../../../web-server/modules/registration/errors/CONST';
+import { registrationErrors } from '../../../../../../common/modules/auth/errors/registration';
 import { RegistrationDTO } from '../../../../../../common/models/schemas/registration.dto';
-import { Provider } from '../../../../../../web-server/_declarations/session';
+import { Provider } from '../../../../../../common/_declarations/session';
 import { Profile } from '../../../../../../../../../libs/models/schemas/profile';
 import { HttpError } from '../../../../../../common/http/http.error';
 import { UserDTO } from '../../../../../../../../../libs/models/schemas/user';
 import { BaseService } from '../../../../../config/base.service';
-import { AUTH_FUNCTIONS, AUTH_MICRO_TYPES } from '../../../container/TYPES.di';
+import { AUTH_MICRO_TYPES } from '../../../container/TYPES.di';
+import { AUTH_FUNCTIONS } from '../../../../../../common/modules/auth/auth.functions';
 
 // TODO: Потом сделать автоматизировано
 interface Registration {

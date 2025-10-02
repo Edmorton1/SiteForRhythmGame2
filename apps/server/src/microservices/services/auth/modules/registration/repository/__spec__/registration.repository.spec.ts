@@ -3,11 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { RegistrationRepository } from '../registration.repository';
 import { authMicroContainer } from '../../../../container/container.di';
-import { randomString } from '../../../../../../../web-server/modules/auth/__e2e__/generateString';
+import { randomString } from '../../../../../../../common/test_rename/generateString';
 import { SERVICES_TYPES } from '../../../../../../../common/containers/SERVICES_TYPES.di';
 import { DatabaseService } from '../../../../../../../common/services/postgres/database.service';
 import { LoggerService } from '../../../../../../../common/services/logger/logger.service';
-import { Provider } from '../../../../../../../web-server/_declarations/session';
+import { Provider } from '../../../../../../../common/_declarations/session';
 import { AUTH_MICRO_TYPES } from '../../../../container/TYPES.di';
 import { RegistrationDTO } from '../../../../../../../common/models/schemas/registration.dto';
 

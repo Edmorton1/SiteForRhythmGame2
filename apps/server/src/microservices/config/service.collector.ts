@@ -1,7 +1,7 @@
 import { injectable, multiInject } from 'inversify';
 import { BaseService } from './base.service';
 import { MICRO_TYPES } from './containers/TYPES.di';
-import { AnyFunction } from './types';
+import { AnyFunction } from '../../common/services/kafka/kafka.types';
 
 @injectable()
 export class ServiceCollector {
