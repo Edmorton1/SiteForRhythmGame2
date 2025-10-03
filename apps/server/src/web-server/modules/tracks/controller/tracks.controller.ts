@@ -28,7 +28,6 @@ export class TracksController extends BaseController {
 			{
 				func: TRACKS_FUNCTIONS.getAllTracks,
 				message: undefined,
-				status: 'conform',
 			},
 			TOPICS.requests.tracks,
 		);

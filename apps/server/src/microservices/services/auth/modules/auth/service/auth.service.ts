@@ -2,13 +2,11 @@ import { inject, injectable } from 'inversify';
 import { AuthRepository } from '../repository/auth.repository';
 import bcrypt from 'bcrypt';
 import { BaseService } from '../../../../../config/base.service';
-import { LoginDTO } from '../../../../../../../../../libs/models/schemas/auth';
-// TODO: HttpError - сделать чтобы прокидывалась ошибка
 import { HttpError } from '../../../../../../common/http/http.error';
 import { authErrors } from '../../../../../../common/modules/auth/errors/auth';
-import { LoginServiceReturn } from '../../../../../../common/modules/auth/auth.micro.types';
 import { AUTH_MICRO_TYPES } from '../../../container/TYPES.di';
-import { AUTH_FUNCTIONS } from '../../../../../../common/modules/auth/auth.functions';
+// prettier-ignore
+import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../../../../common/modules/auth/auth.functions';
 
 console.log('AUTH SERVICE');
 
@@ -21,17 +19,19 @@ export class AuthService extends BaseService {
 		super();
 		this.bindFunctions([
 			{
-				name: AUTH_FUNCTIONS.login,
+				name: AUTH_KEYS.login,
 				func: this.login,
 			},
 			{
-				name: AUTH_FUNCTIONS.getProfileById,
-				func: this.getProfileById,
+				name: AUTH_KEYS.init,
+				func: this.init,
 			},
 		]);
 	}
 
-	login = async (userDTO: LoginDTO): Promise<LoginServiceReturn> => {
+	login = async (
+		userDTO: AUTH_FUNCTIONS['login']['input'],
+	): Promise<AUTH_FUNCTIONS['login']['output']> => {
 		const { password, ...payload } = await this.authRepository.getPassword(
 			userDTO.email,
 		);
@@ -45,7 +45,9 @@ export class AuthService extends BaseService {
 		return { payload, profile };
 	};
 
-	getProfileById = async (id: number) => {
+	init = async (
+		id: AUTH_FUNCTIONS['init']['input'],
+	): Promise<AUTH_FUNCTIONS['init']['output']> => {
 		return await this.authRepository.getProfileById(id);
 	};
 }

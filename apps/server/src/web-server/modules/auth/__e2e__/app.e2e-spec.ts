@@ -1,4 +1,3 @@
-import { WEB_TYPES } from '../../../../web-server/container/TYPES.di';
 import { randomEmail } from '../../../../common/test_rename/generateString';
 import { SERVER_PREFIX } from '../../../../../../../libs/shared/CONST';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
@@ -6,7 +5,8 @@ import { RegistrationDTO } from '../../../../common/models/schemas/registration.
 import { DatabaseService } from '../../../../common/services/postgres/database.service';
 import { testServer } from './supertest';
 import { LoginDTO } from '../../../../../../../libs/models/schemas/auth';
-import { authContainer } from '../../containers/container.di';
+import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
+import { authMicroContainer } from '../../../../microservices/services/auth/container/container.di';
 
 const profile = { name: 'test', about: 'null', country_code: 'RU' };
 describe('[E2E] SERVER TEST', () => {
@@ -14,8 +14,8 @@ describe('[E2E] SERVER TEST', () => {
 		email: randomEmail(),
 		password: '123123',
 	};
-	const databaseService = authContainer.get<DatabaseService>(
-		WEB_TYPES.services.database,
+	const databaseService = authMicroContainer.get<DatabaseService>(
+		SERVICES_TYPES.database,
 	);
 
 	it('[AUTH] Init (empty)', async () => {

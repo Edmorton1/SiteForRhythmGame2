@@ -2,7 +2,6 @@ import { inject, injectable } from 'inversify';
 import { DatabaseService } from '../../../../../../common/services/postgres/database.service';
 import { HttpError } from '../../../../../../common/http/http.error';
 import { authErrors } from '../../../../../../common/modules/auth/errors/auth';
-import { UserProfile } from '../../../../../../../../../libs/models/schemas/profile';
 import { SERVICES_TYPES } from '../../../../../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
@@ -28,7 +27,7 @@ export class AuthRepository {
 		return { ...user, password: user.password };
 	};
 
-	getProfileById = async (id: number): Promise<UserProfile> => {
+	getProfileById = async (id: number) => {
 		console.log(
 			'GET PROFILE BY ID | ЕСЛИ УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ ИЗ БД И НЕ ОБНОВИТЬ СЕССИЮ, БУДЕТ ОШИБКА',
 		);

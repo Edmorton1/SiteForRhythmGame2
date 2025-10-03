@@ -7,7 +7,8 @@ import { KafkaWebServer } from '../../config/kafka.webserver';
 import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
 import { WEB_TYPES } from '../../container/TYPES.di';
 import { TOPICS } from '../../../common/topics/TOPICS';
-import { AUTH_FUNCTIONS } from '../../../common/modules/auth/auth.functions';
+// prettier-ignore
+import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../common/modules/auth/auth.functions';
 
 @injectable()
 export class Passport {
@@ -32,12 +33,13 @@ export class Passport {
 					passReqToCallback: true,
 				},
 				async (req, accessToken, refreshToken, profile, done) => {
-					const id = await this.kafkaWebServer.sendAndWait<number>(
+					const id = await this.kafkaWebServer.sendAndWait<
+						AUTH_FUNCTIONS,
+						'getUserId'
+					>(
 						{
-							func: AUTH_FUNCTIONS.getUserId,
+							func: AUTH_KEYS.getUserId,
 							message: profile.id,
-							// TODO: Временно потом убрать
-							status: 'conform',
 						},
 						TOPICS.requests.auth,
 					);

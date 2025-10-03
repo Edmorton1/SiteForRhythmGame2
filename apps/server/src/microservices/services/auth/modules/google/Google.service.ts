@@ -2,7 +2,8 @@ import { inject, injectable } from 'inversify';
 import { DatabaseService } from '../../../../../common/services/postgres/database.service';
 import { BaseService } from '../../../../config/base.service';
 import { SERVICES_TYPES } from '../../../../../common/containers/SERVICES_TYPES.di';
-import { AUTH_FUNCTIONS } from '../../../../../common/modules/auth/auth.functions';
+// prettier-ignore
+import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../../../common/modules/auth/auth.functions';
 
 @injectable()
 export class GoogleService extends BaseService {
@@ -13,13 +14,15 @@ export class GoogleService extends BaseService {
 		super();
 		this.bindFunctions([
 			{
-				name: AUTH_FUNCTIONS.getUserId,
+				name: AUTH_KEYS.getUserId,
 				func: this.getUserId,
 			},
 		]);
 	}
 
-	getUserId = async (providerId: string) => {
+	getUserId = async (
+		providerId: AUTH_FUNCTIONS['getUserId']['input'],
+	): Promise<AUTH_FUNCTIONS['getUserId']['output']> => {
 		const user = await this.databaseService.db
 			.selectFrom('users')
 			.select('id')

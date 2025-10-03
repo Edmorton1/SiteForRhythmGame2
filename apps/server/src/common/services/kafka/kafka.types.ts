@@ -1,3 +1,6 @@
+import { BASE_FUNCTIONS } from '../../../web-server/config/kafka.webserver';
+import { HttpError } from '../../http/http.error';
+
 export type AnyFunction = (...args: any[]) => any;
 
 export interface KafkaFunc {
@@ -5,10 +8,24 @@ export interface KafkaFunc {
 	func: AnyFunction;
 }
 
-export interface KafkaResponse {
+// TODO: Убрать дублирование в рек рес
+
+export interface KafkaRequest<T extends BASE_FUNCTIONS, F extends keyof T> {
+	id: string;
+	func: F;
+	message: T[F]['input'];
+}
+
+export interface KafkaResponse<T extends BASE_FUNCTIONS, F extends keyof T> {
+	id: string;
+	func: F;
+	message: T[F]['output'];
+	status: 'conform';
+}
+
+export interface KafkaError {
 	id: string;
 	func: string;
-	// TODO: Потом сделать unknown
-	message: any;
-	status: 'conform' | 'error';
+	message: HttpError;
+	status: 'error';
 }

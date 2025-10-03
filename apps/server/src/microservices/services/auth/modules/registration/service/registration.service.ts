@@ -8,13 +8,8 @@ import { HttpError } from '../../../../../../common/http/http.error';
 import { UserDTO } from '../../../../../../../../../libs/models/schemas/user';
 import { BaseService } from '../../../../../config/base.service';
 import { AUTH_MICRO_TYPES } from '../../../container/TYPES.di';
-import { AUTH_FUNCTIONS } from '../../../../../../common/modules/auth/auth.functions';
-
-// TODO: Потом сделать автоматизировано
-interface Registration {
-	authDTO: RegistrationDTO;
-	provider: Provider | undefined;
-}
+// prettier-ignore
+import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../../../../common/modules/auth/auth.functions';
 
 @injectable()
 export class RegistrationService extends BaseService {
@@ -25,13 +20,15 @@ export class RegistrationService extends BaseService {
 		super();
 		this.bindFunctions([
 			{
-				name: AUTH_FUNCTIONS.registration,
+				name: AUTH_KEYS.registration,
 				func: this.registration,
 			},
 		]);
 	}
 
-	registration = async (props: Registration): Promise<Profile> => {
+	registration = async (
+		props: AUTH_FUNCTIONS['registration']['input'],
+	): Promise<AUTH_FUNCTIONS['registration']['output']> => {
 		const { authDTO, provider } = props;
 		const { user, ...profileDTO } = authDTO;
 		const authType = this.getAuthType(provider, user);

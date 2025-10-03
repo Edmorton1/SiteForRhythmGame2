@@ -18,7 +18,7 @@ program
 		const targetDir = path.resolve('.');
 		const filePath = path.join(targetDir, filename);
 
-		fs.mkdirSync('asd')
+		fs.mkdirSync('asd');
 		// fs.writeFileSync(filePath, filename);
 		console.log(`Создан файл: ${filePath}`);
 	});

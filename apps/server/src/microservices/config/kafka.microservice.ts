@@ -6,7 +6,10 @@ import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 import { Producer } from 'kafkajs';
 import { LoggerService } from '../../common/services/logger/logger.service';
 import type { TopicsRequest, TopicsResponse } from '../../common/topics/TOPICS';
-import { KafkaResponse } from '../../common/services/kafka/kafka.types';
+import {
+	KafkaError,
+	KafkaResponse,
+} from '../../common/services/kafka/kafka.types';
 
 export type KafkaMicroserviceOptions = {
 	topic_req: TopicsRequest;
@@ -27,14 +30,15 @@ export class KafkaMicroservice {
 
 	private producer?: Producer;
 
-	private send = (data: KafkaResponse, topic: TopicsResponse) => {
+	//@ts-ignore
+	private send = (data: KafkaResponse | KafkaError, topic: TopicsResponse) => {
 		if (!this.producer) throw new Error('ОШИБКА: Не указан продюсер');
 		this.producer.send({
 			topic,
 			messages: [
 				{
 					// TODO: Убрать возврат func в возврате
-					value: JSON.stringify({ ...data } satisfies KafkaResponse),
+					value: JSON.stringify({ ...data }),
 				},
 			],
 		});
@@ -55,7 +59,7 @@ export class KafkaMicroservice {
 
 		await consumer.run({
 			eachMessage: async ({ message }) => {
-				const value = JSON.parse(message.value!.toString()) as KafkaResponse;
+				const value = JSON.parse(message.value!.toString());
 				console.log(value);
 				this.composite
 					.use(value.func, value.message)

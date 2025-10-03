@@ -3,8 +3,6 @@ import { inject, injectable } from 'inversify';
 import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { userGuard } from '../../../common/guards/user.guard';
-// prettier-ignore
-import { Profile, UserProfile } from '../../../../../../../libs/models/schemas/profile';
 import { LoginDTOZodSchema } from '../../../../../../../libs/models/schemas/auth';
 import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
 import { ConfigService } from '../../../../common/services/config/config.service';
@@ -12,7 +10,6 @@ import { KafkaWebServer } from '../../../config/kafka.webserver';
 import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
 import { WEB_TYPES } from '../../../container/TYPES.di';
 import { TOPICS } from '../../../../common/topics/TOPICS';
-import { LoginServiceReturn } from '../../../../common/modules/auth/auth.micro.types';
 import { AUTH_FUNCTIONS } from '../../../../common/modules/auth/auth.functions';
 
 @injectable()
@@ -44,20 +41,18 @@ export class AuthController extends BaseController {
 		]);
 	}
 
-	login = async (req: Request, res: Response<UserProfile>) => {
-		console.log('[REQUEST]: LOGIN');
+	login = async (req: Request, res: Response) => {
 		const userDTO = ZodValidateSchema(LoginDTOZodSchema, req.body);
-		const { payload, profile } =
-			await this.kafkaWebServer.sendAndWait<LoginServiceReturn>(
-				{
-					func: AUTH_FUNCTIONS.login,
-					message: userDTO,
-
-					// TODO: Временно потом убрать
-					status: 'conform',
-				},
-				TOPICS.requests.auth,
-			);
+		const { payload, profile } = await this.kafkaWebServer.sendAndWait<
+			AUTH_FUNCTIONS,
+			'login'
+		>(
+			{
+				func: 'login',
+				message: userDTO,
+			},
+			TOPICS.requests.auth,
+		);
 
 		req.session.regenerate(err => {
 			if (err) {
@@ -72,27 +67,25 @@ export class AuthController extends BaseController {
 	};
 
 	logout = (req: Request, res: Response) => {
-		console.log('[REQUEST]: LOGOUT');
 		req.session.destroy(err => {
 			if (err) console.error(err);
 			res.clearCookie(this.configService.getEnv('COOKIE_NAME')).sendStatus(204);
 		});
 	};
 
-	init = async (req: Request, res: Response<UserProfile>) => {
-		console.log('[REQUEST]: INIT');
+	init = async (req: Request, res: Response) => {
 		if (!req.session.payload) {
 			res.sendStatus(204);
 			return;
 		}
 		const id = req.session.payload.id;
-		// const profile = await this.authService.getProfileById(id);c
-		const profile = await this.kafkaWebServer.sendAndWait<Profile>(
+		const profile = await this.kafkaWebServer.sendAndWait<
+			AUTH_FUNCTIONS,
+			'init'
+		>(
 			{
-				func: AUTH_FUNCTIONS.getProfileById,
+				func: 'init',
 				message: id,
-				// TODO: Временно потом убрать
-				status: 'conform',
 			},
 			TOPICS.requests.auth,
 		);

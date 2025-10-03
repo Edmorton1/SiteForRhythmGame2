@@ -6,7 +6,6 @@ import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { zodValidateFormData } from '../../../common/pipes/zod.formdata.pipe';
 import { RegistrationDTOZodSchema } from '../../../../common/models/schemas/registration.dto';
 import { KafkaWebServer } from '../../../config/kafka.webserver';
-import { Profile } from '../../../../../../../libs/models/schemas/profile';
 import { WEB_TYPES } from '../../../container/TYPES.di';
 import { TOPICS } from '../../../../common/topics/TOPICS';
 import { AUTH_FUNCTIONS } from '../../../../common/modules/auth/auth.functions';
@@ -42,12 +41,13 @@ export class RegistrationController extends BaseController {
 
 		console.log('SESSION', req.session, provider);
 
-		const profile = await this.kafkaWebServer.sendAndWait<Profile>(
+		const profile = await this.kafkaWebServer.sendAndWait<
+			AUTH_FUNCTIONS,
+			'registration'
+		>(
 			{
-				func: AUTH_FUNCTIONS.registration,
+				func: 'registration',
 				message: { authDTO, provider },
-				// TODO: Временно потом убрать
-				status: 'conform',
 			},
 			TOPICS.requests.auth,
 		);

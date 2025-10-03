@@ -4,9 +4,9 @@ import dotenv from 'dotenv';
 dotenv.config({ path: envPath });
 import { ServerExpress } from '../../../../web-server/config/server';
 import { WEB_TYPES } from '../../../../web-server/container/TYPES.di';
-import { authContainer } from '../../containers/container.di';
+import { authMicroContainer } from '../../../../microservices/services/auth/container/container.di';
 
-export const testSetupServer = authContainer.get<ServerExpress>(
+export const testSetupServer = authMicroContainer.get<ServerExpress>(
 	WEB_TYPES.app.ServerExpress,
 );
 

@@ -6,9 +6,12 @@ import { Producer } from 'kafkajs';
 import { randomUUID } from 'crypto';
 import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 import { HttpError } from '../../common/http/http.error';
-import { KafkaResponse } from '../../common/services/kafka/kafka.types';
+// prettier-ignore
+import { KafkaError, KafkaRequest, KafkaResponse } from '../../common/services/kafka/kafka.types';
 
 const emitter = new EventEmitter();
+
+export type BASE_FUNCTIONS = Record<string, { input: any; output: any }>;
 
 export class KafkaWebServer {
 	private producer?: Producer;
@@ -18,7 +21,10 @@ export class KafkaWebServer {
 		private readonly kafkaService: KafkaService,
 	) {}
 
-	private sendMessage = (data: KafkaResponse, topic: TopicsRequest): void => {
+	sendMessage = <T extends BASE_FUNCTIONS, F extends keyof T>(
+		data: KafkaRequest<T, F>,
+		topic: TopicsRequest,
+	): void => {
 		if (!this.producer) throw new Error('ПРОДЮСЕР НЕ ЗАГРУЖЕН');
 		this.producer.send({
 			topic,
@@ -26,15 +32,15 @@ export class KafkaWebServer {
 		});
 	};
 
-	sendAndWait = <T>(
-		data: Omit<KafkaResponse, 'id'>,
+	sendAndWait = <T extends BASE_FUNCTIONS, F extends keyof T>(
+		data: { func: F; message: T[F]['input'] },
 		topic: TopicsRequest,
-	): Promise<T> => {
+	): Promise<T[F]['output']> => {
 		const id = randomUUID();
 		this.sendMessage({ ...data, id }, topic);
 
 		return new Promise((res, rej) =>
-			emitter.once(id, (result: KafkaResponse) => {
+			emitter.once(id, (result: KafkaResponse<T, F> | KafkaError) => {
 				if (result.status === 'error') {
 					rej(new HttpError(result.message.statusCode, result.message.message));
 					return;
@@ -61,7 +67,7 @@ export class KafkaWebServer {
 
 		await consumer.run({
 			eachMessage: async ({ message }) => {
-				const value = JSON.parse(message.value!.toString()) as KafkaResponse;
+				const value = JSON.parse(message.value!.toString());
 				console.log('ОТВЕТ МИКРОСЕРВИСА', value);
 				emitter.emit(value.id, value);
 			},
