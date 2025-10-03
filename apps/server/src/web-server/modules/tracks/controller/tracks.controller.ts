@@ -5,7 +5,10 @@ import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { KafkaWebServer } from '../../../config/kafka.webserver';
 import { WEB_TYPES } from '../../../container/TYPES.di';
 import { TOPICS } from '../../../../common/topics/TOPICS';
-import { TRACKS_FUNCTIONS } from '../../../../common/modules/tracks/tracks.functions';
+// prettier-ignore
+import { TRACKS_FUNCTIONS, TRACKS_KEYS } from '../../../../common/modules/tracks/tracks.functions';
+import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
+import { zid } from '../../../../../../../libs/models/enums/zod';
 
 @injectable()
 export class TracksController extends BaseController {
@@ -24,14 +27,30 @@ export class TracksController extends BaseController {
 	}
 
 	getAllTracks = async (req: Request, res: Response) => {
-		const tracks = await this.kafkaWebServer.sendAndWait(
+		const tracks = await this.kafkaWebServer.sendAndWait<
+			TRACKS_FUNCTIONS,
+			'getAllTracks'
+		>(
 			{
-				func: TRACKS_FUNCTIONS.getAllTracks,
+				func: TRACKS_KEYS.getAllTracks,
 				message: undefined,
 			},
 			TOPICS.requests.tracks,
 		);
 
 		res.json(tracks);
+	};
+
+	getTrack = async (req: Request, res: Response) => {
+		const id = ZodValidateSchema(zid, req.params['id']);
+		const track = await this.kafkaWebServer.sendAndWait<TRACKS_FUNCTIONS>(
+			{
+				func: TRACKS_KEYS.getAllTracks,
+				message: id,
+			},
+			TOPICS.requests.tracks,
+		);
+
+		res.json(track);
 	};
 }

@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import { TracksRepository } from '../repository/tracks.repository';
 import { BaseService } from '../../../../config/base.service';
 import { TRACKS_MICRO_TYPES } from '../../container/TYPES.di';
-import { TRACKS_FUNCTIONS } from '../../../../../common/modules/tracks/tracks.functions';
+import { TRACKS_KEYS } from '../../../../../common/modules/tracks/tracks.functions';
 
 @injectable()
 export class TracksService extends BaseService {
@@ -13,7 +13,7 @@ export class TracksService extends BaseService {
 		super();
 		this.bindFunctions([
 			{
-				name: TRACKS_FUNCTIONS.getAllTracks,
+				name: TRACKS_KEYS.getAllTracks,
 				func: this.getAllTracks,
 			},
 		]);

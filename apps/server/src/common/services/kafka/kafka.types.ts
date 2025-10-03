@@ -18,7 +18,6 @@ export interface KafkaRequest<T extends BASE_FUNCTIONS, F extends keyof T> {
 
 export interface KafkaResponse<T extends BASE_FUNCTIONS, F extends keyof T> {
 	id: string;
-	func: F;
 	message: T[F]['output'];
 	status: 'conform';
 }

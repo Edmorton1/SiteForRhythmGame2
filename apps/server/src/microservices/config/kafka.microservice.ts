@@ -10,6 +10,7 @@ import {
 	KafkaError,
 	KafkaResponse,
 } from '../../common/services/kafka/kafka.types';
+import { BASE_FUNCTIONS } from '../../web-server/config/kafka.webserver';
 
 export type KafkaMicroserviceOptions = {
 	topic_req: TopicsRequest;
@@ -30,8 +31,10 @@ export class KafkaMicroservice {
 
 	private producer?: Producer;
 
-	//@ts-ignore
-	private send = (data: KafkaResponse | KafkaError, topic: TopicsResponse) => {
+	private send = <T extends BASE_FUNCTIONS, F extends keyof T>(
+		data: KafkaResponse<T, F> | KafkaError,
+		topic: TopicsResponse,
+	) => {
 		if (!this.producer) throw new Error('ОШИБКА: Не указан продюсер');
 		this.producer.send({
 			topic,
@@ -66,7 +69,6 @@ export class KafkaMicroservice {
 					.then(result => {
 						this.send(
 							{
-								func: value.func,
 								id: value.id,
 								message: result,
 								status: 'conform',

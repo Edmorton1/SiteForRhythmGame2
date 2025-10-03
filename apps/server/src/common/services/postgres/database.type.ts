@@ -1,6 +1,8 @@
 import type { ColumnType, GeneratedAlways } from 'kysely';
 import { Role } from '../../../../../../libs/models/schemas/user';
 
+export type Difficulties = 'easy' | 'normal' | 'hard';
+
 export interface DatabaseKysely {
 	users: {
 		id: GeneratedAlways<number>;
@@ -17,5 +19,23 @@ export interface DatabaseKysely {
 		about: string;
 		country_code: string;
 		created_at: GeneratedAlways<string>;
+	};
+
+	tracks: {
+		id: GeneratedAlways<number>;
+		name_en: string;
+		name: string;
+		author: number;
+		about: ColumnType<string, string | undefined, string>;
+		cover_path: string | null;
+		file_path: string;
+		difficulty: Difficulties;
+		bpm: number;
+		lang: string;
+		likes_count: ColumnType<number, number | undefined, number>;
+		downloads_count: ColumnType<number, number | undefined, number>;
+		plays_count: ColumnType<number, number | undefined, number>;
+		created_at: GeneratedAlways<string>;
+		is_deleted: ColumnType<boolean, boolean | undefined, boolean>;
 	};
 }
