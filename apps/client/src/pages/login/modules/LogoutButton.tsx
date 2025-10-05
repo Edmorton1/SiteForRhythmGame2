@@ -7,7 +7,7 @@ export const LogoutButton = () => {
 
 	return (
 		<button
-			onClick={handleClick}
+			onChange={handleClick}
 			type='button'>
 			Выйти
 		</button>

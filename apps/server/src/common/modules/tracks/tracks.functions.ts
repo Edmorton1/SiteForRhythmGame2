@@ -5,6 +5,7 @@ import { Difficulties } from '../../services/postgres/database.type';
 
 export const TRACKS_KEYS = {
 	getAllTracks: 'getAllTracks',
+	getSearchTrack: 'getSearchTrack',
 	getTrack: 'getTrack',
 	postTrack: 'postTrack',
 } as const;
@@ -19,6 +20,7 @@ export type TRACKS_FUNCTIONS = {
 		};
 		output: Track[];
 	};
+	[TRACKS_KEYS.getSearchTrack]: { input: string; output: Track[] };
 	[TRACKS_KEYS.getTrack]: { input: number; output: Track };
 	[TRACKS_KEYS.postTrack]: { input: TrackDTO; output: Track };
 };

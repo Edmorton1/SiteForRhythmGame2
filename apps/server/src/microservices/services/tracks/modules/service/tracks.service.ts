@@ -22,6 +22,10 @@ export class TracksService extends BaseService {
 				name: TRACKS_KEYS.getTrack,
 				func: this.getTrack,
 			},
+			{
+				name: TRACKS_KEYS.getSearchTrack,
+				func: this.getSearchTrack,
+			},
 		]);
 	}
 
@@ -30,6 +34,14 @@ export class TracksService extends BaseService {
 	): Promise<TRACKS_FUNCTIONS['getAllTracks']['output']> => {
 		console.log('CURSOR', options);
 		return await this.TracksRepository.getAllTracks(options);
+	};
+
+	getSearchTrack = async (
+		query: TRACKS_FUNCTIONS['getSearchTrack']['input'],
+	): Promise<TRACKS_FUNCTIONS['getSearchTrack']['output']> => {
+		const tracks = await this.TracksRepository.getSearchTrack(query);
+
+		return tracks;
 	};
 
 	getTrack = async (

@@ -41,6 +41,20 @@ export class TracksController extends BaseController {
 	}
 
 	getAllTracks = async (req: Request, res: Response) => {
+		const query = ZodValidateSchema(z.string().optional(), req.query['query']);
+		if (query) {
+			const track = await this.sender.sendAndWait(
+				{
+					func: 'getSearchTrack',
+					message: query,
+				},
+				TOPICS.requests.tracks,
+			);
+
+			res.json(track);
+			return;
+		}
+
 		const cursor = ZodValidateSchema(zId.optional(), req.query['cursor']);
 		const sort = ZodValidateSchema(TracksSort.optional(), req.query['sort']);
 		// const author = ZodValidateSchema(z.string(), req.query['author']);
@@ -113,5 +127,7 @@ export class TracksController extends BaseController {
 // author
 // performer
 // name
+
+// Будет главный поиск. Он будет искать всё - треки, авторов, перформеров
 
 // TODO: Фильтры потом сделать

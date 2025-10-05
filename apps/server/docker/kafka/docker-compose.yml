@@ -1,8 +1,8 @@
-version: '3.9'
+version: "3.9"
 
 services:
   kafka:
-    image: bitnami/kafka:latest
+    image: bitnami/kafka:4.1.0
     container_name: kafka
     environment:
       KAFKA_ENABLE_KRAFT: "yes"
@@ -17,6 +17,8 @@ services:
       - "9093:9093"
     volumes:
       - kafka-data:/bitnami/kafka
+    networks:
+      - kafka-network
 
 volumes:
   kafka-data:

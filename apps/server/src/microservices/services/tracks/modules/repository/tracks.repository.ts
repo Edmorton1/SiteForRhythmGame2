@@ -33,8 +33,16 @@ export class TracksRepository {
 		private readonly databaseService: DatabaseService,
 	) {}
 
+	getSearchTrack = async (query: string) => {
+		return await this.databaseService.db
+			.selectFrom('tracks')
+			.select(TRACKS_SELECT)
+			.where('name_en', 'ilike', `%${query}%`)
+			.execute();
+	};
+
 	getAllTracks = async (options: TRACKS_FUNCTIONS['getAllTracks']['input']) => {
-		let query = await this.databaseService.db
+		let query = this.databaseService.db
 			.selectFrom('tracks')
 			.select(TRACKS_SELECT);
 
@@ -71,7 +79,7 @@ export class TracksRepository {
 		return query.execute();
 	};
 
-	getTrack = async (id: number) => {
+	getTrack = async (id: TRACKS_FUNCTIONS['getTrack']['input']) => {
 		const track = await this.databaseService.db
 			.selectFrom('tracks')
 			.select(TRACKS_SELECT)

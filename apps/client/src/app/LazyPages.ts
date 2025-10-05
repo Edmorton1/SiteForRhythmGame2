@@ -11,3 +11,7 @@ export const LazyRegistration = lazy(async () =>
 export const LazyLogin = lazy(async () =>
 	import('../pages/login/Login').then(module => ({ default: module.Login })),
 );
+
+export const LazyTracks = lazy(async () =>
+	import('../pages/tracks/Tracks').then(module => ({ default: module.Tracks })),
+);

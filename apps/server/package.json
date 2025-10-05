@@ -44,6 +44,7 @@
 		"typescript": "^5.7.3"
 	},
 	"dependencies": {
+		"@elastic/elasticsearch": "^9.1.1",
 		"bcrypt": "^6.0.0",
 		"cookie-parser": "^1.4.7",
 		"dotenv": "^17.2.1",

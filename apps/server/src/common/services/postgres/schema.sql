@@ -85,3 +85,10 @@ CREATE TABLE tracks (
 --   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
 --   FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE ON UPDATE CASCADE
 -- );
+
+-- ! : ТЕСТОВАЯ ТАБЛИЦА 
+-- CREATE TABLE users(
+-- 	id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+-- 	name VARCHAR(32),
+-- 	departament VARCHAR(32)
+-- )

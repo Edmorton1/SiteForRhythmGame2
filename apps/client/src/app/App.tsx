@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { LazyLogin, LazyMain, LazyRegistration } from './LazyPages';
+import { LazyLogin, LazyMain, LazyRegistration, LazyTracks } from './LazyPages';
 import { clientPaths } from '../common/consts/PATHS';
 import { Main } from '../base/Main';
 import { useLoadColors } from './useLoadColors';
@@ -22,6 +22,10 @@ export const App = () => {
 					<Route
 						path={clientPaths.login}
 						element={<LazyLogin />}
+					/>
+					<Route
+						path={clientPaths.tracks}
+						element={<LazyTracks />}
 					/>
 				</Route>
 			</Routes>
