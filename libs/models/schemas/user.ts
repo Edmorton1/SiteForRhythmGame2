@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { zid } from '../enums/zod';
+import { zId } from '../enums/zod';
 
 export const rolesZodSchema = z.enum(['user', 'admin']);
 export type Role = z.infer<typeof rolesZodSchema>;
@@ -11,7 +11,7 @@ export const zEmailPassword = {
 };
 
 export const UserZodSchema = z.object({
-	id: zid,
+	id: zId,
 	role: rolesZodSchema,
 	email: zEmailPassword.email.nullable(),
 	provider_id: z.string().max(21).nullable(),

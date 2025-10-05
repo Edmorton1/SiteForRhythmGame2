@@ -1,13 +1,11 @@
 import { useForm } from 'react-hook-form';
-import { useCountries } from './hooks/useCountries';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ProfileDTOZodSchema } from './schemas/registration.dto';
 import { useRegistrationAuthStore } from '../../common/stores/user.store';
 import { useRegistrationPost } from './hooks/useRegistration';
+import { countries } from '../../../../../../../libs/models/enums/countries';
 
-// TODO: Сделать чтобы если About пустой, тогда он null
 export const RegistrationProfileModule = () => {
-	const { data, isSuccess, error, isError } = useCountries();
 	const { user } = useRegistrationAuthStore();
 	const { mutate } = useRegistrationPost();
 	const {
@@ -44,21 +42,19 @@ export const RegistrationProfileModule = () => {
 				id='about'></textarea>
 
 			<label htmlFor='country'>Страна</label>
-			{isError && <div>ERROR: {error.message}!</div>}
-			{isSuccess && (
-				<select
-					{...register('country_code')}
-					id='country'>
-					<option value=''>Выберите страну</option>
-					{data.map(country => (
-						<option
-							key={country.code}
-							value={country.code}>
-							{country.name}
-						</option>
-					))}
-				</select>
-			)}
+
+			<select
+				{...register('country_code')}
+				id='country'>
+				<option value=''>Выберите страну</option>
+				{countries.map(country => (
+					<option
+						key={country.code}
+						value={country.code}>
+						{country.name}
+					</option>
+				))}
+			</select>
 
 			<button>Готово</button>
 		</form>

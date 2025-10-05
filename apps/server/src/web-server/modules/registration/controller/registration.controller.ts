@@ -5,13 +5,16 @@ import { BaseController } from '../../../config/base.controller';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { zodValidateFormData } from '../../../common/pipes/zod.formdata.pipe';
 import { RegistrationDTOZodSchema } from '../../../../common/models/schemas/registration.dto';
-import { KafkaWebServer } from '../../../config/kafka.webserver';
+import { KafkaSender, KafkaWebServer } from '../../../config/kafka.webserver';
 import { WEB_TYPES } from '../../../container/TYPES.di';
 import { TOPICS } from '../../../../common/topics/TOPICS';
-import { AUTH_FUNCTIONS } from '../../../../common/modules/auth/auth.functions';
+// prettier-ignore
+import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../../common/modules/auth/auth.functions';
 
 @injectable()
 export class RegistrationController extends BaseController {
+	sender: KafkaSender<AUTH_FUNCTIONS>;
+
 	constructor(
 		@inject(WEB_TYPES.app.KafkaWebServer)
 		private readonly kafkaWebServer: KafkaWebServer,
@@ -25,6 +28,7 @@ export class RegistrationController extends BaseController {
 				middlewares: [multer({}).single('avatar')],
 			},
 		]);
+		this.sender = this.kafkaWebServer.initSender<AUTH_FUNCTIONS>();
 	}
 
 	registration = async (req: Request, res: Response) => {
@@ -41,12 +45,9 @@ export class RegistrationController extends BaseController {
 
 		console.log('SESSION', req.session, provider);
 
-		const profile = await this.kafkaWebServer.sendAndWait<
-			AUTH_FUNCTIONS,
-			'registration'
-		>(
+		const profile = await this.sender.sendAndWait(
 			{
-				func: 'registration',
+				func: AUTH_KEYS.registration,
 				message: { authDTO, provider },
 			},
 			TOPICS.requests.auth,

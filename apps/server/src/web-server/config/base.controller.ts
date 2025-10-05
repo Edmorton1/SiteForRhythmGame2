@@ -13,7 +13,7 @@ export class BaseController {
 		this.router = Router();
 	}
 
-	protected bindRoutes(routes: IControllerRoute[]): void {
+	protected bindRoutes = (routes: IControllerRoute[]): void => {
 		for (const route of routes) {
 			if (!route.middlewares?.length) route.middlewares = [];
 
@@ -21,5 +21,5 @@ export class BaseController {
 
 			this.router[route.method](route.path, ...pipeline);
 		}
-	}
+	};
 }

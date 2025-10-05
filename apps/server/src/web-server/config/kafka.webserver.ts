@@ -9,9 +9,30 @@ import { HttpError } from '../../common/http/http.error';
 // prettier-ignore
 import { KafkaError, KafkaRequest, KafkaResponse } from '../../common/services/kafka/kafka.types';
 
+// TODO: ЗАВТРА УБРАТЬ ДУБЛИРОВАНИЕ
 const emitter = new EventEmitter();
 
 export type BASE_FUNCTIONS = Record<string, { input: any; output: any }>;
+
+type Sender<V extends boolean> = <
+	T extends BASE_FUNCTIONS,
+	F extends Extract<keyof T, string>,
+>(
+	data: { func: F; message: T[F]['input'] },
+	topic: TopicsRequest,
+) => V extends true ? void : Promise<T[F]['output']>;
+
+export type KafkaSender<T extends BASE_FUNCTIONS> = {
+	sendAndWait: <F extends Extract<keyof T, string>>(
+		data: { func: F; message: T[F]['input'] },
+		topic: TopicsRequest,
+	) => Promise<T[F]['output']>;
+
+	sendAndForget: <F extends Extract<keyof T, string>>(
+		data: { func: F; message: T[F]['input'] },
+		topic: TopicsRequest,
+	) => void;
+};
 
 export class KafkaWebServer {
 	private producer?: Producer;
@@ -21,10 +42,7 @@ export class KafkaWebServer {
 		private readonly kafkaService: KafkaService,
 	) {}
 
-	sendMessage = <T extends BASE_FUNCTIONS, F extends keyof T>(
-		data: KafkaRequest<T, F>,
-		topic: TopicsRequest,
-	): void => {
+	private sendMessage = (data: KafkaRequest, topic: TopicsRequest): void => {
 		if (!this.producer) throw new Error('ПРОДЮСЕР НЕ ЗАГРУЖЕН');
 		this.producer.send({
 			topic,
@@ -32,23 +50,40 @@ export class KafkaWebServer {
 		});
 	};
 
-	sendAndWait = <T extends BASE_FUNCTIONS, F extends keyof T>(
-		data: { func: F; message: T[F]['input'] },
-		topic: TopicsRequest,
-	): Promise<T[F]['output']> => {
+	private sendAndWait: Sender<false> = (data, topic) => {
 		const id = randomUUID();
 		this.sendMessage({ ...data, id }, topic);
 
 		return new Promise((res, rej) =>
-			emitter.once(id, (result: KafkaResponse<T, F> | KafkaError) => {
+			emitter.once(id, (result: KafkaResponse | KafkaError) => {
 				if (result.status === 'error') {
 					rej(new HttpError(result.message.statusCode, result.message.message));
 					return;
 				}
-				console.log('ПОЛОЖИТЕЛЬНЫЙ ОТВЕТ', result.message);
+				// console.log('ПОЛОЖИТЕЛЬНЫЙ ОТВЕТ', result.message);
 				res(result.message);
 			}),
 		);
+	};
+
+	private sendAndForget: Sender<true> = (data, topic): void => {
+		// TODO: Пока не было необходимости в запросе без ожидания. Когда будет сделать
+		// @ts-ignore
+		this.sendMessage({ ...data }, topic);
+	};
+
+	initSender = <T extends BASE_FUNCTIONS>(): KafkaSender<T> => {
+		return {
+			sendAndWait: <F extends Extract<keyof T, string>>(
+				data: { func: F; message: T[F]['input'] },
+				topic: TopicsRequest,
+			): Promise<T[F]['output']> => this.sendAndWait<T, F>(data, topic),
+
+			sendAndForget: <F extends Extract<keyof T, string>>(
+				data: { func: F; message: T[F]['input'] },
+				topic: TopicsRequest,
+			): void => this.sendAndForget(data, topic),
+		};
 	};
 
 	startProducer = async () => {
@@ -68,7 +103,7 @@ export class KafkaWebServer {
 		await consumer.run({
 			eachMessage: async ({ message }) => {
 				const value = JSON.parse(message.value!.toString());
-				console.log('ОТВЕТ МИКРОСЕРВИСА', value);
+				// console.log('ОТВЕТ МИКРОСЕРВИСА', value);
 				emitter.emit(value.id, value);
 			},
 		});

@@ -6,11 +6,8 @@ import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
 import { Producer } from 'kafkajs';
 import { LoggerService } from '../../common/services/logger/logger.service';
 import type { TopicsRequest, TopicsResponse } from '../../common/topics/TOPICS';
-import {
-	KafkaError,
-	KafkaResponse,
-} from '../../common/services/kafka/kafka.types';
-import { BASE_FUNCTIONS } from '../../web-server/config/kafka.webserver';
+// prettier-ignore
+import { KafkaError, KafkaResponse } from '../../common/services/kafka/kafka.types';
 
 export type KafkaMicroserviceOptions = {
 	topic_req: TopicsRequest;
@@ -31,10 +28,7 @@ export class KafkaMicroservice {
 
 	private producer?: Producer;
 
-	private send = <T extends BASE_FUNCTIONS, F extends keyof T>(
-		data: KafkaResponse<T, F> | KafkaError,
-		topic: TopicsResponse,
-	) => {
+	private send = (data: KafkaResponse | KafkaError, topic: TopicsResponse) => {
 		if (!this.producer) throw new Error('ОШИБКА: Не указан продюсер');
 		this.producer.send({
 			topic,

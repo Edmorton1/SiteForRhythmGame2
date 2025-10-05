@@ -29,13 +29,17 @@ CREATE TABLE profiles (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- TODO: Добавить Favorites
 -- TRACKS BLOCK
 CREATE TYPE difficulties AS ENUM ('easy', 'normal', 'hard');
 CREATE TABLE tracks (
   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	-- Если имя итак английское, то не должно быть дублирования
   name_en VARCHAR(32) NOT NULL,
   name VARCHAR(32) NOT NULL,
 	author INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+	-- Исполнитель(имя или ссылка)
+	performer VARCHAR(128) NOT NULL,
 	about VARCHAR(512) NOT NULL DEFAULT '',
 	cover_path TEXT,
   file_path TEXT NOT NULL,

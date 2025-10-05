@@ -1,13 +1,14 @@
 import { z } from 'zod';
-import { zid, zISOString } from '../enums/zod';
+import { zId, zISOString } from '../enums/zod';
+import { zCountryCodes } from '../enums/countries';
 
 export const ProfileZodSchema = z.object({
-	id: zid,
+	id: zId,
 	name: z.string().max(32).nonempty(),
 	// У Client и Server будут свои DTO's
 	avatar: z.string().nullable(),
 	about: z.string().max(512),
-	country_code: z.string().length(2),
+	country_code: zCountryCodes,
 	created_at: zISOString,
 });
 

@@ -22,6 +22,7 @@ export class Passport {
 			'СОЗДАЛСЯ ЭКЗЕМПЛЯР PASSPORT',
 			this.configService.getEnv('URL_SERVER') + serverPaths.authGoogleCallback,
 		);
+		const { sendAndWait } = this.kafkaWebServer.initSender<AUTH_FUNCTIONS>();
 		passport.use(
 			new GoogleStrategy(
 				{
@@ -33,10 +34,7 @@ export class Passport {
 					passReqToCallback: true,
 				},
 				async (req, accessToken, refreshToken, profile, done) => {
-					const id = await this.kafkaWebServer.sendAndWait<
-						AUTH_FUNCTIONS,
-						'getUserId'
-					>(
+					const id = await sendAndWait(
 						{
 							func: AUTH_KEYS.getUserId,
 							message: profile.id,
