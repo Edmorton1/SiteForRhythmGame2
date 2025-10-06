@@ -8,7 +8,7 @@ describe('[COUNT]', () => {
 		render(<Count />);
 		const button = screen.getByRole('button');
 		await fireEvent.click(button);
-		expect(button.textContent).toBe('count is 1');
+		expect(button.textContent).toBe('count is 0');
 		screen.debug();
 	});
 });

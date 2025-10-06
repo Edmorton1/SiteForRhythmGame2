@@ -26,6 +26,10 @@ export class TracksService extends BaseService {
 				name: TRACKS_KEYS.getSearchTrack,
 				func: this.getSearchTrack,
 			},
+			{
+				name: TRACKS_KEYS.getSearchSuggestTrack,
+				func: this.getSearchSuggestTrack,
+			},
 		]);
 	}
 
@@ -36,12 +40,16 @@ export class TracksService extends BaseService {
 		return await this.TracksRepository.getAllTracks(options);
 	};
 
+	getSearchSuggestTrack = async (
+		query: TRACKS_FUNCTIONS['getSearchSuggestTrack']['input'],
+	): Promise<TRACKS_FUNCTIONS['getSearchSuggestTrack']['output']> => {
+		return await this.TracksRepository.getSearchSuggestTrack(query);
+	};
+
 	getSearchTrack = async (
 		query: TRACKS_FUNCTIONS['getSearchTrack']['input'],
 	): Promise<TRACKS_FUNCTIONS['getSearchTrack']['output']> => {
-		const tracks = await this.TracksRepository.getSearchTrack(query);
-
-		return tracks;
+		return await this.TracksRepository.getSearchTrack(query);
 	};
 
 	getTrack = async (

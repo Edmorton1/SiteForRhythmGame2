@@ -7,4 +7,6 @@ export const serverPaths = {
 	authGoogle: '/auth/google',
 	authGoogleCallback: '/auth/google/callback',
 	tracks: '/tracks',
+	tracksSearchSuggest: '/tracks/suggest',
+	tracksSearch: '/tracks/search',
 } as const;

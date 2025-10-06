@@ -4,4 +4,5 @@ export const SERVICES_TYPES = {
 	database: Symbol.for('DatabaseService'),
 	redis: Symbol.for('RedisService'),
 	kafka: Symbol.for('KafkaService'),
+	elasticsearch: Symbol.for('ElasticSearchService'),
 };

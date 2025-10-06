@@ -9,10 +9,8 @@ import { TOPICS } from '../../../../common/topics/TOPICS';
 import { TRACKS_FUNCTIONS, TRACKS_KEYS } from '../../../../common/modules/tracks/tracks.functions';
 import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
 import { zId } from '../../../../../../../libs/models/enums/zod';
-import {
-	difficultiesZodSchema,
-	TracksSort,
-} from '../../../../../../../libs/models/schemas/tracks';
+// prettier-ignore
+import { difficultiesZodSchema, TracksSort } from '../../../../../../../libs/models/schemas/tracks';
 import z from 'zod';
 import { zCountryCodes } from '../../../../../../../libs/models/enums/countries';
 
@@ -32,6 +30,16 @@ export class TracksController extends BaseController {
 				path: `${serverPaths.tracks}`,
 			},
 			{
+				handle: this.searchTracks,
+				method: 'get',
+				path: `${serverPaths.tracksSearch}`,
+			},
+			{
+				handle: this.searchTracksSuggest,
+				method: 'get',
+				path: `${serverPaths.tracksSearchSuggest}`,
+			},
+			{
 				handle: this.getTrack,
 				method: 'get',
 				path: `${serverPaths.tracks}/:id`,
@@ -40,21 +48,40 @@ export class TracksController extends BaseController {
 		this.sender = this.kafkaWebServer.initSender<TRACKS_FUNCTIONS>();
 	}
 
+	private validateQuery = (val: unknown) => {
+		return ZodValidateSchema(z.string(), val);
+	};
+
+	searchTracksSuggest = async (req: Request, res: Response) => {
+		const query = this.validateQuery(req.query['query']);
+
+		const suggest = await this.sender.sendAndWait(
+			{
+				func: TRACKS_KEYS.getSearchSuggestTrack,
+				message: query,
+			},
+			TOPICS.requests.tracks,
+		);
+
+		res.json(suggest);
+	};
+
+	searchTracks = async (req: Request, res: Response) => {
+		console.log(req.query['query']);
+		const query = this.validateQuery(req.query['query']);
+
+		const tracks = await this.sender.sendAndWait(
+			{
+				func: TRACKS_KEYS.getSearchTrack,
+				message: query,
+			},
+			TOPICS.requests.tracks,
+		);
+
+		res.json(tracks);
+	};
+
 	getAllTracks = async (req: Request, res: Response) => {
-		const query = ZodValidateSchema(z.string().optional(), req.query['query']);
-		if (query) {
-			const track = await this.sender.sendAndWait(
-				{
-					func: 'getSearchTrack',
-					message: query,
-				},
-				TOPICS.requests.tracks,
-			);
-
-			res.json(track);
-			return;
-		}
-
 		const cursor = ZodValidateSchema(zId.optional(), req.query['cursor']);
 		const sort = ZodValidateSchema(TracksSort.optional(), req.query['sort']);
 		// const author = ZodValidateSchema(z.string(), req.query['author']);
