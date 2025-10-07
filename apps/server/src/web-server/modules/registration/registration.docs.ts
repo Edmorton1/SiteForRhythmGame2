@@ -7,7 +7,7 @@ import { serverPaths } from '../../../../../../libs/shared/PATHS';
 import { RegistrationDTOZodSchema } from '../../../common/models/schemas/registration.dto';
 import { ProfileZodSchema } from '../../../../../../libs/models/schemas/profile';
 import { registrationErrors } from '../../../common/modules/auth/errors/registration';
-import { commonErrors } from '../../common/errors/COMMON_ERRORS';
+import { docsErrors } from '../../common/errors/docs.errors';
 
 extendZodWithOpenApi(z);
 // TODO: Add errors variables
@@ -41,9 +41,9 @@ registry.registerPath({
 		400: {
 			description: `
 	${registrationErrors.AUTH_METHOD}
-	${commonErrors.ZOD_FORMDATA_NOT_JSON('data')}
-	${commonErrors.ZOD_FORMDATA_NO_PROPERTY('data')}
-	${commonErrors.DOCS_VALIDATION_ERROR}`,
+	${docsErrors.ZOD_FORMDATA_NOT_JSON('data')}
+	${docsErrors.ZOD_FORMDATA_NO_PROPERTY('data')}
+	${docsErrors.DOCS_VALIDATION_ERROR}`,
 		},
 		409: {
 			description: `
@@ -51,6 +51,6 @@ registry.registerPath({
 	${registrationErrors.NICKNAME_TAKEN}`,
 		},
 		//@ts-ignore
-		default: commonErrors.default,
+		default: docsErrors.default,
 	},
 });

@@ -7,15 +7,15 @@ import { Profile } from '../../../../../../../../../libs/models/schemas/profile'
 import { HttpError } from '../../../../../../common/http/http.error';
 import { UserDTO } from '../../../../../../../../../libs/models/schemas/user';
 import { BaseService } from '../../../../../config/service/base.service';
-import { AUTH_MICRO_TYPES } from '../../../container/TYPES.di';
+import { AUTH } from '../../../container/auth.types';
 // prettier-ignore
 import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../../../../common/modules/auth/auth.functions';
 
 @injectable()
 export class RegistrationService extends BaseService {
 	constructor(
-		@inject(AUTH_MICRO_TYPES.repositories.registration)
-		private readonly registrationSQL: RegistrationRepository,
+		@inject(AUTH.repositories.registration)
+		private readonly registrationRepository: RegistrationRepository,
 	) {
 		super();
 		this.bindFunctions([
@@ -58,7 +58,7 @@ export class RegistrationService extends BaseService {
 		await this.isEmailIsFree(authDTO.user.email!);
 		await this.isNameIsFree(authDTO.profile.name);
 
-		return await this.registrationSQL.registrationEmail(authDTO);
+		return await this.registrationRepository.registrationEmail(authDTO);
 	};
 
 	private registrationWithProvider = async (
@@ -67,17 +67,20 @@ export class RegistrationService extends BaseService {
 	): Promise<Profile> => {
 		await this.isNameIsFree(authDTO.profile.name);
 
-		return await this.registrationSQL.registrationProvider(authDTO, provider);
+		return await this.registrationRepository.registrationProvider(
+			authDTO,
+			provider,
+		);
 	};
 
 	private isEmailIsFree = async (email: string) => {
-		if (await this.registrationSQL.isInDB('users', 'email', email)) {
+		if (await this.registrationRepository.isInDB('users', 'email', email)) {
 			throw new HttpError(409, registrationErrors.EMAIL_TAKEN);
 		}
 	};
 
 	private isNameIsFree = async (name: string) => {
-		if (await this.registrationSQL.isInDB('profiles', 'name', name)) {
+		if (await this.registrationRepository.isInDB('profiles', 'name', name)) {
 			throw new HttpError(409, registrationErrors.NICKNAME_TAKEN);
 		}
 	};

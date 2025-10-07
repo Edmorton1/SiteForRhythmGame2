@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-interface IControllerRoute {
+interface ControllerRoute {
 	path: string;
 	handle: (req: Request, res: Response) => Promise<void> | void;
 	method: keyof Pick<Router, 'get' | 'post' | 'delete' | 'patch' | 'put'>;
@@ -13,7 +13,7 @@ export class BaseController {
 		this.router = Router();
 	}
 
-	protected bindRoutes = (routes: IControllerRoute[]): void => {
+	protected bindRoutes = (routes: ControllerRoute[]): void => {
 		for (const route of routes) {
 			if (!route.middlewares?.length) route.middlewares = [];
 

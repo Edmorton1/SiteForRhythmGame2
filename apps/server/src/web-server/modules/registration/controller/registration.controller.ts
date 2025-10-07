@@ -9,16 +9,16 @@ import { TOPICS } from '../../../../common/topics/TOPICS';
 // prettier-ignore
 import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../../common/modules/auth/auth.functions';
 // prettier-ignore
-import { KafkaMessenger, KafkaSender } from '../../../common/services/packages/kafka/kafka.messenger';
-import { WEB_SERVICES_TYPES } from '../../../common/services/containers/SERVICES_TYPES.di';
+import { KafkaSender, KafkaSenderReturn } from '../../../common/adapters/kafka.sender';
+import { ADAPTERS } from '../../../../common/adapters/container/adapters.types';
 
 @injectable()
 export class RegistrationController extends BaseController {
-	sender: KafkaSender<AUTH_FUNCTIONS>;
+	sender: KafkaSenderReturn<AUTH_FUNCTIONS>;
 
 	constructor(
-		@inject(WEB_SERVICES_TYPES.kafkaMessenger)
-		private readonly kafkaMessenger: KafkaMessenger,
+		@inject(ADAPTERS.web.kafkaSender)
+		private readonly kafkaSender: KafkaSender,
 	) {
 		super();
 		this.bindRoutes([
@@ -29,7 +29,7 @@ export class RegistrationController extends BaseController {
 				middlewares: [multer({}).single('avatar')],
 			},
 		]);
-		this.sender = this.kafkaMessenger.initSender<AUTH_FUNCTIONS>();
+		this.sender = this.kafkaSender.initSender<AUTH_FUNCTIONS>();
 	}
 
 	registration = async (req: Request, res: Response) => {

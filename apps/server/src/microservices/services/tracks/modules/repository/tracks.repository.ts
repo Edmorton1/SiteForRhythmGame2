@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
-import { SERVICES_TYPES } from '../../../../../common/containers/SERVICES_TYPES.di';
-import { DatabaseService } from '../../../../../common/services/postgres/database.service';
+import { DatabaseAdapter } from '../../../../common/adapters/postgres/database.adapters';
 import { TRACKS_FUNCTIONS } from '../../../../../common/modules/tracks/tracks.functions';
 import { sql } from 'kysely';
+import { ADAPTERS } from '../../../../../common/adapters/container/adapters.types';
 
 const days = {
 	today: 1,
@@ -29,14 +29,12 @@ export const TRACKS_SELECT = [
 @injectable()
 export class TracksRepository {
 	constructor(
-		@inject(SERVICES_TYPES.database)
-		private readonly databaseService: DatabaseService,
+		@inject(ADAPTERS.micro.database)
+		private readonly db: DatabaseAdapter,
 	) {}
 
 	getAllTracks = async (options: TRACKS_FUNCTIONS['getAllTracks']['input']) => {
-		let query = this.databaseService.db
-			.selectFrom('tracks')
-			.select(TRACKS_SELECT);
+		let query = this.db.db.selectFrom('tracks').select(TRACKS_SELECT);
 
 		if (options.cursor) {
 			query = query.where('id', '>', options.cursor);
@@ -72,7 +70,7 @@ export class TracksRepository {
 	};
 
 	getTrack = async (id: TRACKS_FUNCTIONS['getTrack']['input']) => {
-		const track = await this.databaseService.db
+		const track = await this.db.db
 			.selectFrom('tracks')
 			.select(TRACKS_SELECT)
 			.where('id', '=', id)

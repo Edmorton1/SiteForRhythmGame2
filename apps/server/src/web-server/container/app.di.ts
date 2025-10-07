@@ -1,25 +1,21 @@
 import { ContainerModule } from 'inversify';
-import { WEB_TYPES } from './TYPES.di';
+import { WEB } from './web.di';
 import { ControllerCollector } from '../config/controllers/controller.collector';
-import { ServerExpress } from '../config/server/server';
-import { ExpressError } from '../config/middlewares/express.error';
-import { ExpressSession } from '../config/middlewares/express.session';
-import { KafkaWebServer } from '../config/kafka.webserver';
+import { ServerWeb } from '../config/server/server';
+import { KafkaLoader } from '../config/kafka/kafka.loader';
+import { ErrorMiddleware } from '../config/middlewares/error.middleware';
+import { SessionMiddleware } from '../config/middlewares/session.middleware';
 
 export const appBindings = new ContainerModule(({ bind }) => {
-	bind<ControllerCollector>(WEB_TYPES.app.ControllerCollector)
+	bind<ControllerCollector>(WEB.app.ControllerCollector)
 		.to(ControllerCollector)
 		.inSingletonScope();
-	bind<ExpressError>(WEB_TYPES.app.ExpressError)
-		.to(ExpressError)
+	bind<ErrorMiddleware>(WEB.app.errorMiddleware)
+		.to(ErrorMiddleware)
 		.inSingletonScope();
-	bind<ExpressSession>(WEB_TYPES.app.ExpressSession)
-		.to(ExpressSession)
+	bind<SessionMiddleware>(WEB.app.sessionMiddleware)
+		.to(SessionMiddleware)
 		.inSingletonScope();
-	bind<ServerExpress>(WEB_TYPES.app.ServerExpress)
-		.to(ServerExpress)
-		.inSingletonScope();
-	bind<KafkaWebServer>(WEB_TYPES.app.KafkaWebServer)
-		.to(KafkaWebServer)
-		.inSingletonScope();
+	bind<ServerWeb>(WEB.app.ServerWeb).to(ServerWeb).inSingletonScope();
+	bind<KafkaLoader>(WEB.app.KafkaLoader).to(KafkaLoader).inSingletonScope();
 });

@@ -1,7 +1,7 @@
 import { CountryCodes } from '../../../../../../libs/models/enums/countries';
 // prettier-ignore
 import type { Track, TrackDTO, TracksSort } from "../../../../../../libs/models/schemas/tracks"
-import { Difficulties } from '../../services/postgres/database.type';
+import { Difficulties } from '../../../microservices/common/adapters/postgres/database.type';
 
 export const TRACKS_KEYS = {
 	getAllTracks: 'getAllTracks',

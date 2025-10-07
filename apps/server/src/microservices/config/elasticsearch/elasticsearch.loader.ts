@@ -1,15 +1,15 @@
 import { multiInject } from 'inversify';
-import { MICRO_TYPES } from '../containers/TYPES.di';
+import { MICRO } from '../containers/micro.types';
 import { ElasticSearchBase } from './elasticsearch.types';
 
 export class ElasticSearchLoader {
 	constructor(
-		@multiInject(MICRO_TYPES.elastics)
-		private readonly elastics: ElasticSearchBase[],
+		@multiInject(MICRO.elastics)
+		private readonly elasticSearchIndexes: ElasticSearchBase[],
 	) {}
 
 	loadElastics = async () => {
-		for (const elastic of this.elastics) {
+		for (const elastic of this.elasticSearchIndexes) {
 			await elastic.collect();
 		}
 	};

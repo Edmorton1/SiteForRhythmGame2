@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 // prettier-ignore
-import { AnyFunction, KafkaFunc } from '../../../common/services/kafka/kafka.types';
+import { AnyFunction, KafkaFunc } from '../../../common/adapters/kafka/kafka.types';
 
 @injectable()
 export class BaseService {

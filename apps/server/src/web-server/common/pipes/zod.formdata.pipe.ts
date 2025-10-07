@@ -1,6 +1,6 @@
 import { ZodError, ZodType } from 'zod';
 import { HttpError } from '../../../common/http/http.error';
-import { commonErrors } from '../errors/COMMON_ERRORS';
+import { docsErrors } from '../errors/docs.errors';
 
 interface Args<T extends ZodType<any>> {
 	data: unknown;
@@ -19,7 +19,7 @@ export const zodValidateFormData = <T extends ZodType<any>>({
 	files: file,
 }: Args<T>) => {
 	if (typeof data !== 'object' || data === null || !(name in data)) {
-		throw new HttpError(400, commonErrors.ZOD_FORMDATA_NO_PROPERTY(name));
+		throw new HttpError(400, docsErrors.ZOD_FORMDATA_NO_PROPERTY(name));
 	}
 
 	try {
@@ -30,6 +30,6 @@ export const zodValidateFormData = <T extends ZodType<any>>({
 		if (err instanceof ZodError) {
 			throw new HttpError(400, JSON.parse(err.message));
 		}
-		throw new HttpError(400, commonErrors.ZOD_FORMDATA_NOT_JSON(name));
+		throw new HttpError(400, docsErrors.ZOD_FORMDATA_NOT_JSON(name));
 	}
 };

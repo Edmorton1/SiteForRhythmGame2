@@ -2,13 +2,13 @@ import 'reflect-metadata';
 import dotenv from 'dotenv';
 dotenv.config();
 import { RegistrationRepository } from '../registration.repository';
-import { authMicroContainer } from '../../../../container/container.di';
+import { authContainer } from '../../../../container/container.di';
 import { randomString } from '../../../../../../../common/test_rename/generateString';
-import { SERVICES_TYPES } from '../../../../../../../common/containers/SERVICES_TYPES.di';
-import { DatabaseService } from '../../../../../../../common/services/postgres/database.service';
-import { LoggerService } from '../../../../../../../common/services/logger/logger.service';
+import { ADAPTERS } from '../../../../../../../common/adapters/container/adapters.types';
+import { DatabaseAdapter } from '../../../../../../common/adapters/postgres/database.adapters';
+import { LoggerAdapter } from '../../../../../../../common/adapters/logger/logger.adapter';
 import { Provider } from '../../../../../../../common/_declarations/session';
-import { AUTH_MICRO_TYPES } from '../../../../container/TYPES.di';
+import { AUTH } from '../../../../container/auth.types';
 import { RegistrationDTO } from '../../../../../../../common/models/schemas/registration.dto';
 
 // TODO: make name without collision
@@ -22,14 +22,10 @@ const email = '_test';
 // SELECT pid, usename, datname, client_addr, state, query
 // FROM pg_stat_activity;
 
-const databaseService = authMicroContainer.get<DatabaseService>(
-	SERVICES_TYPES.database,
-);
-const loggerService = authMicroContainer.get<LoggerService>(
-	SERVICES_TYPES.logger,
-);
-const registrationRepository = authMicroContainer.get<RegistrationRepository>(
-	AUTH_MICRO_TYPES.repositories.registration,
+const database = authContainer.get<DatabaseAdapter>(ADAPTERS.micro.database);
+const logger = authContainer.get<LoggerAdapter>(ADAPTERS.common.logger);
+const registrationRepository = authContainer.get<RegistrationRepository>(
+	AUTH.repositories.registration,
 );
 
 const profileDTO: RegistrationDTO['profile'] = {
@@ -58,7 +54,7 @@ describe('[REGISTRATION] Repository', () => {
 	});
 
 	afterEach(async () => {
-		await databaseService.db
+		await database.db
 			.deleteFrom('users')
 			.where(eb => eb('email', '=', email).or('provider_id', '=', provider.id))
 			.returningAll()
@@ -66,7 +62,7 @@ describe('[REGISTRATION] Repository', () => {
 	});
 
 	afterAll(async () => {
-		await databaseService.disconnect();
-		loggerService.logger.flush();
+		await database.disconnect();
+		logger.logger.flush();
 	});
 });

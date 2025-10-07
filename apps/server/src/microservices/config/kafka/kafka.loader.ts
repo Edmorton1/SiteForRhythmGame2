@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
 import { TopicsRequest, TopicsResponse } from '../../../common/topics/TOPICS';
-import { MICRO_TYPES } from '../containers/TYPES.di';
+import { MICRO } from '../containers/micro.types';
 import { ServiceCollector } from '../service/service.collector';
-import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
-import { KafkaService } from '../../../common/services/kafka/kafka.service';
-import { LoggerService } from '../../../common/services/logger/logger.service';
+import { ADAPTERS } from '../../../common/adapters/container/adapters.types';
+import { KafkaAdapter } from '../../../common/adapters/kafka/kafka.adapter';
+import { LoggerAdapter } from '../../../common/adapters/logger/logger.adapter';
 import { Producer } from 'kafkajs';
 // prettier-ignore
-import { KafkaError, KafkaResponse } from '../../../common/services/kafka/kafka.types';
+import { KafkaError, KafkaResponse } from '../../../common/adapters/kafka/kafka.types';
 
 export type KafkaLoadingOptions = {
 	topic_req: TopicsRequest;
@@ -18,12 +18,12 @@ export type KafkaLoadingOptions = {
 @injectable()
 export class KafkaLoader {
 	constructor(
-		@inject(MICRO_TYPES.app.baseServiceCollector)
-		private readonly composite: ServiceCollector,
-		@inject(SERVICES_TYPES.kafka)
-		private readonly kafkaService: KafkaService,
-		@inject(SERVICES_TYPES.logger)
-		private readonly logger: LoggerService,
+		@inject(MICRO.app.baseServiceCollector)
+		private readonly collector: ServiceCollector,
+		@inject(ADAPTERS.common.kafka)
+		private readonly kafkaAdapter: KafkaAdapter,
+		@inject(ADAPTERS.common.logger)
+		private readonly logger: LoggerAdapter,
 	) {}
 
 	private producer?: Producer;
@@ -42,7 +42,7 @@ export class KafkaLoader {
 	};
 
 	private loadConsumer = async (options: KafkaLoadingOptions) => {
-		const consumer = this.kafkaService.createConsumer(options.groupId);
+		const consumer = this.kafkaAdapter.createConsumer(options.groupId);
 		await consumer.connect();
 		await consumer.subscribe({
 			topic: options.topic_req,
@@ -53,7 +53,7 @@ export class KafkaLoader {
 	};
 
 	private loadProducer = async () => {
-		const producer = this.kafkaService.createProducer();
+		const producer = this.kafkaAdapter.createProducer();
 		await producer.connect();
 		this.producer = producer;
 	};
@@ -68,7 +68,7 @@ export class KafkaLoader {
 			eachMessage: async ({ message }) => {
 				const value = JSON.parse(message.value!.toString());
 				console.log(value);
-				this.composite
+				this.collector
 					.use(value.func, value.message)
 
 					.then(result => {

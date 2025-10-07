@@ -1,17 +1,15 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import { webContainer } from '../../container/container.di';
-import { KafkaWebServer } from '../kafka.webserver';
-import { WEB_TYPES } from '../../container/TYPES.di';
-import { ServerExpress } from './server';
+import { KafkaLoader } from '../kafka/kafka.loader';
+import { WEB } from '../../container/web.di';
+import { ServerWeb } from './server';
 
 export const startServer = async () => {
-	const kafkaWebServer = webContainer.get<KafkaWebServer>(
-		WEB_TYPES.app.KafkaWebServer,
-	);
+	const kafkaWebServer = webContainer.get<KafkaLoader>(WEB.app.KafkaLoader);
 
 	await kafkaWebServer.startKafka();
 
-	const server = webContainer.get<ServerExpress>(WEB_TYPES.app.ServerExpress);
+	const server = webContainer.get<ServerWeb>(WEB.app.ServerWeb);
 	server.start();
 };

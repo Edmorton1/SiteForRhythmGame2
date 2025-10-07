@@ -7,7 +7,7 @@ import { SERVER_PREFIX } from '../../../../../../libs/shared/CONST';
 import { UserProfileZodSchemaClient } from '../../../../../../libs/models/schemas/profile';
 import { LoginDTOZodSchema } from '../../../../../../libs/models/schemas/auth';
 import { authErrors } from '../../../common/modules/auth/errors/auth';
-import { commonErrors } from '../../common/errors/COMMON_ERRORS';
+import { docsErrors } from '../../common/errors/docs.errors';
 
 extendZodWithOpenApi(z);
 
@@ -59,7 +59,7 @@ registry.registerPath({
 			description: authErrors.INCORRECT_PASSWORD,
 		},
 		//@ts-ignore
-		default: commonErrors.default,
+		default: docsErrors.default,
 	},
 });
 
@@ -71,6 +71,6 @@ registry.registerPath({
 		204: {
 			description: 'empty',
 		},
-		...commonErrors.UNAUTHORIZED_ERROR,
+		...docsErrors.UNAUTHORIZED_ERROR,
 	},
 });

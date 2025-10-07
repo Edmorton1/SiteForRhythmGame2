@@ -2,11 +2,11 @@ import { randomEmail } from '../../../../common/test_rename/generateString';
 import { SERVER_PREFIX } from '../../../../../../../libs/shared/CONST';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { RegistrationDTO } from '../../../../common/models/schemas/registration.dto';
-import { DatabaseService } from '../../../../common/services/postgres/database.service';
+import { DatabaseAdapter } from '../../../../microservices/common/adapters/postgres/database.adapters';
 import { testServer } from './supertest';
 import { LoginDTO } from '../../../../../../../libs/models/schemas/auth';
-import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
-import { authMicroContainer } from '../../../../microservices/services/auth/container/container.di';
+import { authContainer } from '../../../../microservices/services/auth/container/container.di';
+import { ADAPTERS } from '../../../../common/adapters/container/adapters.types';
 
 const profile = { name: 'test', about: 'null', country_code: 'RU' };
 describe('[E2E] SERVER TEST', () => {
@@ -14,9 +14,7 @@ describe('[E2E] SERVER TEST', () => {
 		email: randomEmail(),
 		password: '123123',
 	};
-	const databaseService = authMicroContainer.get<DatabaseService>(
-		SERVICES_TYPES.database,
-	);
+	const db = authContainer.get<DatabaseAdapter>(ADAPTERS.micro.database);
 
 	it('[AUTH] Init (empty)', async () => {
 		await testServer.get(SERVER_PREFIX + serverPaths.init).expect(204);
@@ -65,7 +63,7 @@ describe('[E2E] SERVER TEST', () => {
 	// });
 
 	afterAll(async () => {
-		await databaseService.db
+		await db.db
 			.deleteFrom('users')
 			// .where(eb => eb('email', '=', email).or('provider_id', '=', provider.id))
 			.where(eb => eb('email', '=', user.email))

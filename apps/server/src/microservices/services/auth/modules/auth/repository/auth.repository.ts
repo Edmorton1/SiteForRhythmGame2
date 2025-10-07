@@ -1,18 +1,18 @@
 import { inject, injectable } from 'inversify';
-import { DatabaseService } from '../../../../../../common/services/postgres/database.service';
+import { DatabaseAdapter } from '../../../../../common/adapters/postgres/database.adapters';
 import { HttpError } from '../../../../../../common/http/http.error';
 import { authErrors } from '../../../../../../common/modules/auth/errors/auth';
-import { SERVICES_TYPES } from '../../../../../../common/containers/SERVICES_TYPES.di';
+import { ADAPTERS } from '../../../../../../common/adapters/container/adapters.types';
 
 @injectable()
 export class AuthRepository {
 	constructor(
-		@inject(SERVICES_TYPES.database)
-		private readonly databaseService: DatabaseService,
+		@inject(ADAPTERS.micro.database)
+		private readonly db: DatabaseAdapter,
 	) {}
 
 	getPassword = async (email: string) => {
-		const user = await this.databaseService.db
+		const user = await this.db.db
 			.selectFrom('users')
 			.select(['id', 'role', 'password'])
 			.where('email', '=', email)
@@ -31,7 +31,7 @@ export class AuthRepository {
 		console.log(
 			'GET PROFILE BY ID | ЕСЛИ УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ ИЗ БД И НЕ ОБНОВИТЬ СЕССИЮ, БУДЕТ ОШИБКА',
 		);
-		return await this.databaseService.db
+		return await this.db.db
 			.selectFrom('profiles')
 			.select(['id', 'name', 'avatar', 'country_code'])
 			.where('id', '=', id)

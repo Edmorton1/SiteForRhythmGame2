@@ -1,19 +1,19 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import passport from 'passport';
-import { ConfigService } from '../../../../common/services/config/config.service';
+import { ConfigAdapter } from '../../../../common/adapters/config/config.adapter';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
 import { BaseController } from '../../../config/controllers/base.controller';
 import { Passport } from '../passport';
-import { WEB_TYPES } from '../../../container/TYPES.di';
-import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';
+import { WEB } from '../../../container/web.di';
+import { ADAPTERS } from '../../../../common/adapters/container/adapters.types';
 
 @injectable()
 export class GoogleController extends BaseController {
 	constructor(
-		@inject(SERVICES_TYPES.config)
-		private readonly configService: ConfigService,
-		@inject(WEB_TYPES.oauth.PassportGoogle)
+		@inject(ADAPTERS.common.config)
+		private readonly config: ConfigAdapter,
+		@inject(WEB.oauth.PassportGoogle)
 		private readonly pass: Passport,
 	) {
 		super();
@@ -36,11 +36,11 @@ export class GoogleController extends BaseController {
 	callback = (req: Request, res: Response) => {
 		passport.authenticate('google', { failureRedirect: '/fail' }, () => {
 			if (req.session.payload) {
-				res.redirect(this.configService.getEnv('URL_CLIENT'));
+				res.redirect(this.config.getEnv('URL_CLIENT'));
 			} else if (req.session.provider) {
 				res.redirect(
 					// TODO: ХардКод
-					`${this.configService.getEnv('URL_CLIENT')}/registration?oauth=true`,
+					`${this.config.getEnv('URL_CLIENT')}/registration?oauth=true`,
 				);
 			}
 		})(req, res);

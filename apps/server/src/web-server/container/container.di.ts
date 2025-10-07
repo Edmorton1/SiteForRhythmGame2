@@ -1,11 +1,11 @@
 import { Container } from 'inversify';
-import { serviceBindings } from '../../common/containers/services.di';
 import { appBindings } from './app.di';
 import { controllersBindings } from './controllers';
-import { webServicesBindings } from '../common/services/containers/services.di';
+import { webAdaptersBindings } from '../common/container/adapters-web.di';
+import { adaptersBindings } from '../../common/adapters/container/adapters.di';
 
 export const webContainer = new Container();
-webContainer.load(serviceBindings);
-webContainer.load(webServicesBindings);
+webContainer.load(adaptersBindings);
+webContainer.load(webAdaptersBindings);
 webContainer.load(appBindings);
 webContainer.load(controllersBindings);

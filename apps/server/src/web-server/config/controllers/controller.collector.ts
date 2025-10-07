@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import { BaseController } from './base.controller';
 import { injectable, multiInject } from 'inversify';
-import { WEB_TYPES } from '../../container/TYPES.di';
+import { WEB } from '../../container/web.di';
 
 @injectable()
 export class ControllerCollector {
 	router: Router;
 
 	constructor(
-		@multiInject(WEB_TYPES.controllers)
+		@multiInject(WEB.controllers)
 		private readonly controllers: BaseController[],
 	) {
 		this.router = Router();

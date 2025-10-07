@@ -3,40 +3,37 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { ControllerCollector } from '../controllers/controller.collector';
 import { SERVER_PREFIX } from '../../../../../../libs/shared/CONST';
-import { ConfigService } from '../../../common/services/config/config.service';
-import { ExpressError } from '../middlewares/express.error';
-import { LoggerService } from '../../../common/services/logger/logger.service';
+import { ConfigAdapter } from '../../../common/adapters/config/config.adapter';
+import { LoggerAdapter } from '../../../common/adapters/logger/logger.adapter';
 import swaggerUi from 'swagger-ui-express';
 import { openapiDocs } from '../swagger/openapi.config';
 import { inject, injectable } from 'inversify';
-import { WEB_TYPES } from '../../container/TYPES.di';
-import { ExpressSession } from '../middlewares/express.session';
+import { WEB } from '../../container/web.di';
 import passport from 'passport';
 import { Server } from 'http';
-import { DatabaseService } from '../../../common/services/postgres/database.service';
-import { RedisService } from '../../../common/services/redis/redis.service';
-import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
+import { ADAPTERS } from '../../../common/adapters/container/adapters.types';
+import { RedisAdapter } from '../../../common/adapters/redis/redis.adapter';
+import { SessionMiddleware } from '../middlewares/session.middleware';
+import { ErrorMiddleware } from '../middlewares/error.middleware';
 
 @injectable()
-export class ServerExpress {
+export class ServerWeb {
 	app: Express;
 	server?: Server;
 
 	constructor(
-		@inject(WEB_TYPES.app.ControllerCollector)
-		private readonly controllerCollector: ControllerCollector,
-		@inject(SERVICES_TYPES.config)
-		private readonly configService: ConfigService,
-		@inject(WEB_TYPES.app.ExpressError)
-		private readonly expressError: ExpressError,
-		@inject(SERVICES_TYPES.logger)
-		private readonly loggerService: LoggerService,
-		@inject(WEB_TYPES.app.ExpressSession)
-		private readonly expressSession: ExpressSession,
-		@inject(SERVICES_TYPES.database)
-		private readonly database: DatabaseService,
-		@inject(SERVICES_TYPES.redis)
-		private readonly redis: RedisService,
+		@inject(WEB.app.ControllerCollector)
+		private readonly collector: ControllerCollector,
+		@inject(ADAPTERS.common.config)
+		private readonly config: ConfigAdapter,
+		@inject(WEB.app.errorMiddleware)
+		private readonly errorsMiddleware: ErrorMiddleware,
+		@inject(ADAPTERS.common.logger)
+		private readonly logger: LoggerAdapter,
+		@inject(WEB.app.sessionMiddleware)
+		private readonly sessionMiddleware: SessionMiddleware,
+		@inject(ADAPTERS.common.redis)
+		private readonly redis: RedisAdapter,
 	) {
 		this.app = express();
 	}
@@ -45,18 +42,18 @@ export class ServerExpress {
 		this.app.use(cookieParser());
 		this.app.use(helmet());
 		this.app.use(json());
-		this.app.use(this.expressSession.expressSession);
+		this.app.use(this.sessionMiddleware.expressSession);
 		this.app.use(passport.initialize());
 		this.app.use(passport.session());
 		// РОУТЕР ЗАГРУЖАЕТСЯ
-		this.app.use(SERVER_PREFIX, this.controllerCollector.router);
+		this.app.use(SERVER_PREFIX, this.collector.router);
 
 		return this;
 	};
 
 	private configureApp = () => {
 		this.applyMiddlewares();
-		this.app.use(this.expressError.expressError);
+		this.app.use(this.errorsMiddleware.expressError);
 		this.app.use(
 			SERVER_PREFIX + '/docs',
 			swaggerUi.serve,
@@ -66,12 +63,12 @@ export class ServerExpress {
 
 	start = () => {
 		this.configureApp();
-		const port = parseInt(this.configService.getEnv('PORT'));
+		const port = parseInt(this.config.getEnv('PORT'));
 		// const port = (Math.random() * 10) % 10 > 5 ? 3000 : 3001;
-		const host = this.configService.getEnv('HOST');
+		const host = this.config.getEnv('HOST');
 
 		this.server = this.app.listen(port, host);
-		this.loggerService.logger.info(
+		this.logger.logger.info(
 			`SERVER STARTED ON PORT = ${port} AND HOST = ${host}`,
 		);
 	};
@@ -81,9 +78,9 @@ export class ServerExpress {
 		if (!this.server) {
 			console.log('SERVER NOT STARTED');
 		} else {
-			await this.database.disconnect();
+			// await this.database.disconnect();
 			await this.redis.disconnect();
-			this.loggerService.logger.flush();
+			this.logger.logger.flush();
 			this.server.close();
 		}
 	};

@@ -5,11 +5,11 @@ import { inject, injectable } from 'inversify';
 //prettier-ignore
 import { User, UserDTO } from '../../../../../../../../../libs/models/schemas/user';
 import { RegistrationDTO } from '../../../../../../common/models/schemas/registration.dto';
-import { DatabaseService } from '../../../../../../common/services/postgres/database.service';
+import { DatabaseAdapter } from '../../../../../common/adapters/postgres/database.adapters';
 import { Profile } from '../../../../../../../../../libs/models/schemas/profile';
-import { DatabaseKysely } from '../../../../../../common/services/postgres/database.type';
+import { DatabaseKysely } from '../../../../../common/adapters/postgres/database.type';
 import { Provider } from '../../../../../../common/_declarations/session';
-import { SERVICES_TYPES } from '../../../../../../common/containers/SERVICES_TYPES.di';
+import { ADAPTERS } from '../../../../../../common/adapters/container/adapters.types';
 
 type ProfileAvatar = Omit<RegistrationDTO, 'user'>;
 
@@ -18,8 +18,8 @@ type RoleId = Pick<User, 'id' | 'role'>;
 @injectable()
 export class RegistrationRepository {
 	constructor(
-		@inject(SERVICES_TYPES.database)
-		private readonly databaseService: DatabaseService,
+		@inject(ADAPTERS.micro.database)
+		private readonly db: DatabaseAdapter,
 	) {}
 
 	registrationEmail = async (authDTO: RegistrationDTO): Promise<Profile> => {
@@ -45,7 +45,7 @@ export class RegistrationRepository {
 			? await this.uploadAvatar(authDTO.avatar)
 			: null;
 
-		return this.databaseService.db.transaction().execute(async trx => {
+		return this.db.db.transaction().execute(async trx => {
 			const Payload = await insertUser(trx);
 			const profile = await trx
 				.insertInto('profiles')
@@ -98,7 +98,7 @@ export class RegistrationRepository {
 			SELECT 1
 			FROM ${sql.table(table)}
 			WHERE ${sql.ref(String(param))} = ${value}
-		)`.execute(this.databaseService.db);
+		)`.execute(this.db.db);
 
 		return rows[0].exists;
 	};

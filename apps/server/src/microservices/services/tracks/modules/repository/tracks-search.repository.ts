@@ -1,17 +1,17 @@
 import { inject, injectable } from 'inversify';
-import { SERVICES_TYPES } from '../../../../../common/containers/SERVICES_TYPES.di';
-import { ElasticSearchService } from '../../../../../common/services/elasticsearch/elasticsearch.service';
-import { INDEXES } from '../../../../../common/services/elasticsearch/INDEXES';
-import { DatabaseService } from '../../../../../common/services/postgres/database.service';
+import { ElasticSearchAdapter } from '../../../../common/adapters/elasticsearch/elasticsearch.adapter';
+import { INDEXES } from '../../../../common/adapters/elasticsearch/INDEXES';
+import { DatabaseAdapter } from '../../../../common/adapters/postgres/database.adapters';
 import { TRACKS_SELECT } from './tracks.repository';
+import { ADAPTERS } from '../../../../../common/adapters/container/adapters.types';
 
 @injectable()
 export class TracksSearchRepository {
 	constructor(
-		@inject(SERVICES_TYPES.elasticsearch)
-		private readonly es: ElasticSearchService,
-		@inject(SERVICES_TYPES.database)
-		private readonly databaseService: DatabaseService,
+		@inject(ADAPTERS.micro.elasticsearch)
+		private readonly es: ElasticSearchAdapter,
+		@inject(ADAPTERS.micro.database)
+		private readonly db: DatabaseAdapter,
 	) {}
 
 	getSearchSuggestTrack = async (query: string) => {
@@ -39,7 +39,7 @@ export class TracksSearchRepository {
 			return [];
 		}
 
-		const tracks = await this.databaseService.db
+		const tracks = await this.db.db
 			.selectFrom('tracks')
 			.select(TRACKS_SELECT)
 			.where('id', 'in', tracks_ids)

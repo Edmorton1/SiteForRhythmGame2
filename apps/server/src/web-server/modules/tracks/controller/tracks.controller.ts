@@ -11,17 +11,17 @@ import { zId } from '../../../../../../../libs/models/enums/zod';
 import { difficultiesZodSchema, TracksSort } from '../../../../../../../libs/models/schemas/tracks';
 import z from 'zod';
 import { zCountryCodes } from '../../../../../../../libs/models/enums/countries';
-import { WEB_SERVICES_TYPES } from '../../../common/services/containers/SERVICES_TYPES.di';
 // prettier-ignore
-import { KafkaMessenger, KafkaSender } from '../../../common/services/packages/kafka/kafka.messenger';
+import { KafkaSender, KafkaSenderReturn } from '../../../common/adapters/kafka.sender';
+import { ADAPTERS } from '../../../../common/adapters/container/adapters.types';
 
 @injectable()
 export class TracksController extends BaseController {
-	sender: KafkaSender<TRACKS_FUNCTIONS>;
+	sender: KafkaSenderReturn<TRACKS_FUNCTIONS>;
 
 	constructor(
-		@inject(WEB_SERVICES_TYPES.kafkaMessenger)
-		private readonly kafkaMessenger: KafkaMessenger,
+		@inject(ADAPTERS.web.kafkaSender)
+		private readonly kafkaSender: KafkaSender,
 	) {
 		super();
 		this.bindRoutes([
@@ -46,7 +46,7 @@ export class TracksController extends BaseController {
 				path: `${serverPaths.tracks}/:id`,
 			},
 		]);
-		this.sender = this.kafkaMessenger.initSender<TRACKS_FUNCTIONS>();
+		this.sender = this.kafkaSender.initSender<TRACKS_FUNCTIONS>();
 	}
 
 	private validateQuery = (val: unknown) => {

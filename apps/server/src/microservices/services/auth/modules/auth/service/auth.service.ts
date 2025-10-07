@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { BaseService } from '../../../../../config/service/base.service';
 import { HttpError } from '../../../../../../common/http/http.error';
 import { authErrors } from '../../../../../../common/modules/auth/errors/auth';
-import { AUTH_MICRO_TYPES } from '../../../container/TYPES.di';
+import { AUTH } from '../../../container/auth.types';
 // prettier-ignore
 import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../../../../common/modules/auth/auth.functions';
 
@@ -13,7 +13,7 @@ console.log('AUTH SERVICE');
 @injectable()
 export class AuthService extends BaseService {
 	constructor(
-		@inject(AUTH_MICRO_TYPES.repositories.auth)
+		@inject(AUTH.repositories.auth)
 		private readonly authRepository: AuthRepository,
 	) {
 		super();

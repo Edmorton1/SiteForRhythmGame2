@@ -4,11 +4,6 @@ import { Profile, UserProfile } from '../../../../../../libs/models/schemas/prof
 import { Payload, Provider } from '../../_declarations/session';
 import { RegistrationDTO } from '../../models/schemas/registration.dto';
 
-export type LoginServiceReturn = {
-	payload: Payload;
-	profile: UserProfile;
-};
-
 export const AUTH_KEYS = {
 	login: 'login',
 	init: 'init',
@@ -17,7 +12,13 @@ export const AUTH_KEYS = {
 } as const;
 
 export type AUTH_FUNCTIONS = {
-	[AUTH_KEYS.login]: { input: LoginDTO; output: LoginServiceReturn };
+	[AUTH_KEYS.login]: {
+		input: LoginDTO;
+		output: {
+			payload: Payload;
+			profile: UserProfile;
+		};
+	};
 	[AUTH_KEYS.init]: { input: number; output: UserProfile };
 	[AUTH_KEYS.registration]: {
 		input: { authDTO: RegistrationDTO; provider: Provider | undefined };

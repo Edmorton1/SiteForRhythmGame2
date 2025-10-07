@@ -1,36 +1,34 @@
 import { inject, injectable } from 'inversify';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { ConfigService } from '../../../common/services/config/config.service';
+import { ConfigAdapter } from '../../../common/adapters/config/config.adapter';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
-import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
+import { ADAPTERS } from '../../../common/adapters/container/adapters.types';
 import { TOPICS } from '../../../common/topics/TOPICS';
 // prettier-ignore
 import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../common/modules/auth/auth.functions';
-import { WEB_SERVICES_TYPES } from '../../common/services/containers/SERVICES_TYPES.di';
-import { KafkaMessenger } from '../../common/services/packages/kafka/kafka.messenger';
+import { KafkaSender } from '../../common/adapters/kafka.sender';
 
 @injectable()
 export class Passport {
 	constructor(
-		@inject(SERVICES_TYPES.config)
-		private readonly configService: ConfigService,
-		@inject(WEB_SERVICES_TYPES.kafkaMessenger)
-		private readonly KafkaMessenger: KafkaMessenger,
+		@inject(ADAPTERS.common.config)
+		private readonly config: ConfigAdapter,
+		@inject(ADAPTERS.web.kafkaSender)
+		private readonly KafkaSender: KafkaSender,
 	) {
 		console.log(
 			'СОЗДАЛСЯ ЭКЗЕМПЛЯР PASSPORT',
-			this.configService.getEnv('URL_SERVER') + serverPaths.authGoogleCallback,
+			this.config.getEnv('URL_SERVER') + serverPaths.authGoogleCallback,
 		);
-		const { sendAndWait } = this.KafkaMessenger.initSender<AUTH_FUNCTIONS>();
+		const { sendAndWait } = this.KafkaSender.initSender<AUTH_FUNCTIONS>();
 		passport.use(
 			new GoogleStrategy(
 				{
-					clientID: this.configService.getEnv('GOOGLE_CLIENT_ID'),
-					clientSecret: this.configService.getEnv('GOOGLE_CLIENT_SECRET'),
+					clientID: this.config.getEnv('GOOGLE_CLIENT_ID'),
+					clientSecret: this.config.getEnv('GOOGLE_CLIENT_SECRET'),
 					callbackURL:
-						this.configService.getEnv('URL_SERVER') +
-						serverPaths.authGoogleCallback,
+						this.config.getEnv('URL_SERVER') + serverPaths.authGoogleCallback,
 					passReqToCallback: true,
 				},
 				async (req, accessToken, refreshToken, profile, done) => {
