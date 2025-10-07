@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { TracksRepository } from '../repository/tracks.repository';
-import { BaseService } from '../../../../config/base.service';
+import { BaseService } from '../../../../config/service/base.service';
 import { TRACKS_MICRO_TYPES } from '../../container/TYPES.di';
 // prettier-ignore
 import { TRACKS_FUNCTIONS, TRACKS_KEYS } from '../../../../../common/modules/tracks/tracks.functions';

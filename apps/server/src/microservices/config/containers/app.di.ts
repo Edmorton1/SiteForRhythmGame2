@@ -1,24 +1,28 @@
 import { ContainerModule } from 'inversify';
 import { MICRO_TYPES } from './TYPES.di';
-import { BaseService } from '../base.service';
-import { ServiceCollector } from '../service.collector';
-import { KafkaMicroservice } from '../kafka.microservice';
-import { ServerMicroservice } from '../server';
-import { ElasticMicroservice } from '../elastic.microservice';
+import { BaseService } from '../service/base.service';
+import { ServiceCollector } from '../service/service.collector';
+import { ServerMicroservice } from '../server/server';
+import { ElasticSearchLoader } from '../elasticsearch/elasticsearch.loader';
+import { KafkaLoader } from '../kafka/kafka.loader';
 
 export const appMicroBindings = new ContainerModule(({ bind }) => {
-	bind<BaseService>(MICRO_TYPES.app.instance)
+	bind<BaseService>(MICRO_TYPES.app.baseService)
 		.to(BaseService)
 		.inSingletonScope();
-	bind<ServiceCollector>(MICRO_TYPES.app.composite)
+
+	bind<ServiceCollector>(MICRO_TYPES.app.baseServiceCollector)
 		.to(ServiceCollector)
 		.inSingletonScope();
-	bind<KafkaMicroservice>(MICRO_TYPES.app.kafka)
-		.to(KafkaMicroservice)
+
+	bind<KafkaLoader>(MICRO_TYPES.app.kafkaLoader)
+		.to(KafkaLoader)
 		.inSingletonScope();
-	bind<ElasticMicroservice>(MICRO_TYPES.app.elastic)
-		.to(ElasticMicroservice)
+
+	bind<ElasticSearchLoader>(MICRO_TYPES.app.elasticLoader)
+		.to(ElasticSearchLoader)
 		.inSingletonScope();
+
 	bind<ServerMicroservice>(MICRO_TYPES.app.server)
 		.to(ServerMicroservice)
 		.inSingletonScope();

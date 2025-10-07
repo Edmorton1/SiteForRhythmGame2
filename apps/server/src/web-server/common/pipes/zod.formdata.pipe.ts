@@ -1,6 +1,6 @@
 import { ZodError, ZodType } from 'zod';
 import { HttpError } from '../../../common/http/http.error';
-import { commonErrors } from '../errors/CONST';
+import { commonErrors } from '../errors/COMMON_ERRORS';
 
 interface Args<T extends ZodType<any>> {
 	data: unknown;

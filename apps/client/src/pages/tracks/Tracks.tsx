@@ -45,7 +45,8 @@ export const Tracks = () => {
 				type='text'
 			/>
 
-			<button onClick={onClick}>Готово</button>
+			<button onClick={() => console.log('log')}>log</button>
+			<button onClick={() => onClick()}>Готово</button>
 			<div>Автодополнение</div>
 			<div>
 				{suggests.map(sug => (

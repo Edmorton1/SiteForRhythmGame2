@@ -1,24 +1,24 @@
 import { inject, injectable } from 'inversify';
-import { MICRO_TYPES } from './containers/TYPES.di';
-import { ServiceCollector } from './service.collector';
-import { KafkaService } from '../../common/services/kafka/kafka.service';
-import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
+import { TopicsRequest, TopicsResponse } from '../../../common/topics/TOPICS';
+import { MICRO_TYPES } from '../containers/TYPES.di';
+import { ServiceCollector } from '../service/service.collector';
+import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
+import { KafkaService } from '../../../common/services/kafka/kafka.service';
+import { LoggerService } from '../../../common/services/logger/logger.service';
 import { Producer } from 'kafkajs';
-import { LoggerService } from '../../common/services/logger/logger.service';
-import type { TopicsRequest, TopicsResponse } from '../../common/topics/TOPICS';
 // prettier-ignore
-import { KafkaError, KafkaResponse } from '../../common/services/kafka/kafka.types';
+import { KafkaError, KafkaResponse } from '../../../common/services/kafka/kafka.types';
 
-export type KafkaMicroserviceOptions = {
+export type KafkaLoadingOptions = {
 	topic_req: TopicsRequest;
 	topic_res: TopicsResponse;
 	groupId: string;
 };
 
 @injectable()
-export class KafkaMicroservice {
+export class KafkaLoader {
 	constructor(
-		@inject(MICRO_TYPES.app.composite)
+		@inject(MICRO_TYPES.app.baseServiceCollector)
 		private readonly composite: ServiceCollector,
 		@inject(SERVICES_TYPES.kafka)
 		private readonly kafkaService: KafkaService,
@@ -41,7 +41,7 @@ export class KafkaMicroservice {
 		});
 	};
 
-	private loadConsumer = async (options: KafkaMicroserviceOptions) => {
+	private loadConsumer = async (options: KafkaLoadingOptions) => {
 		const consumer = this.kafkaService.createConsumer(options.groupId);
 		await consumer.connect();
 		await consumer.subscribe({
@@ -58,7 +58,7 @@ export class KafkaMicroservice {
 		this.producer = producer;
 	};
 
-	start = async (options: KafkaMicroserviceOptions) => {
+	start = async (options: KafkaLoadingOptions) => {
 		console.log(`СТАРТ ServerMicroservice`);
 
 		const consumer = await this.loadConsumer(options);

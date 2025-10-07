@@ -1,10 +1,10 @@
 export const MICRO_TYPES = {
 	app: {
 		server: Symbol.for('ServerMicroservice'),
-		kafka: Symbol.for('KafkaMicroservice'),
-		composite: Symbol.for('ServiceComposite'),
-		instance: Symbol.for('ServiceInstance'),
-		elastic: Symbol.for('ElasticLoading'),
+		baseServiceCollector: Symbol.for('ServiceCollector'),
+		baseService: Symbol.for('ServiceInstance'),
+		kafkaLoader: Symbol.for('KafkaLoader'),
+		elasticLoader: Symbol.for('ElasticLoader'),
 	},
 
 	controllers: Symbol.for('MicroControllers'),

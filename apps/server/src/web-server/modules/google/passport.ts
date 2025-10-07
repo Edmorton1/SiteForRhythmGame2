@@ -3,26 +3,26 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { ConfigService } from '../../../common/services/config/config.service';
 import { serverPaths } from '../../../../../../libs/shared/PATHS';
-import { KafkaWebServer } from '../../config/kafka.webserver';
 import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
-import { WEB_TYPES } from '../../container/TYPES.di';
 import { TOPICS } from '../../../common/topics/TOPICS';
 // prettier-ignore
 import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../common/modules/auth/auth.functions';
+import { WEB_SERVICES_TYPES } from '../../common/services/containers/SERVICES_TYPES.di';
+import { KafkaMessenger } from '../../common/services/packages/kafka/kafka.messenger';
 
 @injectable()
 export class Passport {
 	constructor(
 		@inject(SERVICES_TYPES.config)
 		private readonly configService: ConfigService,
-		@inject(WEB_TYPES.app.KafkaWebServer)
-		private readonly kafkaWebServer: KafkaWebServer,
+		@inject(WEB_SERVICES_TYPES.kafkaMessenger)
+		private readonly KafkaMessenger: KafkaMessenger,
 	) {
 		console.log(
 			'СОЗДАЛСЯ ЭКЗЕМПЛЯР PASSPORT',
 			this.configService.getEnv('URL_SERVER') + serverPaths.authGoogleCallback,
 		);
-		const { sendAndWait } = this.kafkaWebServer.initSender<AUTH_FUNCTIONS>();
+		const { sendAndWait } = this.KafkaMessenger.initSender<AUTH_FUNCTIONS>();
 		passport.use(
 			new GoogleStrategy(
 				{

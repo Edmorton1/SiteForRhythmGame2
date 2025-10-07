@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { BaseController } from './base.controller';
 import { injectable, multiInject } from 'inversify';
-import { WEB_TYPES } from '../container/TYPES.di';
+import { WEB_TYPES } from '../../container/TYPES.di';
 
 @injectable()
-export class ServerRoutes {
+export class ControllerCollector {
 	router: Router;
 
 	constructor(
@@ -13,12 +13,8 @@ export class ServerRoutes {
 	) {
 		this.router = Router();
 
-		// const controllers: BaseController[] = Object.values(this.modules).map(e =>
-		// 	this.container.get(e.controller),
-		// );
-
-		this.controllers.forEach(controller => {
+		for (const controller of this.controllers) {
 			this.router.use(controller.router);
-		});
+		}
 	}
 }

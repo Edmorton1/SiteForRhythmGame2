@@ -6,7 +6,7 @@ import { Provider } from '../../../../../../common/_declarations/session';
 import { Profile } from '../../../../../../../../../libs/models/schemas/profile';
 import { HttpError } from '../../../../../../common/http/http.error';
 import { UserDTO } from '../../../../../../../../../libs/models/schemas/user';
-import { BaseService } from '../../../../../config/base.service';
+import { BaseService } from '../../../../../config/service/base.service';
 import { AUTH_MICRO_TYPES } from '../../../container/TYPES.di';
 // prettier-ignore
 import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../../../../common/modules/auth/auth.functions';

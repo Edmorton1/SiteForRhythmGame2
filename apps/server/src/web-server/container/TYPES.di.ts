@@ -1,6 +1,6 @@
 export const WEB_TYPES = {
 	app: {
-		ServerRoutes: Symbol.for('ServerRoutes'),
+		ControllerCollector: Symbol.for('ControllersCollector'),
 		ExpressError: Symbol.for('ErrorMiddleware'),
 		ExpressSession: Symbol.for('ExpressSession'),
 		ServerExpress: Symbol.for('ServerExpress'),

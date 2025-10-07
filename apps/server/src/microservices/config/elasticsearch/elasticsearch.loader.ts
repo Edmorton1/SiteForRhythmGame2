@@ -1,11 +1,11 @@
 import { multiInject } from 'inversify';
-import { MICRO_TYPES } from './containers/TYPES.di';
-import { ElasticBase } from './elastic.types';
+import { MICRO_TYPES } from '../containers/TYPES.di';
+import { ElasticSearchBase } from './elasticsearch.types';
 
-export class ElasticMicroservice {
+export class ElasticSearchLoader {
 	constructor(
 		@multiInject(MICRO_TYPES.elastics)
-		private readonly elastics: ElasticBase[],
+		private readonly elastics: ElasticSearchBase[],
 	) {}
 
 	loadElastics = async () => {

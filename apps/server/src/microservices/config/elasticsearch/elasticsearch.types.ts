@@ -1,3 +1,3 @@
-export abstract class ElasticBase {
+export abstract class ElasticSearchBase {
 	abstract collect: () => Promise<void>;
 }

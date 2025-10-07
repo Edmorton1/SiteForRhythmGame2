@@ -7,7 +7,7 @@ import { serverPaths } from '../../../../../../libs/shared/PATHS';
 import { RegistrationDTOZodSchema } from '../../../common/models/schemas/registration.dto';
 import { ProfileZodSchema } from '../../../../../../libs/models/schemas/profile';
 import { registrationErrors } from '../../../common/modules/auth/errors/registration';
-import { commonErrors } from '../../common/errors/CONST';
+import { commonErrors } from '../../common/errors/COMMON_ERRORS';
 
 extendZodWithOpenApi(z);
 // TODO: Add errors variables

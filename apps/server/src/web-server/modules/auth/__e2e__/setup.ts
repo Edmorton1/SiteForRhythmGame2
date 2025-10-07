@@ -2,7 +2,7 @@ import path from 'path';
 const envPath = path.resolve(__dirname, '../../../.env');
 import dotenv from 'dotenv';
 dotenv.config({ path: envPath });
-import { ServerExpress } from '../../../../web-server/config/server';
+import { ServerExpress } from '../../../config/server/server';
 import { WEB_TYPES } from '../../../../web-server/container/TYPES.di';
 import { authMicroContainer } from '../../../../microservices/services/auth/container/container.di';
 

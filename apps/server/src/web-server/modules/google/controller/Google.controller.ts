@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import passport from 'passport';
 import { ConfigService } from '../../../../common/services/config/config.service';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
-import { BaseController } from '../../../config/base.controller';
+import { BaseController } from '../../../config/controllers/base.controller';
 import { Passport } from '../passport';
 import { WEB_TYPES } from '../../../container/TYPES.di';
 import { SERVICES_TYPES } from '../../../../common/containers/SERVICES_TYPES.di';

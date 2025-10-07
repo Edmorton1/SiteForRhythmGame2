@@ -3,10 +3,10 @@ import { SERVICES_TYPES } from '../../../../../common/containers/SERVICES_TYPES.
 import { DatabaseService } from '../../../../../common/services/postgres/database.service';
 import { ElasticSearchService } from '../../../../../common/services/elasticsearch/elasticsearch.service';
 import { INDEXES } from '../../../../../common/services/elasticsearch/INDEXES';
-import { ElasticBase } from '../../../../config/elastic.types';
+import { ElasticSearchBase } from '../../../../config/elasticsearch/elasticsearch.types';
 
 @injectable()
-export class TracksElastic implements ElasticBase {
+export class TracksElastic extends ElasticSearchBase {
 	index = INDEXES.second_index;
 
 	constructor(
@@ -14,7 +14,9 @@ export class TracksElastic implements ElasticBase {
 		private readonly es: ElasticSearchService,
 		@inject(SERVICES_TYPES.database)
 		private readonly db: DatabaseService,
-	) {}
+	) {
+		super();
+	}
 
 	collect = async () => {
 		await this.createIndex();

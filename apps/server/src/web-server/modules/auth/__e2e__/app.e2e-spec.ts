@@ -29,6 +29,7 @@ describe('[E2E] SERVER TEST', () => {
 				'data',
 				JSON.stringify({
 					user,
+					//@ts-ignore
 					profile,
 				} satisfies RegistrationDTO),
 			)

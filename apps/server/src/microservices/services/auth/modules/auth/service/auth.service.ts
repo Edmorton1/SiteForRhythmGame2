@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { AuthRepository } from '../repository/auth.repository';
 import bcrypt from 'bcrypt';
-import { BaseService } from '../../../../../config/base.service';
+import { BaseService } from '../../../../../config/service/base.service';
 import { HttpError } from '../../../../../../common/http/http.error';
 import { authErrors } from '../../../../../../common/modules/auth/errors/auth';
 import { AUTH_MICRO_TYPES } from '../../../container/TYPES.di';

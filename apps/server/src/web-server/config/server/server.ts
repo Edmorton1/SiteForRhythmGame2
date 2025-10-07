@@ -1,30 +1,30 @@
 import express, { Express, json } from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import { ServerRoutes } from './server.routes';
-import { SERVER_PREFIX } from '../../../../../libs/shared/CONST';
-import { ConfigService } from '../../common/services/config/config.service';
-import { ExpressError } from './middlewares/express.error';
-import { LoggerService } from '../../common/services/logger/logger.service';
+import { ControllerCollector } from '../controllers/controller.collector';
+import { SERVER_PREFIX } from '../../../../../../libs/shared/CONST';
+import { ConfigService } from '../../../common/services/config/config.service';
+import { ExpressError } from '../middlewares/express.error';
+import { LoggerService } from '../../../common/services/logger/logger.service';
 import swaggerUi from 'swagger-ui-express';
-import { openapiDocs } from './swagger/openapi.config';
+import { openapiDocs } from '../swagger/openapi.config';
 import { inject, injectable } from 'inversify';
-import { WEB_TYPES } from '../container/TYPES.di';
-import { ExpressSession } from './middlewares/express.session';
+import { WEB_TYPES } from '../../container/TYPES.di';
+import { ExpressSession } from '../middlewares/express.session';
 import passport from 'passport';
 import { Server } from 'http';
-import { DatabaseService } from '../../common/services/postgres/database.service';
-import { RedisService } from '../../common/services/redis/redis.service';
-import { SERVICES_TYPES } from '../../common/containers/SERVICES_TYPES.di';
+import { DatabaseService } from '../../../common/services/postgres/database.service';
+import { RedisService } from '../../../common/services/redis/redis.service';
+import { SERVICES_TYPES } from '../../../common/containers/SERVICES_TYPES.di';
 
 @injectable()
 export class ServerExpress {
 	app: Express;
-	server: Server | undefined;
+	server?: Server;
 
 	constructor(
-		@inject(WEB_TYPES.app.ServerRoutes)
-		private readonly serverRoutes: ServerRoutes,
+		@inject(WEB_TYPES.app.ControllerCollector)
+		private readonly controllerCollector: ControllerCollector,
 		@inject(SERVICES_TYPES.config)
 		private readonly configService: ConfigService,
 		@inject(WEB_TYPES.app.ExpressError)
@@ -48,18 +48,14 @@ export class ServerExpress {
 		this.app.use(this.expressSession.expressSession);
 		this.app.use(passport.initialize());
 		this.app.use(passport.session());
-
-		return this;
-	};
-
-	private useRoutes = () => {
-		this.app.use(SERVER_PREFIX, this.serverRoutes.router);
+		// РОУТЕР ЗАГРУЖАЕТСЯ
+		this.app.use(SERVER_PREFIX, this.controllerCollector.router);
 
 		return this;
 	};
 
 	private configureApp = () => {
-		this.applyMiddlewares().useRoutes();
+		this.applyMiddlewares();
 		this.app.use(this.expressError.expressError);
 		this.app.use(
 			SERVER_PREFIX + '/docs',

@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
-import { BaseController } from '../../../config/base.controller';
+import { BaseController } from '../../../config/controllers/base.controller';
 import { serverPaths } from '../../../../../../../libs/shared/PATHS';
-import { KafkaWebServer, KafkaSender } from '../../../config/kafka.webserver';
-import { WEB_TYPES } from '../../../container/TYPES.di';
 import { TOPICS } from '../../../../common/topics/TOPICS';
 // prettier-ignore
 import { TRACKS_FUNCTIONS, TRACKS_KEYS } from '../../../../common/modules/tracks/tracks.functions';
@@ -13,14 +11,17 @@ import { zId } from '../../../../../../../libs/models/enums/zod';
 import { difficultiesZodSchema, TracksSort } from '../../../../../../../libs/models/schemas/tracks';
 import z from 'zod';
 import { zCountryCodes } from '../../../../../../../libs/models/enums/countries';
+import { WEB_SERVICES_TYPES } from '../../../common/services/containers/SERVICES_TYPES.di';
+// prettier-ignore
+import { KafkaMessenger, KafkaSender } from '../../../common/services/packages/kafka/kafka.messenger';
 
 @injectable()
 export class TracksController extends BaseController {
 	sender: KafkaSender<TRACKS_FUNCTIONS>;
 
 	constructor(
-		@inject(WEB_TYPES.app.KafkaWebServer)
-		private readonly kafkaWebServer: KafkaWebServer,
+		@inject(WEB_SERVICES_TYPES.kafkaMessenger)
+		private readonly kafkaMessenger: KafkaMessenger,
 	) {
 		super();
 		this.bindRoutes([
@@ -45,7 +46,7 @@ export class TracksController extends BaseController {
 				path: `${serverPaths.tracks}/:id`,
 			},
 		]);
-		this.sender = this.kafkaWebServer.initSender<TRACKS_FUNCTIONS>();
+		this.sender = this.kafkaMessenger.initSender<TRACKS_FUNCTIONS>();
 	}
 
 	private validateQuery = (val: unknown) => {

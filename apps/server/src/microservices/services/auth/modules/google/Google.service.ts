@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { DatabaseService } from '../../../../../common/services/postgres/database.service';
-import { BaseService } from '../../../../config/base.service';
+import { BaseService } from '../../../../config/service/base.service';
 import { SERVICES_TYPES } from '../../../../../common/containers/SERVICES_TYPES.di';
 // prettier-ignore
 import { AUTH_FUNCTIONS, AUTH_KEYS } from '../../../../../common/modules/auth/auth.functions';
