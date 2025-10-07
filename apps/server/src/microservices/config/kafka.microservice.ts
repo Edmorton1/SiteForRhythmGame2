@@ -41,8 +41,7 @@ export class KafkaMicroservice {
 		});
 	};
 
-	start = async (options: KafkaMicroserviceOptions) => {
-		console.log(`СТАРТ ServerMicroservice`);
+	private loadConsumer = async (options: KafkaMicroserviceOptions) => {
 		const consumer = this.kafkaService.createConsumer(options.groupId);
 		await consumer.connect();
 		await consumer.subscribe({
@@ -50,9 +49,20 @@ export class KafkaMicroservice {
 			fromBeginning: false,
 		});
 
+		return consumer;
+	};
+
+	private loadProducer = async () => {
 		const producer = this.kafkaService.createProducer();
 		await producer.connect();
 		this.producer = producer;
+	};
+
+	start = async (options: KafkaMicroserviceOptions) => {
+		console.log(`СТАРТ ServerMicroservice`);
+
+		const consumer = await this.loadConsumer(options);
+		await this.loadProducer();
 
 		await consumer.run({
 			eachMessage: async ({ message }) => {
@@ -60,6 +70,7 @@ export class KafkaMicroservice {
 				console.log(value);
 				this.composite
 					.use(value.func, value.message)
+
 					.then(result => {
 						this.send(
 							{
@@ -70,6 +81,7 @@ export class KafkaMicroservice {
 							options.topic_res,
 						);
 					})
+
 					.catch(err => {
 						this.logger.logger.error({ ERROR_IN_RESPONSE: err });
 						this.send(

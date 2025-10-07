@@ -5,12 +5,15 @@ import { TRACKS_MICRO_TYPES } from '../../container/TYPES.di';
 // prettier-ignore
 import { TRACKS_FUNCTIONS, TRACKS_KEYS } from '../../../../../common/modules/tracks/tracks.functions';
 import { HttpError } from '../../../../../common/http/http.error';
+import { TracksSearchRepository } from '../repository/tracks-search.repository';
 
 @injectable()
 export class TracksService extends BaseService {
 	constructor(
 		@inject(TRACKS_MICRO_TYPES.repositories.tracks)
 		private readonly TracksRepository: TracksRepository,
+		@inject(TRACKS_MICRO_TYPES.repositories.tracksSearch)
+		private readonly TracksSearchRepository: TracksSearchRepository,
 	) {
 		super();
 		this.bindFunctions([
@@ -43,13 +46,13 @@ export class TracksService extends BaseService {
 	getSearchSuggestTrack = async (
 		query: TRACKS_FUNCTIONS['getSearchSuggestTrack']['input'],
 	): Promise<TRACKS_FUNCTIONS['getSearchSuggestTrack']['output']> => {
-		return await this.TracksRepository.getSearchSuggestTrack(query);
+		return await this.TracksSearchRepository.getSearchSuggestTrack(query);
 	};
 
 	getSearchTrack = async (
 		query: TRACKS_FUNCTIONS['getSearchTrack']['input'],
 	): Promise<TRACKS_FUNCTIONS['getSearchTrack']['output']> => {
-		return await this.TracksRepository.getSearchTrack(query);
+		return await this.TracksSearchRepository.getSearchTrack(query);
 	};
 
 	getTrack = async (

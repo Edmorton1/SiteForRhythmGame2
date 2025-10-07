@@ -21,6 +21,7 @@ interface Env {
 	GOOGLE_CLIENT_SECRET: string;
 	KAFKA_BROKERS: string;
 	KAFKA_CLIENT_ID: string;
+	ELASTIC_URL: string;
 }
 
 export class ConfigService {

@@ -80,6 +80,7 @@ export class ServerExpress {
 		);
 	};
 
+	// TODO: Убрать базы данных из Web-Server
 	close = async () => {
 		if (!this.server) {
 			console.log('SERVER NOT STARTED');

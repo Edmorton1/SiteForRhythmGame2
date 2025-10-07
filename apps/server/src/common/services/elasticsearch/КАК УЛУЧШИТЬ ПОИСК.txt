@@ -1,0 +1,5 @@
+		TODO: Использовать multi_match для поиска с несколькими полями, name^3 about^2
+		match: {
+		ПОТОМ СДЕЛАТЬ minimum_should_match - ЭТО МИНИМАЛЬНОЕ КОЛ-ВО НАЙДЕННЫХ СЛОВ
+			name: query,
+		},

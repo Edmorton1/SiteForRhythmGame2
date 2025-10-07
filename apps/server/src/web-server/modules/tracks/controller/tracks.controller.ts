@@ -84,7 +84,6 @@ export class TracksController extends BaseController {
 	getAllTracks = async (req: Request, res: Response) => {
 		const cursor = ZodValidateSchema(zId.optional(), req.query['cursor']);
 		const sort = ZodValidateSchema(TracksSort.optional(), req.query['sort']);
-		// const author = ZodValidateSchema(z.string(), req.query['author']);
 		const difficulty = ZodValidateSchema(
 			z.union([
 				difficultiesZodSchema.transform(lang => [lang]),
