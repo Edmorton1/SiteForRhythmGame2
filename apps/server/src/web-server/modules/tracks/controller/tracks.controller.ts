@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { BaseController } from '../../../config/controllers/base.controller';
-import { serverPaths } from '../../../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../../../libs/common/PATHS';
 import { TOPICS } from '../../../../common/topics/TOPICS';
 // prettier-ignore
 import { TRACKS_FUNCTIONS, TRACKS_KEYS } from '../../../../common/modules/tracks/tracks.functions';
 import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
 import { zId } from '../../../../../../../libs/models/enums/zod';
 // prettier-ignore
-import { difficultiesZodSchema, TracksSort } from '../../../../../../../libs/models/schemas/tracks';
+import { difficultiesZodSchema, TracksSortZodSchema } from '../../../../../../../libs/models/schemas/tracks';
 import z from 'zod';
 import { zCountryCodes } from '../../../../../../../libs/models/enums/countries';
 // prettier-ignore
@@ -84,10 +84,13 @@ export class TracksController extends BaseController {
 
 	getAllTracks = async (req: Request, res: Response) => {
 		const cursor = ZodValidateSchema(zId.optional(), req.query['cursor']);
-		const sort = ZodValidateSchema(TracksSort.optional(), req.query['sort']);
+		const sort = ZodValidateSchema(
+			TracksSortZodSchema.optional(),
+			req.query['sort'],
+		);
 		const difficulty = ZodValidateSchema(
 			z.union([
-				difficultiesZodSchema.transform(lang => [lang]),
+				difficultiesZodSchema.transform(difficulty => [difficulty]),
 				z.array(difficultiesZodSchema),
 				z.undefined(),
 			]),

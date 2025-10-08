@@ -1,4 +1,4 @@
-import { serverPaths } from '../../../../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../../../../libs/common/PATHS';
 import {} from '../../../../../../../../libs/models/schemas/user';
 import type { AuthDTO } from '../schemas/registration.dto';
 import { useMutation } from '@tanstack/react-query';

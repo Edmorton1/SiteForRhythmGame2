@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { UserDTOZodSchema } from '../../../../../../../libs/models/schemas/user';
 import { NAMESPACES } from '../../../../common/consts/NAMESPACES';
 import { useRegistrationAuthStore } from '../../common/stores/user.store';
-import { serverPaths } from '../../../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../../../libs/common/PATHS';
 
 export const RegistrationUserModule = () => {
 	const { t } = useTranslation(NAMESPACES.registration);

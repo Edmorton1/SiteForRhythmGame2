@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import passport from 'passport';
 import { ConfigAdapter } from '../../../../common/adapters/config/config.adapter';
-import { serverPaths } from '../../../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../../../libs/common/PATHS';
 import { BaseController } from '../../../config/controllers/base.controller';
 import { Passport } from '../passport';
 import { WEB } from '../../../container/web.di';

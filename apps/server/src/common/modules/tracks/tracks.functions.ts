@@ -1,7 +1,6 @@
 import { CountryCodes } from '../../../../../../libs/models/enums/countries';
 // prettier-ignore
-import type { Track, TrackDTO, TracksSort } from "../../../../../../libs/models/schemas/tracks"
-import { Difficulties } from '../../../microservices/common/adapters/postgres/database.type';
+import type { Difficulties, Track, TrackDTO, TracksSortZodSchema } from "../../../../../../libs/models/schemas/tracks"
 
 export const TRACKS_KEYS = {
 	getAllTracks: 'getAllTracks',
@@ -15,7 +14,7 @@ export type TRACKS_FUNCTIONS = {
 	[TRACKS_KEYS.getAllTracks]: {
 		input: {
 			cursor: number | undefined;
-			sort: TracksSort | undefined;
+			sort: TracksSortZodSchema | undefined;
 			lang: CountryCodes[] | undefined;
 			difficulty: Difficulties[] | undefined;
 		};

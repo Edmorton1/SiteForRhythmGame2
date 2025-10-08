@@ -2,7 +2,7 @@ import express, { Express, json } from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { ControllerCollector } from '../controllers/controller.collector';
-import { SERVER_PREFIX } from '../../../../../../libs/shared/CONST';
+import { SERVER_PREFIX } from '../../../../../../libs/common/CONST';
 import { ConfigAdapter } from '../../../common/adapters/config/config.adapter';
 import { LoggerAdapter } from '../../../common/adapters/logger/logger.adapter';
 import swaggerUi from 'swagger-ui-express';

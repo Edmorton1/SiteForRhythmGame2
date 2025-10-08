@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { BaseController } from '../../../config/base.controller';
-import { serverPaths } from '../../../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../../../libs/common/PATHS';
 import { KafkaWebServer } from '../../../config/kafka.webserver';
 import { WEB_TYPES } from '../../../container/TYPES.di';
 

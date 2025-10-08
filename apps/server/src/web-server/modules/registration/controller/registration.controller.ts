@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import multer from 'multer';
 import { inject, injectable } from 'inversify';
 import { BaseController } from '../../../config/controllers/base.controller';
-import { serverPaths } from '../../../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../../../libs/common/PATHS';
 import { zodValidateFormData } from '../../../common/pipes/zod.formdata.pipe';
 import { RegistrationDTOZodSchema } from '../../../../common/models/schemas/registration.dto';
 import { TOPICS } from '../../../../common/topics/TOPICS';

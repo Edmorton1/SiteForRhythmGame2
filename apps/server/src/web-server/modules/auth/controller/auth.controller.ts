@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { BaseController } from '../../../config/controllers/base.controller';
-import { serverPaths } from '../../../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../../../libs/common/PATHS';
 import { userGuard } from '../../../common/guards/user.guard';
 import { LoginDTOZodSchema } from '../../../../../../../libs/models/schemas/auth';
 import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';

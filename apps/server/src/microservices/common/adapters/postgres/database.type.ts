@@ -1,8 +1,7 @@
 import type { ColumnType, GeneratedAlways } from 'kysely';
 import { Role } from '../../../../../../../libs/models/schemas/user';
 import { CountryCodes } from '../../../../../../../libs/models/enums/countries';
-
-export type Difficulties = 'easy' | 'normal' | 'hard';
+import { Difficulties } from '../../../../../../../libs/models/schemas/tracks';
 
 export interface DatabaseKysely {
 	users: {

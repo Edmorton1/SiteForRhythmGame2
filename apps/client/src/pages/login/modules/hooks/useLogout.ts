@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { PROFILE } from '../../../../common/consts/QUERY_KEYS';
-import { serverPaths } from '../../../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../../../libs/common/PATHS';
 import { queryClient } from '../../../../app/queryClient';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';

@@ -2,7 +2,11 @@ import z from 'zod';
 import { zId, zISOString } from '../enums/zod';
 import { zCountryCodes } from '../enums/countries';
 
-export const difficultiesZodSchema = z.enum(['easy', 'normal', 'hard']);
+export const difficultiesTracks = ['easy', 'normal', 'hard'] as const;
+
+export const difficultiesZodSchema = z.enum(difficultiesTracks);
+
+export type Difficulties = z.infer<typeof difficultiesZodSchema>;
 
 export const TrackZodSchema = z.object({
 	id: zId,
@@ -35,7 +39,7 @@ export const TracksDtoZodSchema = TrackZodSchema.omit({
 
 export type TrackDTO = z.infer<typeof TracksDtoZodSchema>;
 
-export const TracksSort = z.enum([
+export const tracksSort = [
 	'plays_count',
 	'likes_count',
 	'downloads_count',
@@ -47,5 +51,7 @@ export const TracksSort = z.enum([
 	'week',
 	'month',
 	'year',
-]);
-export type TracksSort = z.infer<typeof TracksSort>;
+] as const;
+
+export const TracksSortZodSchema = z.enum(tracksSort);
+export type TracksSortZodSchema = z.infer<typeof TracksSortZodSchema>;

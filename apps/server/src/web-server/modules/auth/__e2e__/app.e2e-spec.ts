@@ -1,6 +1,6 @@
 import { randomEmail } from '../../../../common/test_rename/generateString';
-import { SERVER_PREFIX } from '../../../../../../../libs/shared/CONST';
-import { serverPaths } from '../../../../../../../libs/shared/PATHS';
+import { SERVER_PREFIX } from '../../../../../../../libs/common/CONST';
+import { serverPaths } from '../../../../../../../libs/common/PATHS';
 import { RegistrationDTO } from '../../../../common/models/schemas/registration.dto';
 import { DatabaseAdapter } from '../../../../microservices/common/adapters/postgres/database.adapters';
 import { testServer } from './supertest';

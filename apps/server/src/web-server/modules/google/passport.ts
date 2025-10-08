@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { ConfigAdapter } from '../../../common/adapters/config/config.adapter';
-import { serverPaths } from '../../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../../libs/common/PATHS';
 import { ADAPTERS } from '../../../common/adapters/container/adapters.types';
 import { TOPICS } from '../../../common/topics/TOPICS';
 // prettier-ignore

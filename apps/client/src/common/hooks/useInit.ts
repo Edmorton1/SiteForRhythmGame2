@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { serverPaths } from '../../../../../libs/shared/PATHS';
+import { serverPaths } from '../../../../../libs/common/PATHS';
 // prettier-ignore
 import { UserProfileZodSchemaClient } from "../../../../../libs/models/schemas/profile";
 import { PROFILE } from '../consts/QUERY_KEYS';
