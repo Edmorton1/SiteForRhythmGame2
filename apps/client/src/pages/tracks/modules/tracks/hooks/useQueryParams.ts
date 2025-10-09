@@ -42,6 +42,3 @@ export const useQueryParams = (): [URLSearchParams, Methods] => {
 
 	return [searchParams, methods];
 };
-
-// ! ПРОБЛЕМЫ:
-// ! ОТПРАВЛЯЕТ ЛИШНИЕ И ПУСТЫЕ ПАРАМЕТРЫ

@@ -3,14 +3,14 @@ import { difficultiesTracks, tracksSort } from '../../../../../../../libs/models
 import { useTracksGet } from './hooks/useTracks';
 import { useQueryParams } from './hooks/useQueryParams';
 
-const langs = ['RU', 'UA', 'EN'];
+const langs = ['RU', 'UA', 'GB'];
 
 export const TracksList = () => {
 	const [searchParams, methods] = useQueryParams();
 	console.log(searchParams);
 
 	const { data } = useTracksGet(searchParams);
-	console.log(data);
+	console.log('ПОЛУЧЕННЫЕ ДАННЫЕ', data);
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
