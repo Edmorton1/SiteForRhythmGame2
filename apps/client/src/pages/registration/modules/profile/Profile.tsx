@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ProfileDTOZodSchema } from './schemas/registration.dto';
 import { useRegistrationAuthStore } from '../../common/stores/user.store';
 import { useRegistrationPost } from './hooks/useRegistration';
-import { countries } from '../../../../../../../libs/models/enums/countries';
+import { countriesList } from '../../../../../../../libs/models/enums/countries';
 
 export const RegistrationProfileModule = () => {
 	const { user } = useRegistrationAuthStore();
@@ -47,7 +47,7 @@ export const RegistrationProfileModule = () => {
 				{...register('country_code')}
 				id='country'>
 				<option value=''>Выберите страну</option>
-				{countries.map(country => (
+				{countriesList.map(country => (
 					<option
 						key={country.code}
 						value={country.code}>

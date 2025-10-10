@@ -2,6 +2,7 @@
 import { difficultiesTracks, tracksSort } from '../../../../../../../libs/models/schemas/tracks';
 import { useTracksGet } from './hooks/useTracks';
 import { useQueryParams } from './hooks/useQueryParams';
+import { countries } from 'countries-list';
 
 const langs = ['RU', 'UA', 'GB'];
 
@@ -11,6 +12,7 @@ export const TracksList = () => {
 
 	const { data } = useTracksGet(searchParams);
 	console.log('ПОЛУЧЕННЫЕ ДАННЫЕ', data);
+	console.log(countries);
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -66,6 +68,8 @@ export const TracksList = () => {
 					</li>
 				))}
 			</ul>
+
+			<div>Тест языков</div>
 		</div>
 	);
 };

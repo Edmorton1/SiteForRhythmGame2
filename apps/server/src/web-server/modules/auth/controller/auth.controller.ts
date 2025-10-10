@@ -4,7 +4,7 @@ import { BaseController } from '../../../config/controllers/base.controller';
 import { serverPaths } from '../../../../../../../libs/common/PATHS';
 import { userGuard } from '../../../common/guards/user.guard';
 import { LoginDTOZodSchema } from '../../../../../../../libs/models/schemas/auth';
-import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
+import { zodValidateSchema } from '../../../common/pipes/zod.pipe';
 import { ConfigAdapter } from '../../../../common/adapters/config/config.adapter';
 import { ADAPTERS } from '../../../../common/adapters/container/adapters.types';
 import { TOPICS } from '../../../../common/topics/TOPICS';
@@ -45,7 +45,7 @@ export class AuthController extends BaseController {
 	}
 
 	login = async (req: Request, res: Response) => {
-		const userDTO = ZodValidateSchema(LoginDTOZodSchema, req.body);
+		const userDTO = zodValidateSchema(LoginDTOZodSchema, req.body);
 		const { payload, profile } = await this.sender.sendAndWait(
 			{
 				func: 'login',

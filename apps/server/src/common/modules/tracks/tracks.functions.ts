@@ -1,6 +1,6 @@
-import { CountryCodes } from '../../../../../../libs/models/enums/countries';
 // prettier-ignore
-import type { Difficulties, Track, TrackDTO, TracksSortZodSchema } from "../../../../../../libs/models/schemas/tracks"
+import type { Track, TrackDTO, TracksQueryParams } from "../../../../../../libs/models/schemas/tracks"
+import { PartialWithUndefined } from '../../../../../../libs/models/enums/types';
 
 export const TRACKS_KEYS = {
 	getAllTracks: 'getAllTracks',
@@ -12,12 +12,7 @@ export const TRACKS_KEYS = {
 
 export type TRACKS_FUNCTIONS = {
 	[TRACKS_KEYS.getAllTracks]: {
-		input: {
-			cursor: number | undefined;
-			sort: TracksSortZodSchema | undefined;
-			lang: CountryCodes[] | undefined;
-			difficulty: Difficulties[] | undefined;
-		};
+		input: PartialWithUndefined<TracksQueryParams>;
 		output: Track[];
 	};
 	[TRACKS_KEYS.getSearchTrack]: { input: string; output: Track[] };

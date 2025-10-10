@@ -5,12 +5,10 @@ import { serverPaths } from '../../../../../../../libs/common/PATHS';
 import { TOPICS } from '../../../../common/topics/TOPICS';
 // prettier-ignore
 import { TRACKS_FUNCTIONS, TRACKS_KEYS } from '../../../../common/modules/tracks/tracks.functions';
-import { ZodValidateSchema } from '../../../common/pipes/zod.pipe';
+import { zodValidateSchema } from '../../../common/pipes/zod.pipe';
 import { zId } from '../../../../../../../libs/models/enums/zod';
-// prettier-ignore
-import { difficultiesZodSchema, TracksSortZodSchema } from '../../../../../../../libs/models/schemas/tracks';
+import { TracksQueryParamsZodSchema } from '../../../../../../../libs/models/schemas/tracks';
 import z from 'zod';
-import { zCountryCodes } from '../../../../../../../libs/models/enums/countries';
 // prettier-ignore
 import { KafkaSender, KafkaSenderReturn } from '../../../common/adapters/kafka.sender';
 import { ADAPTERS } from '../../../../common/adapters/container/adapters.types';
@@ -50,7 +48,7 @@ export class TracksController extends BaseController {
 	}
 
 	private validateQuery = (val: unknown) => {
-		return ZodValidateSchema(z.string(), val);
+		return zodValidateSchema(z.string(), val);
 	};
 
 	searchTracksSuggest = async (req: Request, res: Response) => {
@@ -83,33 +81,17 @@ export class TracksController extends BaseController {
 	};
 
 	getAllTracks = async (req: Request, res: Response) => {
-		const cursor = ZodValidateSchema(zId.optional(), req.query['cursor']);
-		const sort = ZodValidateSchema(
-			TracksSortZodSchema.optional(),
-			req.query['sort'],
-		);
-		const difficulty = ZodValidateSchema(
-			z.union([
-				difficultiesZodSchema.transform(difficulty => [difficulty]),
-				z.array(difficultiesZodSchema),
-				z.undefined(),
-			]),
-			req.query['difficulty'],
-		);
-		const lang = ZodValidateSchema(
-			z.union([
-				zCountryCodes.transform(lang => [lang]),
-				z.array(zCountryCodes),
-				z.undefined(),
-			]),
-			req.query['lang'],
+		console.log(req.query);
+		const params = zodValidateSchema(
+			TracksQueryParamsZodSchema.partial(),
+			req.query,
 		);
 
-		console.log('OPTIONS', sort, cursor, lang, difficulty);
+		console.log('OPTIONS', params);
 		const tracks = await this.sender.sendAndWait(
 			{
 				func: TRACKS_KEYS.getAllTracks,
-				message: { cursor, sort, lang, difficulty },
+				message: params,
 			},
 			TOPICS.requests.tracks,
 		);
@@ -118,7 +100,7 @@ export class TracksController extends BaseController {
 	};
 
 	getTrack = async (req: Request, res: Response) => {
-		const id = ZodValidateSchema(zId, req.params['id']);
+		const id = zodValidateSchema(zId, req.params['id']);
 		const track = await this.sender.sendAndWait(
 			{
 				func: TRACKS_KEYS.getTrack,
