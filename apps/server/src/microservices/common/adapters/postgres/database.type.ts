@@ -1,6 +1,6 @@
 import type { ColumnType, GeneratedAlways } from 'kysely';
 import { Role } from '../../../../../../../libs/models/schemas/user';
-import { CountryCodes } from '../../../../../../../libs/models/enums/countries';
+import { CountryCodes, LanguagesCodes } from '../../../../../../../libs/models/enums/countries';
 import { Difficulties } from '../../../../../../../libs/models/schemas/tracks';
 
 export interface DatabaseKysely {
@@ -32,7 +32,7 @@ export interface DatabaseKysely {
 		file_path: string;
 		difficulty: Difficulties;
 		bpm: number;
-		lang: CountryCodes;
+		lang: LanguagesCodes;
 		likes_count: ColumnType<number, number | undefined, number>;
 		downloads_count: ColumnType<number, number | undefined, number>;
 		plays_count: ColumnType<number, number | undefined, number>;

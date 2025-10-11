@@ -29,6 +29,10 @@ CREATE TABLE profiles (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- ALTER TABLE profiles
+-- ADD CONSTRAINT country_code_check
+-- CHECK 
+
 -- TODO: Добавить Favorites
 -- TRACKS BLOCK
 CREATE TYPE difficulties AS ENUM ('easy', 'normal', 'hard');

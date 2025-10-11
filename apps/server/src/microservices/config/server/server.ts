@@ -13,7 +13,8 @@ export class ServerMicroservice {
 	) {}
 
 	start = async (options: KafkaLoadingOptions) => {
-		await this.elasticSearchLoader.loadElastics();
+		// !NOTEBOOK: ВРЕМЕННОЕ ОТКЛЮЧЕНИЕ НА НОУТБУКЕ
+		// await this.elasticSearchLoader.loadElastics();
 		await this.kafkaMicroservice.start(options);
 	};
 
