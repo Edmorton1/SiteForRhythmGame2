@@ -11,6 +11,8 @@ import { useInit } from '../common/hooks/useInit';
 // import style from './header.module.scss';
 import { Link } from 'react-router-dom';
 import { clientPaths } from '../common/consts/PATHS';
+import { SUPPORTED_LANGUAGES } from '../common/consts/SUPPORTED_LANGUAGES';
+import { LANGUAGE } from '../common/consts/LOCALSTORAGE';
 
 // ?: КОГДА БУДЕТ ФРОНТ, ВЕРНУТЬ
 // const {
@@ -28,6 +30,7 @@ export const Header = () => {
 	};
 
 	const { data } = useInit();
+	console.log('SUPPORTED', SUPPORTED_LANGUAGES, LANGUAGE);
 
 	return (
 		<header>
@@ -37,12 +40,18 @@ export const Header = () => {
 				<Link to={clientPaths.login}>{t('nav.login')}</Link>
 				<Link to={clientPaths.tracks}>tracks</Link>
 			</nav>
-			<div>Пользователь: {data ? data.name : 'asd'}</div>
+			<div>Пользователь: {data ? data.name : 'Не авторизован'}</div>
 			<select
 				name='lang'
+				defaultValue={LANGUAGE!}
 				onChange={event => changeLang(event.target.value)}>
-				<option value='en'>English</option>
-				<option value='ru'>Русский</option>
+				{Object.keys(SUPPORTED_LANGUAGES).map(lang => (
+					<option
+						key={lang}
+						value={lang}>
+						{SUPPORTED_LANGUAGES[lang]}
+					</option>
+				))}
 			</select>
 		</header>
 	);

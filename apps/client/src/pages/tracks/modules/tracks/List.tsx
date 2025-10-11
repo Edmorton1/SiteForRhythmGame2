@@ -3,8 +3,9 @@ import { difficultiesTracks, tracksSort } from '../../../../../../../libs/models
 import { useTracksGet } from './hooks/useTracks';
 import { useQueryParams } from './hooks/useQueryParams';
 import { countries } from 'countries-list';
+import { Track } from './components/Track';
 
-const langs = ['RU', 'UA', 'GB'];
+const langs = ['ru', 'uk', 'en'];
 
 export const TracksList = () => {
 	const [searchParams, methods] = useQueryParams();
@@ -70,6 +71,12 @@ export const TracksList = () => {
 			</ul>
 
 			<div>Тест языков</div>
+			{data?.map(track => (
+				<Track
+					key={track.id}
+					track={track}
+				/>
+			))}
 		</div>
 	);
 };

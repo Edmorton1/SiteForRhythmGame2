@@ -34,11 +34,31 @@ export class TracksRepository {
 	) {}
 
 	getAllTracks = async (options: TRACKS_FUNCTIONS['getAllTracks']['input']) => {
-		let query = this.db.db.selectFrom('tracks').select(TRACKS_SELECT);
+		// const isNeedPopularity = true;
 
-		if (options.cursor) {
-			query = query.where('id', '>', options.cursor);
-		}
+		// TODO: Сделать чтобы в запросах где не требуется popularity, не срабатывало
+		// let query;
+		// if (isNeedPopularity) {
+		let query = this.db.db
+			.with('tracks_with_popularity', db =>
+				db
+					.selectFrom('tracks')
+					.selectAll()
+					.select(() =>
+						sql`(plays_count + likes_count * 2 +  downloads_count * 3)`.as(
+							'popularity',
+						),
+					),
+			)
+			.selectFrom('tracks_with_popularity')
+			.select(TRACKS_SELECT);
+		// } else {
+		// 	query = this.db.db.selectFrom('tracks').select(TRACKS_SELECT);
+		// }
+
+		// if (options.cursor) {
+		// 	query = query.where('id', '>', options.cursor);
+		// }
 
 		if (options.sort) {
 			if (isDays(options.sort)) {
@@ -46,15 +66,23 @@ export class TracksRepository {
 					.orderBy(
 						sql`
 					CASE
-						WHEN created_at >= NOW() - INTERVAL '${sql.lit(days[options.sort])} DAYS'
+						WHEN NOW() - created_at < INTERVAL '${sql.lit(days[options.sort])} days'
 						THEN 1
-						ELSE 0 
+						ELSE 0
 					END`,
 						'desc',
 					)
-					.orderBy('plays_count', 'desc');
+					.orderBy('popularity', 'desc')
+					.orderBy('id', 'desc');
 			} else {
-				query = query.orderBy(options.sort, 'desc');
+				// if (options.sort === 'bpm' || options.sort === 'difficulty') {
+				query = query
+					.orderBy(options.sort, 'desc')
+					.orderBy('popularity', 'desc')
+					.orderBy('id', 'desc');
+				// } else {
+				// 	query = query.orderBy(options.sort, 'desc');
+				// }
 			}
 		}
 
@@ -79,3 +107,81 @@ export class TracksRepository {
 		return track;
 	};
 }
+
+// По каким параметрам сортировать?
+
+// plays_count - (plays_count, id)
+// downloads_count - (downloads_count, id)
+// likes_count - (likes_count, id)
+// bpm - (bpm, plays_count, id)
+// TODO: сделать нормальную сортировку по популярности
+// difficulty - (difficulty DESC, likes_count)
+// По сложности будет смотреть самые популярные и сложные
+
+// !: ПОТОМ СДЕЛАТЬ ПРОСТО popularity
+// most popular (TODAY) - (
+// CASE
+// 		WHEN NOW() - created_at < INTERVAL '1 days'
+// 		THEN 1
+// 		ELSE 0
+// 	END DESC, plays_count DESC
+// )
+
+// !: ТОЖЕ САМОЕ ЧТО И С TODAY, ТОЛЬКО ДНИ РАЗНЫЕ
+// most popular (WEEK)
+// most popular (MONTH)
+// most popular (YEAR)
+
+// * BPM, ID
+// SELECT * FROM tracks
+// WHERE bpm > 85 OR bpm >= 85 AND id < 165
+// ORDER BY bpm, id DESC
+// -- OFFSET 4
+// LIMIT 2
+
+// * BPM, PLAYS_COUNT, ID
+// SELECT * FROM tracks
+// -- WHERE
+// -- bpm < 88 OR
+// -- bpm = 88 AND plays_count = 125 AND id < 92 OR
+// -- bpm = 88 AND plays_count < 125
+// ORDER BY bpm DESC, plays_count DESC, id DESC
+// -- OFFSET 4
+// -- LIMIT 2
+
+// * BPM, POPULARITY, ID
+// WITH tracks_with_popularity AS (SELECT (plays_count + likes_count * 2 +  downloads_count * 3) as popularity, * FROM tracks)
+
+// SELECT * FROM tracks_with_popularity
+// WHERE
+// bpm < 85 OR
+// bpm = 85 AND popularity < 122 OR
+// bpm = 85 AND popularity = 122 AND id < 166
+// ORDER BY bpm, popularity DESC, id DESC
+// -- OFFSET 4
+// LIMIT 2
+
+// ?: ПОТОМ УБРАТЬ
+// SELECT * FROM tracks
+// -- WHERE
+// -- bpm < 88 OR
+// -- bpm = 88 AND plays_count = 125 AND id < 92 OR
+// -- bpm = 88 AND plays_count < 125
+// ORDER BY bpm DESC, plays_count DESC, id DESC
+// -- OFFSET 4
+// -- LIMIT 2
+
+// -- SELECT * FROM tracks
+// -- WHERE plays_count < 122
+// -- ORDER BY
+// -- 	CASE
+// -- 		WHEN NOW() - created_at < INTERVAL '50 days'
+// -- 		THEN 1
+// -- 		ELSE 0
+// -- 	END DESC, plays_count DESC
+// -- LIMIT 2
+
+// * По популярности
+// SELECT (plays_count + likes_count * 2 +  downloads_count * 3) as popularity, *
+// FROM tracks
+// ORDER BY popularity DESC, id DESC
