@@ -40,7 +40,6 @@ export class TracksService extends BaseService {
 		options: TRACKS_FUNCTIONS['getAllTracks']['input'],
 	): Promise<TRACKS_FUNCTIONS['getAllTracks']['output']> => {
 		console.log('CURSOR', options);
-		//@ts-ignore
 		return await this.TracksRepository.getAllTracks(options);
 	};
 

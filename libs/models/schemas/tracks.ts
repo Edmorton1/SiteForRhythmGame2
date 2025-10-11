@@ -8,9 +8,9 @@ export type Difficulties = z.infer<typeof difficultiesZodSchema>;
 
 // prettier-ignore
 export const tracksSort = [
-	'plays_count', 'likes_count', 'downloads_count',
-	'created_at', 'bpm', 'difficulty', 'today',
-	'week', 'month', 'year',
+	'popularity', 'plays_count', 'likes_count', 
+	'downloads_count', 'created_at', 'bpm', 'difficulty',
+	'today', 'week', 'month', 'year'
 ] as const;
 const TracksSortZodSchema = z.enum(tracksSort);
 
@@ -26,16 +26,23 @@ export const TracksQueryParamsZodSchema = z.object({
 		difficultiesZodSchema.transform(difficulty => [difficulty]),
 		z.array(difficultiesZodSchema),
 	]),
-	cursor: zId,
+	cursor: z.object({
+		id: zId,
+		popularity: zId,
+		row: zId.optional(),
+	}),
 	lang: z.union([
 		zLanguageCode.transform(lang => [lang]),
 		z.array(zLanguageCode),
 	]),
 });
 
+export type TracksCursor = z.infer<
+	typeof TracksQueryParamsZodSchema.shape.cursor
+>;
 export type TracksQueryParams = z.infer<typeof TracksQueryParamsZodSchema>;
 
-// Если у пользователя интерфейс выбран на языке, и трек на таком же языке, то название главное показывать на нём, если нет то на английском
+// TODO: Если у пользователя интерфейс выбран на языке, и трек на таком же языке, то название главное показывать на нём, если нет то на английском
 export const TrackZodSchema = z.object({
 	id: zId,
 	name_en: z.string().max(32),
@@ -65,3 +72,8 @@ export const TracksDtoZodSchema = TrackZodSchema.omit({
 	is_deleted: true,
 });
 export type TrackDTO = z.infer<typeof TracksDtoZodSchema>;
+
+export type AllTracksServerReturn = {
+	tracks: Track[];
+	cursor: TracksCursor;
+};

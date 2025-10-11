@@ -12,6 +12,7 @@ import z from 'zod';
 // prettier-ignore
 import { KafkaSender, KafkaSenderReturn } from '../../../common/adapters/kafka.sender';
 import { ADAPTERS } from '../../../../common/adapters/container/adapters.types';
+import { HttpError } from '../../../../common/http/http.error';
 
 @injectable()
 export class TracksController extends BaseController {
@@ -66,7 +67,6 @@ export class TracksController extends BaseController {
 	};
 
 	searchTracks = async (req: Request, res: Response) => {
-		console.log(req.query['query']);
 		const query = this.validateQuery(req.query['query']);
 
 		const tracks = await this.sender.sendAndWait(
@@ -81,11 +81,18 @@ export class TracksController extends BaseController {
 	};
 
 	getAllTracks = async (req: Request, res: Response) => {
-		console.log(req.query);
-		const params = zodValidateSchema(
-			TracksQueryParamsZodSchema.partial(),
-			req.query,
-		);
+		let cursor = undefined;
+		if (typeof req.query['cursor'] === 'string') {
+			try {
+				cursor = JSON.parse(req.query['cursor']);
+			} catch {
+				throw new HttpError(409, 'JSON could not parse the cursor');
+			}
+		}
+		const params = zodValidateSchema(TracksQueryParamsZodSchema.partial(), {
+			...req.query,
+			cursor,
+		});
 
 		console.log('OPTIONS', params);
 		const tracks = await this.sender.sendAndWait(

@@ -3,6 +3,10 @@ import { DatabaseAdapter } from '../../../../common/adapters/postgres/database.a
 import { TRACKS_FUNCTIONS } from '../../../../../common/modules/tracks/tracks.functions';
 import { sql } from 'kysely';
 import { ADAPTERS } from '../../../../../common/adapters/container/adapters.types';
+import { HttpError } from '../../../../../common/http/http.error';
+import { TracksCursor } from '../../../../../../../../libs/models/schemas/tracks';
+
+const LIMIT = 10;
 
 const days = {
 	today: 1,
@@ -35,7 +39,10 @@ export class TracksRepository {
 
 	getAllTracks = async (options: TRACKS_FUNCTIONS['getAllTracks']['input']) => {
 		// const isNeedPopularity = true;
-
+		console.log(options.cursor);
+		if (options.sort === undefined) {
+			options.sort = 'popularity';
+		}
 		// TODO: Сделать чтобы в запросах где не требуется popularity, не срабатывало
 		// let query;
 		// if (isNeedPopularity) {
@@ -51,7 +58,7 @@ export class TracksRepository {
 					),
 			)
 			.selectFrom('tracks_with_popularity')
-			.select(TRACKS_SELECT);
+			.select([...TRACKS_SELECT, 'popularity']);
 		// } else {
 		// 	query = this.db.db.selectFrom('tracks').select(TRACKS_SELECT);
 		// }
@@ -60,29 +67,65 @@ export class TracksRepository {
 		// 	query = query.where('id', '>', options.cursor);
 		// }
 
-		if (options.sort) {
-			if (isDays(options.sort)) {
-				query = query
-					.orderBy(
-						sql`
+		if (isDays(options.sort)) {
+			query = query
+				.orderBy(
+					sql`
 					CASE
 						WHEN NOW() - created_at < INTERVAL '${sql.lit(days[options.sort])} days'
 						THEN 1
 						ELSE 0
 					END`,
-						'desc',
-					)
-					.orderBy('popularity', 'desc')
-					.orderBy('id', 'desc');
-			} else {
-				// if (options.sort === 'bpm' || options.sort === 'difficulty') {
-				query = query
-					.orderBy(options.sort, 'desc')
-					.orderBy('popularity', 'desc')
-					.orderBy('id', 'desc');
-				// } else {
-				// 	query = query.orderBy(options.sort, 'desc');
-				// }
+					'desc',
+				)
+				.orderBy('popularity', 'desc')
+				.orderBy('id', 'desc');
+
+			if (options.cursor) {
+				const { id, popularity } = options.cursor;
+				query = query.where(eb =>
+					eb.or([
+						eb('popularity', '<', popularity),
+						eb('popularity', '=', popularity).and('id', '<', id),
+					]),
+				);
+			}
+			// TODO: УБРАТЬ ДУБЛИРОВАНИЕ
+		} else if (options.sort === 'popularity') {
+			query = query.orderBy('popularity', 'desc').orderBy('id', 'desc');
+
+			if (options.cursor) {
+				const { id, popularity } = options.cursor;
+				query = query.where(eb =>
+					eb.or([
+						eb('popularity', '<', popularity),
+						eb('popularity', '=', popularity).and('id', '<', id),
+					]),
+				);
+			}
+		} else {
+			// if (options.sort === 'bpm' || options.sort === 'difficulty') {
+			query = query
+				.orderBy(options.sort, 'desc')
+				.orderBy('popularity', 'desc')
+				.orderBy('id', 'desc');
+			// } else {
+			// 	query = query.orderBy(options.sort, 'desc');
+			// }
+			if (options.cursor) {
+				const { id, popularity, row } = options.cursor;
+				if (!row) {
+					throw new HttpError(409, 'Cursor does not contain the field row');
+				}
+				query = query.where(eb =>
+					eb.or([
+						eb('bpm', '<', row),
+						eb('bpm', '=', row).and('popularity', '<', popularity),
+						eb('bpm', '=', row)
+							.and('popularity', '=', popularity)
+							.and('id', '<', id),
+					]),
+				);
 			}
 		}
 
@@ -94,7 +137,31 @@ export class TracksRepository {
 			query = query.where('difficulty', 'in', options.difficulty);
 		}
 
-		return query.execute();
+		const tracks = await query.limit(LIMIT).execute();
+		const lastElement = tracks[LIMIT - 1];
+
+		if (!lastElement) {
+			// TODO: Отправка ошибкой
+			throw new HttpError(204);
+		}
+
+		const cursor: TracksCursor = {
+			id: lastElement.id,
+			// TODO: Типизировать popularity
+			popularity: lastElement.popularity as number,
+		};
+		if (!isDays(options.sort)) {
+			// @ts-ignore
+			cursor.row = lastElement[options.sort];
+		}
+
+		return {
+			tracks: tracks.map(track => {
+				delete track.popularity;
+				return track;
+			}),
+			cursor,
+		};
 	};
 
 	getTrack = async (id: TRACKS_FUNCTIONS['getTrack']['input']) => {
@@ -117,15 +184,23 @@ export class TracksRepository {
 // TODO: сделать нормальную сортировку по популярности
 // difficulty - (difficulty DESC, likes_count)
 // По сложности будет смотреть самые популярные и сложные
+// TODO: Добавить по дате выхода (новые, старые)
 
 // !: ПОТОМ СДЕЛАТЬ ПРОСТО popularity
-// most popular (TODAY) - (
-// CASE
-// 		WHEN NOW() - created_at < INTERVAL '1 days'
+// most popular (TODAY)
+// WITH tracks_with_popularity AS (SELECT (plays_count + likes_count * 2 +  downloads_count * 3) as popularity, * FROM tracks)
+
+// SELECT * FROM tracks_with_popularity
+// WHERE
+// popularity < 396 OR
+// popularity = 396 AND id < 167
+// ORDER BY
+// 	CASE
+// 		WHEN NOW() - created_at < INTERVAL '30 days'
 // 		THEN 1
 // 		ELSE 0
-// 	END DESC, plays_count DESC
-// )
+// 	END DESC, popularity DESC, id DESC
+// LIMIT 2
 
 // !: ТОЖЕ САМОЕ ЧТО И С TODAY, ТОЛЬКО ДНИ РАЗНЫЕ
 // most popular (WEEK)
@@ -185,3 +260,14 @@ export class TracksRepository {
 // SELECT (plays_count + likes_count * 2 +  downloads_count * 3) as popularity, *
 // FROM tracks
 // ORDER BY popularity DESC, id DESC
+
+// WITH tracks_with_popularity AS (SELECT (plays_count + likes_count * 2 +  downloads_count * 3) as popularity, * FROM tracks)
+
+// SELECT * FROM tracks_with_popularity
+// WHERE
+// bpm < 128 OR
+// bpm = 128 AND popularity < 268 OR
+// bpm = 128 AND popularity = 268 AND id < 115
+// ORDER BY bpm DESC, popularity DESC, id DESC
+// -- OFFSET 4
+// LIMIT 2

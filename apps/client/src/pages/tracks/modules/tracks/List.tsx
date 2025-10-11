@@ -11,9 +11,10 @@ export const TracksList = () => {
 	const [searchParams, methods] = useQueryParams();
 	console.log(searchParams);
 
-	const { data } = useTracksGet(searchParams);
+	const { data, fetchNextPage } = useTracksGet(searchParams);
 	console.log('ПОЛУЧЕННЫЕ ДАННЫЕ', data);
 	console.log(countries);
+	console.log('ПЕЙДЖЕС', data);
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -22,7 +23,6 @@ export const TracksList = () => {
 			<select
 				onChange={e => methods.select('sort', e.target.value)}
 				defaultValue={searchParams.get('sort') || undefined}>
-				<option value=''>Выбрать сложность</option>
 				{tracksSort.map(sort => (
 					<option
 						key={sort}
@@ -71,12 +71,16 @@ export const TracksList = () => {
 			</ul>
 
 			<div>Тест языков</div>
-			{data?.map(track => (
-				<Track
-					key={track.id}
-					track={track}
-				/>
-			))}
+			{data?.pages.map(page =>
+				page?.tracks?.map(track => (
+					<Track
+						key={track.id}
+						track={track}
+					/>
+				)),
+			)}
+
+			<button onClick={() => fetchNextPage()}>Загрузить ещё треки</button>
 		</div>
 	);
 };

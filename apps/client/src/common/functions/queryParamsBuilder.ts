@@ -1,5 +1,6 @@
 import { serverPaths } from '../../../../../libs/common/PATHS';
 import z from 'zod';
+import type { TracksCursor } from '../../../../../libs/models/schemas/tracks';
 
 const QueryParamsZodSchema = z
 	.object({})
@@ -54,8 +55,12 @@ export class QueryParamsBuilder {
 			});
 	};
 
-	private objectToSearchParams = (): URLSearchParams => {
+	private objectToSearchParams = (cursor?: TracksCursor): URLSearchParams => {
 		const searchParams = new URLSearchParams();
+		// TODO: Сделать чтобы курсор валидировался перед отправкой
+		if (cursor) {
+			searchParams.set('cursor', JSON.stringify(cursor));
+		}
 		Object.entries(this.objValidated).forEach(([key, value]) => {
 			if (Array.isArray(value)) {
 				value.forEach(arrVal => searchParams.append(key, arrVal));
@@ -67,9 +72,9 @@ export class QueryParamsBuilder {
 		return searchParams;
 	};
 
-	getURL = (): string => {
+	getURL = (cursor?: TracksCursor): string => {
 		const url = new URL(_URL_SERVER + serverPaths.tracks);
-		const searchParams = this.objectToSearchParams();
+		const searchParams = this.objectToSearchParams(cursor);
 		url.search = searchParams.toString();
 		console.log('new HREF', url.href);
 		return url.href;
