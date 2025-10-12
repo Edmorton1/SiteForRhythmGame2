@@ -7,7 +7,7 @@ import { HttpError } from '../../../../../common/http/http.error';
 import z from 'zod';
 import { DaysKeys, TracksDays } from './tracks.days';
 
-const LIMIT = 5;
+const LIMIT = 10;
 
 type TracksSelectQueryBuilder = SelectQueryBuilder<
 	DatabaseKysely & { tracks_with_popularity: TracksWithPopularity },

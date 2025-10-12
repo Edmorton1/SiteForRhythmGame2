@@ -38,11 +38,11 @@ export const TracksQueryParamsZodSchema = z.object({
 		z.array(zLanguageCode),
 	]),
 });
+export type TracksQueryParams = z.infer<typeof TracksQueryParamsZodSchema>;
 
 export type TracksCursor = z.infer<
 	typeof TracksQueryParamsZodSchema.shape.cursor
 >;
-export type TracksQueryParams = z.infer<typeof TracksQueryParamsZodSchema>;
 
 // TODO: Если у пользователя интерфейс выбран на языке, и трек на таком же языке, то название главное показывать на нём, если нет то на английском
 export const TrackZodSchema = z.object({
