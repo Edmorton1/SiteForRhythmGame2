@@ -4,6 +4,7 @@ import { TRACKS_FUNCTIONS } from '../../../../../common/modules/tracks/tracks.fu
 import { sql } from 'kysely';
 import { ADAPTERS } from '../../../../../common/adapters/container/adapters.types';
 import { HttpError } from '../../../../../common/http/http.error';
+// prettier-ignore
 import { TracksCursor } from '../../../../../../../../libs/models/schemas/tracks';
 
 const LIMIT = 10;
@@ -38,38 +39,59 @@ export class TracksRepository {
 	) {}
 
 	getAllTracks = async (options: TRACKS_FUNCTIONS['getAllTracks']['input']) => {
-		// const isNeedPopularity = true;
 		console.log(options.cursor);
 		if (options.sort === undefined) {
 			options.sort = 'popularity';
 		}
-		// TODO: Сделать чтобы в запросах где не требуется popularity, не срабатывало
-		// let query;
-		// if (isNeedPopularity) {
+
 		let query = this.db.db
 			.with('tracks_with_popularity', db =>
 				db
 					.selectFrom('tracks')
 					.selectAll()
 					.select(() =>
-						sql`(plays_count + likes_count * 2 +  downloads_count * 3)`.as(
+						sql<number>`(plays_count + likes_count * 2 +  downloads_count * 3)`.as(
 							'popularity',
 						),
 					),
 			)
 			.selectFrom('tracks_with_popularity')
 			.select([...TRACKS_SELECT, 'popularity']);
-		// } else {
-		// 	query = this.db.db.selectFrom('tracks').select(TRACKS_SELECT);
-		// }
 
-		// if (options.cursor) {
-		// 	query = query.where('id', '>', options.cursor);
-		// }
-
-		if (isDays(options.sort)) {
+		if (!isDays(options.sort) && options.sort !== 'popularity') {
+			const sort = options.sort;
 			query = query
-				.orderBy(
+				.orderBy(sort, 'desc')
+				.orderBy('popularity', 'desc')
+				.orderBy('id', 'desc');
+
+			if (options.cursor) {
+				const { id, popularity, row } = options.cursor;
+
+				if (!row) {
+					throw new HttpError(409, 'Cursor does not contain the field row');
+				}
+
+				if (sort === 'difficulty' && typeof row === 'number') {
+					throw new HttpError(
+						409,
+						'It is not possible to use a numeric row to sort by difficulty.',
+					);
+				}
+
+				query = query.where(eb =>
+					eb.or([
+						eb(sort, '<', row),
+						eb(sort, '=', row).and('popularity', '<', popularity),
+						eb(sort, '=', row)
+							.and('popularity', '=', popularity)
+							.and('id', '<', id),
+					]),
+				);
+			}
+		} else {
+			if (isDays(options.sort)) {
+				query = query.orderBy(
 					sql`
 					CASE
 						WHEN NOW() - created_at < INTERVAL '${sql.lit(days[options.sort])} days'
@@ -77,21 +99,9 @@ export class TracksRepository {
 						ELSE 0
 					END`,
 					'desc',
-				)
-				.orderBy('popularity', 'desc')
-				.orderBy('id', 'desc');
-
-			if (options.cursor) {
-				const { id, popularity } = options.cursor;
-				query = query.where(eb =>
-					eb.or([
-						eb('popularity', '<', popularity),
-						eb('popularity', '=', popularity).and('id', '<', id),
-					]),
 				);
 			}
-			// TODO: УБРАТЬ ДУБЛИРОВАНИЕ
-		} else if (options.sort === 'popularity') {
+
 			query = query.orderBy('popularity', 'desc').orderBy('id', 'desc');
 
 			if (options.cursor) {
@@ -100,30 +110,6 @@ export class TracksRepository {
 					eb.or([
 						eb('popularity', '<', popularity),
 						eb('popularity', '=', popularity).and('id', '<', id),
-					]),
-				);
-			}
-		} else {
-			// if (options.sort === 'bpm' || options.sort === 'difficulty') {
-			query = query
-				.orderBy(options.sort, 'desc')
-				.orderBy('popularity', 'desc')
-				.orderBy('id', 'desc');
-			// } else {
-			// 	query = query.orderBy(options.sort, 'desc');
-			// }
-			if (options.cursor) {
-				const { id, popularity, row } = options.cursor;
-				if (!row) {
-					throw new HttpError(409, 'Cursor does not contain the field row');
-				}
-				query = query.where(eb =>
-					eb.or([
-						eb('bpm', '<', row),
-						eb('bpm', '=', row).and('popularity', '<', popularity),
-						eb('bpm', '=', row)
-							.and('popularity', '=', popularity)
-							.and('id', '<', id),
 					]),
 				);
 			}
@@ -137,8 +123,10 @@ export class TracksRepository {
 			query = query.where('difficulty', 'in', options.difficulty);
 		}
 
+		console.log('ЗАПРОС', query.compile().sql);
 		const tracks = await query.limit(LIMIT).execute();
-		const lastElement = tracks[LIMIT - 1];
+		console.log('РЕЗУЛЬТАТ', tracks);
+		const lastElement = tracks[tracks.length - 1];
 
 		if (!lastElement) {
 			// TODO: Отправка ошибкой
@@ -151,15 +139,11 @@ export class TracksRepository {
 			popularity: lastElement.popularity as number,
 		};
 		if (!isDays(options.sort)) {
-			// @ts-ignore
 			cursor.row = lastElement[options.sort];
 		}
 
 		return {
-			tracks: tracks.map(track => {
-				delete track.popularity;
-				return track;
-			}),
+			tracks: tracks.map(({ popularity, ...track }) => track),
 			cursor,
 		};
 	};
@@ -186,7 +170,9 @@ export class TracksRepository {
 // По сложности будет смотреть самые популярные и сложные
 // TODO: Добавить по дате выхода (новые, старые)
 
-// !: ПОТОМ СДЕЛАТЬ ПРОСТО popularity
+// По дате выхода (сначала новые)
+// По дате выхода (сначала старые)
+
 // most popular (TODAY)
 // WITH tracks_with_popularity AS (SELECT (plays_count + likes_count * 2 +  downloads_count * 3) as popularity, * FROM tracks)
 

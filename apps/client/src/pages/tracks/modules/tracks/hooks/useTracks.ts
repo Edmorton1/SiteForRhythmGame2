@@ -21,7 +21,7 @@ export const useTracksGet = (params: URLSearchParams) => {
 	// 	},
 	// });
 	return useInfiniteQuery<AllTracksServerReturn | undefined>({
-		queryKey: [TRACKS],
+		queryKey: [TRACKS, queryParamsBuilder.getSortedParams()],
 		queryFn: async ({ pageParam }) => {
 			//@ts-ignore
 			const href = queryParamsBuilder.getURL(pageParam);

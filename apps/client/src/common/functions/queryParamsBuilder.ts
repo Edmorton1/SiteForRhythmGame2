@@ -72,6 +72,7 @@ export class QueryParamsBuilder {
 		return searchParams;
 	};
 
+	// TODO: Хардкод, убрать
 	getURL = (cursor?: TracksCursor): string => {
 		const url = new URL(_URL_SERVER + serverPaths.tracks);
 		const searchParams = this.objectToSearchParams(cursor);

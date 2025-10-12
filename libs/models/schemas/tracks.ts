@@ -9,7 +9,7 @@ export type Difficulties = z.infer<typeof difficultiesZodSchema>;
 // prettier-ignore
 export const tracksSort = [
 	'popularity', 'plays_count', 'likes_count', 
-	'downloads_count', 'created_at', 'bpm', 'difficulty',
+	'downloads_count', 'bpm', 'difficulty',
 	'today', 'week', 'month', 'year'
 ] as const;
 const TracksSortZodSchema = z.enum(tracksSort);
@@ -29,7 +29,8 @@ export const TracksQueryParamsZodSchema = z.object({
 	cursor: z.object({
 		id: zId,
 		popularity: zId,
-		row: zId.optional(),
+		row: z.union([zId.optional(), difficultiesZodSchema]),
+		// row: zId.optional(),
 	}),
 	lang: z.union([
 		zLanguageCode.transform(lang => [lang]),

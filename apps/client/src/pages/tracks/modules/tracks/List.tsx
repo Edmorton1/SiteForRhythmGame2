@@ -11,7 +11,7 @@ export const TracksList = () => {
 	const [searchParams, methods] = useQueryParams();
 	console.log(searchParams);
 
-	const { data, fetchNextPage } = useTracksGet(searchParams);
+	const { data, fetchNextPage, hasNextPage } = useTracksGet(searchParams);
 	console.log('ПОЛУЧЕННЫЕ ДАННЫЕ', data);
 	console.log(countries);
 	console.log('ПЕЙДЖЕС', data);
@@ -80,7 +80,9 @@ export const TracksList = () => {
 				)),
 			)}
 
-			<button onClick={() => fetchNextPage()}>Загрузить ещё треки</button>
+			{hasNextPage && (
+				<button onClick={() => fetchNextPage()}>Загрузить ещё треки</button>
+			)}
 		</div>
 	);
 };
