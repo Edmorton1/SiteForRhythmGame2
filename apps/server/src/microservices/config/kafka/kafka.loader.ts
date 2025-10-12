@@ -83,6 +83,7 @@ export class KafkaLoader {
 					})
 
 					.catch(err => {
+						console.error('ОШИБКА:', err);
 						this.logger.logger.error({ ERROR_IN_RESPONSE: err });
 						this.send(
 							{

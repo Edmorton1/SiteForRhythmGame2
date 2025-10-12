@@ -84,6 +84,7 @@ export class TracksController extends BaseController {
 		let cursor = undefined;
 		if (typeof req.query['cursor'] === 'string') {
 			try {
+				console.log('BEFORE PARSED CURSOR', req.query['cursor']);
 				cursor = JSON.parse(req.query['cursor']);
 			} catch {
 				throw new HttpError(409, 'JSON could not parse the cursor');

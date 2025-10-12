@@ -7,6 +7,7 @@ export const Track = ({ track }: { track: ITrack }) => {
 
 	return (
 		<div>
+			<div>id: {track.id}</div>
 			<div>name: {isInterfaceLang ? track.name : track.name_en}</div>
 			<div>name_second: {isInterfaceLang ? track.name_en : track.name}</div>
 			<div>author: {track.author}</div>

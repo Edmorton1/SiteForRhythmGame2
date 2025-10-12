@@ -14,7 +14,10 @@ export const TracksList = () => {
 	const { data, fetchNextPage, hasNextPage } = useTracksGet(searchParams);
 	console.log('ПОЛУЧЕННЫЕ ДАННЫЕ', data);
 	console.log(countries);
-	console.log('ПЕЙДЖЕС', data);
+	console.log(
+		'ФЛЭТ МАП ПЕЙДЖЕС',
+		data?.pages.flatMap(e => e?.tracks),
+	);
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>

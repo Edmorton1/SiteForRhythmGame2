@@ -3,25 +3,9 @@ import { DatabaseAdapter } from '../../../../common/adapters/postgres/database.a
 import { TRACKS_FUNCTIONS } from '../../../../../common/modules/tracks/tracks.functions';
 import { sql } from 'kysely';
 import { ADAPTERS } from '../../../../../common/adapters/container/adapters.types';
+import { TracksQueryBuilder } from './tracks.querybuilder';
+import { TracksDays } from './tracks.days';
 import { HttpError } from '../../../../../common/http/http.error';
-// prettier-ignore
-import { TracksCursor } from '../../../../../../../../libs/models/schemas/tracks';
-
-const LIMIT = 10;
-
-const days = {
-	today: 1,
-	week: 7,
-	month: 31,
-	year: 365,
-} as const;
-
-function isDays(val: unknown): val is keyof typeof days {
-	if (typeof val === 'string' && Object.keys(days).includes(val)) {
-		return true;
-	}
-	return false;
-}
 
 // prettier-ignore
 export const TRACKS_SELECT = [
@@ -40,11 +24,12 @@ export class TracksRepository {
 
 	getAllTracks = async (options: TRACKS_FUNCTIONS['getAllTracks']['input']) => {
 		console.log(options.cursor);
+
 		if (options.sort === undefined) {
 			options.sort = 'popularity';
 		}
 
-		let query = this.db.db
+		const query = this.db.db
 			.with('tracks_with_popularity', db =>
 				db
 					.selectFrom('tracks')
@@ -58,94 +43,47 @@ export class TracksRepository {
 			.selectFrom('tracks_with_popularity')
 			.select([...TRACKS_SELECT, 'popularity']);
 
-		if (!isDays(options.sort) && options.sort !== 'popularity') {
-			const sort = options.sort;
-			query = query
-				.orderBy(sort, 'desc')
-				.orderBy('popularity', 'desc')
-				.orderBy('id', 'desc');
+		const builder = new TracksQueryBuilder(query);
 
-			if (options.cursor) {
-				const { id, popularity, row } = options.cursor;
-
-				if (!row) {
-					throw new HttpError(409, 'Cursor does not contain the field row');
-				}
-
-				if (sort === 'difficulty' && typeof row === 'number') {
+		if (!TracksDays.isDays(options.sort) && options.sort !== 'popularity') {
+			builder.sortByTableRows(options.sort, options.cursor);
+		} else {
+			if (TracksDays.isDays(options.sort)) {
+				if (options.cursor?.row && typeof options.cursor.row !== 'string') {
 					throw new HttpError(
 						409,
-						'It is not possible to use a numeric row to sort by difficulty.',
+						`The row parameter in sorting by date is incorrect - ${options.cursor} it should be ISO-STRING`,
 					);
 				}
 
-				query = query.where(eb =>
-					eb.or([
-						eb(sort, '<', row),
-						eb(sort, '=', row).and('popularity', '<', popularity),
-						eb(sort, '=', row)
-							.and('popularity', '=', popularity)
-							.and('id', '<', id),
-					]),
-				);
-			}
-		} else {
-			if (isDays(options.sort)) {
-				query = query.orderBy(
-					sql`
-					CASE
-						WHEN NOW() - created_at < INTERVAL '${sql.lit(days[options.sort])} days'
-						THEN 1
-						ELSE 0
-					END`,
-					'desc',
-				);
+				// TODO: Дублирование, Убрать
+				if (typeof options.cursor?.row === 'string') {
+					builder.paginationByDays(
+						TracksDays.days[options.sort],
+						// @ts-ignore
+						options.cursor,
+					);
+				}
+
+				builder.sortByDays(TracksDays.days[options.sort]);
 			}
 
-			query = query.orderBy('popularity', 'desc').orderBy('id', 'desc');
+			builder.sortByPopularity();
 
-			if (options.cursor) {
-				const { id, popularity } = options.cursor;
-				query = query.where(eb =>
-					eb.or([
-						eb('popularity', '<', popularity),
-						eb('popularity', '=', popularity).and('id', '<', id),
-					]),
-				);
+			if (options.sort === 'popularity' && options.cursor) {
+				builder.sortByPopularityCursorOnly(options.cursor);
 			}
 		}
 
 		if (options.lang) {
-			query = query.where('lang', 'in', options.lang);
+			builder.filterByLang(options.lang);
 		}
 
 		if (options.difficulty) {
-			query = query.where('difficulty', 'in', options.difficulty);
+			builder.filterByDifficulty(options.difficulty);
 		}
 
-		console.log('ЗАПРОС', query.compile().sql);
-		const tracks = await query.limit(LIMIT).execute();
-		console.log('РЕЗУЛЬТАТ', tracks);
-		const lastElement = tracks[tracks.length - 1];
-
-		if (!lastElement) {
-			// TODO: Отправка ошибкой
-			throw new HttpError(204);
-		}
-
-		const cursor: TracksCursor = {
-			id: lastElement.id,
-			// TODO: Типизировать popularity
-			popularity: lastElement.popularity as number,
-		};
-		if (!isDays(options.sort)) {
-			cursor.row = lastElement[options.sort];
-		}
-
-		return {
-			tracks: tracks.map(({ popularity, ...track }) => track),
-			cursor,
-		};
+		return builder.result(options.sort);
 	};
 
 	getTrack = async (id: TRACKS_FUNCTIONS['getTrack']['input']) => {

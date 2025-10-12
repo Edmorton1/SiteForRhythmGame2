@@ -1,5 +1,5 @@
 import z, { ZodType } from 'zod';
-import { zId, zISOString } from '../enums/zod';
+import { zId, zIntNum, zISOString } from '../enums/zod';
 import { zLanguageCode } from '../enums/countries';
 
 export const difficultiesTracks = ['easy', 'normal', 'hard'] as const;
@@ -13,6 +13,7 @@ export const tracksSort = [
 	'today', 'week', 'month', 'year'
 ] as const;
 const TracksSortZodSchema = z.enum(tracksSort);
+// export type TracksSort = z.infer<typeof TracksSortZodSchema>;
 
 // const saveRow = (schema: ZodType) =>
 // 	z.preprocess(val => {
@@ -28,8 +29,8 @@ export const TracksQueryParamsZodSchema = z.object({
 	]),
 	cursor: z.object({
 		id: zId,
-		popularity: zId,
-		row: z.union([zId.optional(), difficultiesZodSchema]),
+		popularity: zIntNum,
+		row: z.union([zIntNum, difficultiesZodSchema, zISOString, z.undefined()]),
 		// row: zId.optional(),
 	}),
 	lang: z.union([
