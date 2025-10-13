@@ -1,11 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { DatabaseAdapter } from '../../../../common/adapters/postgres/database.adapters';
 import { TRACKS_FUNCTIONS } from '../../../../../common/modules/tracks/tracks.functions';
-import { sql } from 'kysely';
 import { ADAPTERS } from '../../../../../common/adapters/container/adapters.types';
-import { TracksQueryBuilder } from './tracks.querybuilder';
-import { TracksDays } from './tracks.days';
-import { HttpError } from '../../../../../common/http/http.error';
+import { createAllTracksInstance } from './fabric/allTracks.fabric';
 
 // prettier-ignore
 export const TRACKS_SELECT = [
@@ -25,65 +22,64 @@ export class TracksRepository {
 	getAllTracks = async (options: TRACKS_FUNCTIONS['getAllTracks']['input']) => {
 		console.log(options.cursor);
 
-		if (options.sort === undefined) {
-			options.sort = 'popularity';
-		}
+		console.log('КУРСОР ПЕРЕД ОТПРАВКОЙ', options.cursor);
+		return await createAllTracksInstance(this.db, options).getResult();
 
-		const query = this.db.db
-			.with('tracks_with_popularity', db =>
-				db
-					.selectFrom('tracks')
-					.selectAll()
-					.select(() =>
-						sql<number>`(plays_count + likes_count * 2 +  downloads_count * 3)`.as(
-							'popularity',
-						),
-					),
-			)
-			.selectFrom('tracks_with_popularity')
-			.select([...TRACKS_SELECT, 'popularity']);
+		// 	const query = this.db.db
+		// 		.with('tracks_with_popularity', db =>
+		// 			db
+		// 				.selectFrom('tracks')
+		// 				.selectAll()
+		// 				.select(() =>
+		// 					sql<number>`(plays_count + likes_count * 2 +  downloads_count * 3)`.as(
+		// 						'popularity',
+		// 					),
+		// 				),
+		// 		)
+		// 		.selectFrom('tracks_with_popularity')
+		// 		.select([...TRACKS_SELECT, 'popularity']);
 
-		const builder = new TracksQueryBuilder(query);
+		// 	const builder = new TracksQueryBuilder(query);
 
-		if (!TracksDays.isDays(options.sort) && options.sort !== 'popularity') {
-			builder.sortByTableRows(options.sort, options.cursor);
-		} else {
-			if (TracksDays.isDays(options.sort)) {
-				if (options.cursor?.row && typeof options.cursor.row !== 'string') {
-					throw new HttpError(
-						409,
-						`The row parameter in sorting by date is incorrect - ${options.cursor} it should be ISO-STRING`,
-					);
-				}
+		// 	if (!TracksDays.isDays(options.sort) && options.sort !== 'popularity') {
+		// 		builder.sortByTableRows(options.sort, options.cursor);
+		// 	} else {
+		// 		if (TracksDays.isDays(options.sort)) {
+		// 			if (options.cursor?.row && typeof options.cursor.row !== 'string') {
+		// 				throw new HttpError(
+		// 					409,
+		// 					`The row parameter in sorting by date is incorrect - ${options.cursor} it should be ISO-STRING`,
+		// 				);
+		// 			}
 
-				// TODO: Дублирование, Убрать
-				if (typeof options.cursor?.row === 'string') {
-					builder.paginationByDays(
-						TracksDays.days[options.sort],
-						// @ts-ignore
-						options.cursor,
-					);
-				}
+		// 			// TODO: Дублирование, Убрать
+		// 			if (typeof options.cursor?.row === 'string') {
+		// 				builder.paginationByDays(
+		// 					TracksDays.days[options.sort],
+		// 					// @ts-ignore
+		// 					options.cursor,
+		// 				);
+		// 			}
 
-				builder.sortByDays(TracksDays.days[options.sort]);
-			}
+		// 			builder.sortByDays(TracksDays.days[options.sort]);
+		// 		}
 
-			builder.sortByPopularity();
+		// 		builder.sortByPopularity();
 
-			if (options.sort === 'popularity' && options.cursor) {
-				builder.sortByPopularityCursorOnly(options.cursor);
-			}
-		}
+		// 		if (options.sort === 'popularity' && options.cursor) {
+		// 			builder.sortByPopularityCursorOnly(options.cursor);
+		// 		}
+		// 	}
 
-		if (options.lang) {
-			builder.filterByLang(options.lang);
-		}
+		// 	if (options.lang) {
+		// 		builder.filterByLang(options.lang);
+		// 	}
 
-		if (options.difficulty) {
-			builder.filterByDifficulty(options.difficulty);
-		}
+		// 	if (options.difficulty) {
+		// 		builder.filterByDifficulty(options.difficulty);
+		// 	}
 
-		return builder.result(options.sort);
+		// 	return builder.result(options.sort);
 	};
 
 	getTrack = async (id: TRACKS_FUNCTIONS['getTrack']['input']) => {

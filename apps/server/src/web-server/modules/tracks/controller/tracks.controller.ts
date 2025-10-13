@@ -90,7 +90,7 @@ export class TracksController extends BaseController {
 				throw new HttpError(409, 'JSON could not parse the cursor');
 			}
 		}
-		const params = zodValidateSchema(TracksQueryParamsZodSchema.partial(), {
+		const params = zodValidateSchema(TracksQueryParamsZodSchema, {
 			...req.query,
 			cursor,
 		});

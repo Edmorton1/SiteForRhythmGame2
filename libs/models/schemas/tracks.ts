@@ -3,7 +3,7 @@ import { zId, zIntNum, zISOString } from '../enums/zod';
 import { zLanguageCode } from '../enums/countries';
 
 export const difficultiesTracks = ['easy', 'normal', 'hard'] as const;
-const difficultiesZodSchema = z.enum(difficultiesTracks);
+export const difficultiesZodSchema = z.enum(difficultiesTracks);
 export type Difficulties = z.infer<typeof difficultiesZodSchema>;
 
 // prettier-ignore
@@ -22,27 +22,42 @@ const TracksSortZodSchema = z.enum(tracksSort);
 // 	}, schema.optional());
 
 export const TracksQueryParamsZodSchema = z.object({
-	sort: TracksSortZodSchema,
-	difficulty: z.union([
-		difficultiesZodSchema.transform(difficulty => [difficulty]),
-		z.array(difficultiesZodSchema),
-	]),
-	cursor: z.object({
-		id: zId,
-		popularity: zIntNum,
-		row: z.union([zIntNum, difficultiesZodSchema, zISOString, z.undefined()]),
-		// row: zId.optional(),
-	}),
-	lang: z.union([
-		zLanguageCode.transform(lang => [lang]),
-		z.array(zLanguageCode),
-	]),
+	sort: TracksSortZodSchema.default('popularity'),
+	difficulty: z
+		.union([
+			difficultiesZodSchema.transform(difficulty => [difficulty]),
+			z.array(difficultiesZodSchema),
+		])
+		.optional(),
+	cursor: z
+		.object({
+			id: zId,
+			popularity: zIntNum,
+			row: z.union([zIntNum, difficultiesZodSchema, zISOString, z.undefined()]),
+		})
+		.optional(),
+	lang: z
+		.union([zLanguageCode.transform(lang => [lang]), z.array(zLanguageCode)])
+		.optional(),
 });
 export type TracksQueryParams = z.infer<typeof TracksQueryParamsZodSchema>;
 
-export type TracksCursor = z.infer<
-	typeof TracksQueryParamsZodSchema.shape.cursor
->;
+export type TracksCursor<
+	Row extends 'tables' | 'popularity' | 'days' | undefined = undefined,
+> = Omit<
+	NonNullable<z.infer<typeof TracksQueryParamsZodSchema.shape.cursor>>,
+	'row'
+> & {
+	row: Row extends 'tables'
+		? number | Difficulties
+		: Row extends 'popularity'
+			? undefined
+			: Row extends 'days'
+				? string
+				: NonNullable<
+						z.infer<typeof TracksQueryParamsZodSchema.shape.cursor>
+					>['row'];
+};
 
 // TODO: Если у пользователя интерфейс выбран на языке, и трек на таком же языке, то название главное показывать на нём, если нет то на английском
 export const TrackZodSchema = z.object({

@@ -1,6 +1,5 @@
 // prettier-ignore
 import type { AllTracksServerReturn, Track, TrackDTO, TracksQueryParams } from "../../../../../../libs/models/schemas/tracks"
-import { PartialWithUndefined } from '../../../../../../libs/models/enums/types';
 
 export const TRACKS_KEYS = {
 	getAllTracks: 'getAllTracks',
@@ -12,7 +11,7 @@ export const TRACKS_KEYS = {
 
 export type TRACKS_FUNCTIONS = {
 	[TRACKS_KEYS.getAllTracks]: {
-		input: PartialWithUndefined<TracksQueryParams>;
+		input: TracksQueryParams;
 		output: AllTracksServerReturn;
 	};
 	[TRACKS_KEYS.getSearchTrack]: { input: string; output: Track[] };
