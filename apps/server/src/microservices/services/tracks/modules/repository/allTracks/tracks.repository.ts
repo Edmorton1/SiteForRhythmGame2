@@ -1,13 +1,14 @@
 import { inject, injectable } from 'inversify';
-import { DatabaseAdapter } from '../../../../common/adapters/postgres/database.adapters';
-import { TRACKS_FUNCTIONS } from '../../../../../common/modules/tracks/tracks.functions';
-import { ADAPTERS } from '../../../../../common/adapters/container/adapters.types';
+import { DatabaseAdapter } from '../../../../../common/adapters/postgres/database.adapters';
+import { TRACKS_FUNCTIONS } from '../../../../../../common/modules/tracks/tracks.functions';
+import { ADAPTERS } from '../../../../../../common/adapters/container/adapters.types';
 import { createAllTracksInstance } from './fabric/allTracks.fabric';
+import { LoggerAdapter } from '../../../../../../common/adapters/logger/logger.adapter';
 
 // prettier-ignore
 export const TRACKS_SELECT = [
   'id', 'name', 'name_en', 'author', 'performer',
-  'about', 'cover_path', 'file_path', 'difficulty',
+  'cover_path', 'file_path', 'difficulty',
   'bpm', 'lang', 'likes_count', 'downloads_count',
   'plays_count', 'created_at', 'is_deleted',
 ] as const;
@@ -15,71 +16,15 @@ export const TRACKS_SELECT = [
 @injectable()
 export class TracksRepository {
 	constructor(
+		@inject(ADAPTERS.common.logger)
+		private readonly logger: LoggerAdapter,
 		@inject(ADAPTERS.micro.database)
 		private readonly db: DatabaseAdapter,
 	) {}
 
 	getAllTracks = async (options: TRACKS_FUNCTIONS['getAllTracks']['input']) => {
-		console.log(options.cursor);
-
-		console.log('КУРСОР ПЕРЕД ОТПРАВКОЙ', options.cursor);
-		return await createAllTracksInstance(this.db, options).getResult();
-
-		// 	const query = this.db.db
-		// 		.with('tracks_with_popularity', db =>
-		// 			db
-		// 				.selectFrom('tracks')
-		// 				.selectAll()
-		// 				.select(() =>
-		// 					sql<number>`(plays_count + likes_count * 2 +  downloads_count * 3)`.as(
-		// 						'popularity',
-		// 					),
-		// 				),
-		// 		)
-		// 		.selectFrom('tracks_with_popularity')
-		// 		.select([...TRACKS_SELECT, 'popularity']);
-
-		// 	const builder = new TracksQueryBuilder(query);
-
-		// 	if (!TracksDays.isDays(options.sort) && options.sort !== 'popularity') {
-		// 		builder.sortByTableRows(options.sort, options.cursor);
-		// 	} else {
-		// 		if (TracksDays.isDays(options.sort)) {
-		// 			if (options.cursor?.row && typeof options.cursor.row !== 'string') {
-		// 				throw new HttpError(
-		// 					409,
-		// 					`The row parameter in sorting by date is incorrect - ${options.cursor} it should be ISO-STRING`,
-		// 				);
-		// 			}
-
-		// 			// TODO: Дублирование, Убрать
-		// 			if (typeof options.cursor?.row === 'string') {
-		// 				builder.paginationByDays(
-		// 					TracksDays.days[options.sort],
-		// 					// @ts-ignore
-		// 					options.cursor,
-		// 				);
-		// 			}
-
-		// 			builder.sortByDays(TracksDays.days[options.sort]);
-		// 		}
-
-		// 		builder.sortByPopularity();
-
-		// 		if (options.sort === 'popularity' && options.cursor) {
-		// 			builder.sortByPopularityCursorOnly(options.cursor);
-		// 		}
-		// 	}
-
-		// 	if (options.lang) {
-		// 		builder.filterByLang(options.lang);
-		// 	}
-
-		// 	if (options.difficulty) {
-		// 		builder.filterByDifficulty(options.difficulty);
-		// 	}
-
-		// 	return builder.result(options.sort);
+		this.logger.logger.info({ CURSOR_BEFORE_PARSE: options.cursor });
+		return await createAllTracksInstance(options).getAllTracks();
 	};
 
 	getTrack = async (id: TRACKS_FUNCTIONS['getTrack']['input']) => {

@@ -10,7 +10,7 @@
 		"start": "node dist/apps/server/src/main",
 		"build": "esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node",
 		"format": "prettier --write \"src/**/*.ts\"",
-		"lint": "eslint \"{src}/**/*.ts\" ",
+		"lint": "eslint src/**/*.ts",
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"test:cov": "jest --coverage",

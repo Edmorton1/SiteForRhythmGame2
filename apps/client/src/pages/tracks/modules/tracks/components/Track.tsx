@@ -1,6 +1,6 @@
-import { languages } from 'countries-list';
 import type { Track as ITrack } from '../../../../../../../../libs/models/schemas/tracks';
 import { LANGUAGE } from '../../../../../common/consts/LOCALSTORAGE';
+import { languages } from 'countries-list';
 
 export const Track = ({ track }: { track: ITrack }) => {
 	const isInterfaceLang = LANGUAGE === track.lang;

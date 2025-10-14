@@ -1,34 +1,24 @@
-import z, { ZodType } from 'zod';
-import { zId, zIntNum, zISOString } from '../enums/zod';
 import { zLanguageCode } from '../enums/countries';
-
-export const difficultiesTracks = ['easy', 'normal', 'hard'] as const;
-export const difficultiesZodSchema = z.enum(difficultiesTracks);
-export type Difficulties = z.infer<typeof difficultiesZodSchema>;
+import { toArrayPreprocess, zId, zIntNum, zISOString } from '../enums/zod';
+import z from 'zod';
 
 // prettier-ignore
-export const tracksSort = [
+export const TRACKS_SORT = [
 	'popularity', 'plays_count', 'likes_count', 
 	'downloads_count', 'bpm', 'difficulty',
 	'today', 'week', 'month', 'year'
-] as const;
-const TracksSortZodSchema = z.enum(tracksSort);
-// export type TracksSort = z.infer<typeof TracksSortZodSchema>;
+] as const
 
-// const saveRow = (schema: ZodType) =>
-// 	z.preprocess(val => {
-// 		const parsed = schema.safeParse(val);
-// 		return parsed.success ? parsed.data : undefined;
-// 	}, schema.optional());
+export const DIFFICULTIES_TRACKS = ['easy', 'normal', 'hard'] as const;
+
+export const difficultiesZodSchema = z.enum(DIFFICULTIES_TRACKS);
+export type Difficulties = z.infer<typeof difficultiesZodSchema>;
+
+const TracksSortZodSchema = z.enum(TRACKS_SORT);
 
 export const TracksQueryParamsZodSchema = z.object({
 	sort: TracksSortZodSchema.default('popularity'),
-	difficulty: z
-		.union([
-			difficultiesZodSchema.transform(difficulty => [difficulty]),
-			z.array(difficultiesZodSchema),
-		])
-		.optional(),
+	difficulty: toArrayPreprocess(difficultiesZodSchema).optional(),
 	cursor: z
 		.object({
 			id: zId,
@@ -41,23 +31,7 @@ export const TracksQueryParamsZodSchema = z.object({
 		.optional(),
 });
 export type TracksQueryParams = z.infer<typeof TracksQueryParamsZodSchema>;
-
-export type TracksCursor<
-	Row extends 'tables' | 'popularity' | 'days' | undefined = undefined,
-> = Omit<
-	NonNullable<z.infer<typeof TracksQueryParamsZodSchema.shape.cursor>>,
-	'row'
-> & {
-	row: Row extends 'tables'
-		? number | Difficulties
-		: Row extends 'popularity'
-			? undefined
-			: Row extends 'days'
-				? string
-				: NonNullable<
-						z.infer<typeof TracksQueryParamsZodSchema.shape.cursor>
-					>['row'];
-};
+export type TracksCursor = NonNullable<TracksQueryParams['cursor']>;
 
 // TODO: Если у пользователя интерфейс выбран на языке, и трек на таком же языке, то название главное показывать на нём, если нет то на английском
 export const TrackZodSchema = z.object({
@@ -66,7 +40,6 @@ export const TrackZodSchema = z.object({
 	name: z.string().max(32),
 	author: zId,
 	performer: z.string().max(128),
-	// about: z.string().max(512).default(''),
 	cover_path: z.string().nullable(),
 	file_path: z.string(),
 	difficulty: difficultiesZodSchema,
@@ -80,7 +53,7 @@ export const TrackZodSchema = z.object({
 });
 export type Track = z.infer<typeof TrackZodSchema>;
 
-export const TracksDtoZodSchema = TrackZodSchema.omit({
+export const TrackDtoZodSchema = TrackZodSchema.omit({
 	id: true,
 	likes_count: true,
 	downloads_count: true,
@@ -88,7 +61,7 @@ export const TracksDtoZodSchema = TrackZodSchema.omit({
 	created_at: true,
 	is_deleted: true,
 });
-export type TrackDTO = z.infer<typeof TracksDtoZodSchema>;
+export type TrackDTO = z.infer<typeof TrackDtoZodSchema>;
 
 export type AllTracksServerReturn = {
 	tracks: Track[];

@@ -1,5 +1,4 @@
 // TODO: ПЕРЕИМЕНОВАТЬ ПАПКУ, ПЕРЕМЕСТИТЬ
-
 import { randomBytes } from 'crypto';
 
 export const randomString = (length: number) => {

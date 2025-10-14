@@ -1,9 +1,9 @@
 // prettier-ignore
-import { difficultiesTracks, tracksSort } from '../../../../../../../libs/models/schemas/tracks';
-import { useTracksGet } from './hooks/useTracks';
-import { useQueryParams } from './hooks/useQueryParams';
-import { countries } from 'countries-list';
+import { DIFFICULTIES_TRACKS, TRACKS_SORT } from '../../../../../../../libs/models/schemas/tracks';
 import { Track } from './components/Track';
+import { useQueryParams } from './hooks/useQueryParams';
+import { useTracksGet } from './hooks/useTracks';
+import { countries } from 'countries-list';
 
 const langs = ['ru', 'uk', 'en'];
 
@@ -26,7 +26,7 @@ export const TracksList = () => {
 			<select
 				onChange={e => methods.select('sort', e.target.value)}
 				defaultValue={searchParams.get('sort') || undefined}>
-				{tracksSort.map(sort => (
+				{TRACKS_SORT.map(sort => (
 					<option
 						key={sort}
 						value={sort}>
@@ -40,7 +40,7 @@ export const TracksList = () => {
 			<div>Сложность</div>
 
 			<ul>
-				{difficultiesTracks.map(difficulty => (
+				{DIFFICULTIES_TRACKS.map(difficulty => (
 					<li key={difficulty}>
 						<label>
 							<input

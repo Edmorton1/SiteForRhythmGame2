@@ -1,7 +1,8 @@
-import type { ColumnType, GeneratedAlways } from 'kysely';
-import { Role } from '../../../../../../../libs/models/schemas/user';
+// prettier-ignore
 import { CountryCodes, LanguagesCodes } from '../../../../../../../libs/models/enums/countries';
 import { Difficulties } from '../../../../../../../libs/models/schemas/tracks';
+import { Role } from '../../../../../../../libs/models/schemas/user';
+import type { ColumnType, GeneratedAlways } from 'kysely';
 
 export interface DatabaseKysely {
 	users: {
@@ -27,7 +28,6 @@ export interface DatabaseKysely {
 		name: string;
 		author: number;
 		performer: string;
-		about: ColumnType<string, string | undefined, string>;
 		cover_path: string | null;
 		file_path: string;
 		difficulty: Difficulties;

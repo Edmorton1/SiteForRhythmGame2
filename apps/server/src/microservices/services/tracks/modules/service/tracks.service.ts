@@ -1,11 +1,11 @@
 import { inject, injectable } from 'inversify';
-import { TracksRepository } from '../repository/tracks.repository';
+import { TracksRepository } from '../repository/allTracks/tracks.repository';
 import { BaseService } from '../../../../config/service/base.service';
 import { TRACKS } from '../../container/tracks.types';
 // prettier-ignore
 import { TRACKS_FUNCTIONS, TRACKS_KEYS } from '../../../../../common/modules/tracks/tracks.functions';
 import { HttpError } from '../../../../../common/http/http.error';
-import { TracksSearchRepository } from '../repository/tracks-search.repository';
+import { TracksSearchRepository } from '../repository/search/tracks-search.repository';
 
 @injectable()
 export class TracksService extends BaseService {

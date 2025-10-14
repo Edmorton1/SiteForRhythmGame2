@@ -1,7 +1,7 @@
+//prettier-ignore
+import { UserZodSchema } from '../../../../../libs/models/schemas/user';
 import 'express-session';
 import z from 'zod';
-//prettier-ignore
-import { UserZodSchema, zEmailPassword } from '../../../../../libs/models/schemas/user';
 
 export const PayloadZodSchema = UserZodSchema.pick({
 	id: true,
@@ -9,12 +9,18 @@ export const PayloadZodSchema = UserZodSchema.pick({
 });
 export type Payload = z.infer<typeof PayloadZodSchema>;
 
-const ProviderZodSchema = z.object({
-	id: z.string(),
-	email: zEmailPassword.email,
-	provider: z.string(),
-});
-export type Provider = z.infer<typeof ProviderZodSchema>;
+// const ProviderZodSchema = z.object({
+// 	id: z.string(),
+// 	email: zEmailPassword.email,
+// 	provider: z.string(),
+// });
+// export type Provider = z.infer<typeof ProviderZodSchema>;
+
+export interface Provider {
+	id: string;
+	email: string;
+	provider: string;
+}
 
 declare module 'express-session' {
 	interface SessionData {

@@ -2,9 +2,9 @@ import { ContainerModule } from 'inversify';
 import { TRACKS } from './tracks.types';
 import { MICRO } from '../../../config/containers/micro.types';
 import { TracksService } from '../modules/service/tracks.service';
-import { TracksRepository } from '../modules/repository/tracks.repository';
+import { TracksRepository } from '../modules/repository/allTracks/tracks.repository';
 import { TracksElasticSearch } from '../modules/elasticsearch/tracks.elasticsearch';
-import { TracksSearchRepository } from '../modules/repository/tracks-search.repository';
+import { TracksSearchRepository } from '../modules/repository/search/tracks-search.repository';
 
 export const tracksBindings = new ContainerModule(({ bind }) => {
 	bind<TracksService>(MICRO.controllers).to(TracksService).inSingletonScope();

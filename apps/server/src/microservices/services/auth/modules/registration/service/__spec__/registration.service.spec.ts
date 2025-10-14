@@ -1,8 +1,8 @@
-import 'reflect-metadata';
-//prettier-ignore
-import { mockProfileDTO, mockRegistrationService, mockResult } from "./services.mock";
 import { Provider } from '../../../../../../../common/_declarations/session';
 import { HttpError } from '../../../../../../../common/http/http.error';
+//prettier-ignore
+import { mockProfileDTO, mockRegistrationService, mockResult } from "./services.mock";
+import 'reflect-metadata';
 
 // TODO: ПРОВЕРИТЬ ЕЩЁ РАЗ ЭТОТ ТЕСТ
 const userDTO = { email: 'q@w.er', password: '123123' };

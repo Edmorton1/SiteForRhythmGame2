@@ -1,22 +1,14 @@
-import z, { ZodType } from 'zod';
 // prettier-ignore
-import { zIntNum, zISOString } from '../../../../../../../../../libs/models/enums/zod';
+import { zIntNum, zISOString } from '../../../../../../../../../../libs/models/enums/zod';
 // prettier-ignore
-import { difficultiesTracks, difficultiesZodSchema, TracksCursor, TracksQueryParams } from '../../../../../../../../../libs/models/schemas/tracks';
-import { DatabaseAdapter } from '../../../../../common/adapters/postgres/database.adapters';
+import { difficultiesZodSchema, TracksCursor, TracksQueryParams } from '../../../../../../../../../../libs/models/schemas/tracks';
 import { TracksDays } from '../tracks.days';
 import { AllTracksDays } from './allTracks.days';
 import { AllTracksPopularity } from './allTracks.popularity';
 import { AllTracksTable } from './allTracks.table';
+import z, { ZodType } from 'zod';
 
-export function createAllTracksInstance(
-	db: DatabaseAdapter,
-	options: TracksQueryParams,
-) {
-	if (options.sort === undefined) {
-		options.sort = 'popularity';
-	}
-
+export function createAllTracksInstance(options: TracksQueryParams) {
 	const sort = options.sort;
 
 	const validateCursorRow = <T extends ZodType<any>>(
@@ -29,9 +21,9 @@ export function createAllTracksInstance(
 
 	if (TracksDays.isDays(sort)) {
 		const cursor = validateCursorRow(zISOString);
-		return new AllTracksDays(db, { ...options, sort, cursor });
+		return new AllTracksDays({ ...options, sort, cursor });
 	} else if (sort === 'popularity') {
-		return new AllTracksPopularity(db, {
+		return new AllTracksPopularity({
 			...options,
 			sort,
 			cursor: options.cursor
@@ -39,7 +31,6 @@ export function createAllTracksInstance(
 				: undefined,
 		});
 	} else {
-		console.log('КУРСОР ПЕРЕД ПАРСОМ', options.cursor);
 		let cursor;
 
 		if (sort === 'difficulty') {
@@ -48,7 +39,7 @@ export function createAllTracksInstance(
 			cursor = validateCursorRow(zIntNum);
 		}
 
-		return new AllTracksTable(db, {
+		return new AllTracksTable({
 			...options,
 			sort,
 			cursor,

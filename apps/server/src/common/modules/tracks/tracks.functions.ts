@@ -1,5 +1,5 @@
 // prettier-ignore
-import type { AllTracksServerReturn, Track, TrackDTO, TracksQueryParams } from "../../../../../../libs/models/schemas/tracks"
+import type { AllTracksServerReturn, Track, TrackDTO, TracksQueryParams } from "../../../../../../libs/models/schemas/tracks";
 
 export const TRACKS_KEYS = {
 	getAllTracks: 'getAllTracks',

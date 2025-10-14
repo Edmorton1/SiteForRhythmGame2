@@ -1,8 +1,8 @@
-import z from 'zod';
-import { zodValidateFormData } from './zod.formdata.pipe';
 import { HttpError } from '../../../common/http/http.error';
 import { zExpressMulterFile } from '../../../common/models/enums/enums';
+import { zodValidateFormData } from './zod.formdata.pipe';
 import { Readable } from 'stream';
+import z from 'zod';
 
 const mockFile: Express.Multer.File = {
 	fieldname: 'avatar',

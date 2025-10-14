@@ -1,7 +1,7 @@
-import z from 'zod';
-import { zExpressMulterFile } from '../enums/enums';
-import { UserDTOZodSchema } from '../../../../../../libs/models/schemas/user';
 import { ProfileZodSchema } from '../../../../../../libs/models/schemas/profile';
+import { UserDTOZodSchema } from '../../../../../../libs/models/schemas/user';
+import { zExpressMulterFile } from '../enums/enums';
+import z from 'zod';
 
 const ProfileDTOZodSchema = ProfileZodSchema.pick({
 	name: true,

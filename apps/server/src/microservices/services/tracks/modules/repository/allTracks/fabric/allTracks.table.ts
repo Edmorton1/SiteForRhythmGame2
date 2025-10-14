@@ -1,18 +1,9 @@
-// prettier-ignore
-import { TracksCursor, TracksQueryParams, tracksSort } from '../../../../../../../../../libs/models/schemas/tracks';
-import { DatabaseAdapter } from '../../../../../common/adapters/postgres/database.adapters';
-import { DaysKeys } from '../tracks.days';
 import { AllTracksAbstract } from './allTracks.abstract';
+import { TracksQueryParamsTables } from './types';
 
 export class AllTracksTable extends AllTracksAbstract {
-	constructor(
-		protected override readonly db: DatabaseAdapter,
-		protected override readonly options: TracksQueryParams & {
-			sort: Exclude<(typeof tracksSort)[number], DaysKeys | 'popularity'>;
-			cursor: TracksCursor<'tables'> | undefined;
-		},
-	) {
-		super(db, options);
+	constructor(protected override readonly options: TracksQueryParamsTables) {
+		super(options);
 	}
 
 	protected useSort = () => {
@@ -40,5 +31,16 @@ export class AllTracksTable extends AllTracksAbstract {
 				]),
 			);
 		}
+	};
+
+	public getAllTracks = async () => {
+		const { tracks, cursorWithoutRow, lastElement } = await this.getTracks();
+
+		const cursor: NonNullable<TracksQueryParamsTables['cursor']> = {
+			...cursorWithoutRow,
+			row: lastElement[this.options.sort],
+		};
+
+		return { tracks, cursor };
 	};
 }

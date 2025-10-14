@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
-import { ElasticSearchAdapter } from '../../../../common/adapters/elasticsearch/elasticsearch.adapter';
-import { INDEXES } from '../../../../common/adapters/elasticsearch/INDEXES';
-import { DatabaseAdapter } from '../../../../common/adapters/postgres/database.adapters';
-import { TRACKS_SELECT } from './tracks.repository';
-import { ADAPTERS } from '../../../../../common/adapters/container/adapters.types';
+import { ElasticSearchAdapter } from '../../../../../common/adapters/elasticsearch/elasticsearch.adapter';
+import { INDEXES } from '../../../../../common/adapters/elasticsearch/INDEXES';
+import { DatabaseAdapter } from '../../../../../common/adapters/postgres/database.adapters';
+import { TRACKS_SELECT } from '../allTracks/tracks.repository';
+import { ADAPTERS } from '../../../../../../common/adapters/container/adapters.types';
 
 @injectable()
 export class TracksSearchRepository {

@@ -27,7 +27,7 @@ export class TracksElasticSearch extends ElasticSearchBase {
 	private fillIndex = async () => {
 		const tracks = await this.db.db
 			.selectFrom('tracks')
-			.select(['id', 'name', 'name_en', 'about'])
+			.select(['id', 'name', 'name_en'])
 			.execute();
 
 		const body = tracks.flatMap(doc => [
@@ -35,7 +35,6 @@ export class TracksElasticSearch extends ElasticSearchBase {
 			{
 				name: doc.name,
 				name_en: doc.name_en,
-				about: doc.about,
 			},
 		]);
 
